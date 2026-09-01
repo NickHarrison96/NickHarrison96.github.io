@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description"
+    content="Nicholas Harrison — Right to Repair activist. Campaigning for the right to open, repair, and keep the devices we own." />
+  <title>Nicholas Harrison — Right to Repair</title>
+
+  <!-- Fonts: Syne (display) + DM Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- ─── Loader ─────────────────────────────────────── -->
+  <div id="loader">
+    <div class="loader-logo">
+      <!-- Repair mark: wrench + screwdriver -->
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26" />
+      </svg>
+    </div>
+    <div class="loader-bar-wrap">
+      <div class="loader-bar"></div>
+    </div>
+    <p class="loader-text">Nicholas Harrison</p>
+  </div>
+
+  <!-- ─── Ambient Background ─────────────────────────── -->
+  <div class="ambient">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- ─── Page ───────────────────────────────────────── -->
+  <div class="page">
+
+    <header>
+      <div class="brand">
+        <div class="brand-icon">
+          <!-- Repair mark: wrench + screwdriver -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Nicholas <span>Harrison</span></h1>
+          <p>Right to Repair</p>
+        </div>
+      </div>
+      <!-- GitHub profile link (avatar served from GitHub; swap for a local file to self-host) -->
+      <a class="gh-link" href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer"
+        aria-label="Nicholas Harrison on GitHub" title="GitHub — NickHarrison96">
+        <img src="https://github.com/NickHarrison96.png?size=96" alt="Nicholas Harrison's GitHub avatar"
+          class="gh-avatar" loading="lazy" width="44" height="44">
+      </a>
+    </header>
+
+    <main>
+      <div class="card">
+
+        <!-- ─── Hero: the self-drawing "hello" + intro ─── -->
+        <div class="card-header" id="welcomeHeader">
+          <!-- Signature: cursive "hello" that writes itself on, iPhone-setup style.
+               Inline SVG + CSS so it's self-contained and respects reduced-motion. -->
+          <svg class="hello-anim" viewBox="0 0 350 197" fill="none" role="img"
+            aria-label="hello" xmlns="http://www.w3.org/2000/svg">
+            <g transform="matrix(1.181,0,0,1.195,-119.835,-198.027)">
+              <g transform="matrix(1,0,0,1,252,245.918)">
+                <path class="hello-path" pathLength="100" stroke="#ffffff" stroke-width="9" stroke-linecap="round"
+                  stroke-linejoin="round" fill="none"
+                  d="M-145.66,43.747C-145.66,43.747,-86.107,10.264,-81.851,-26.162C-79.424,-46.943,-98.573,-44.137,-101.426,-23.013C-103.757,-5.755,-109.596,40.561,-109.596,40.561C-109.596,40.561,-103.979,-0.034,-85.851,1.753C-65.936,4.083,-91.979,40.05,-69,40.305C-48.573,40.532,-27.639,22.688,-26.873,10.943C-25.99,-2.599,-44.362,-4.886,-50.022,11.966C-55.226,27.461,-43.584,44.902,-23.54,40.581C7.341,33.922,22.483,-10.827,23.936,-26.077C25.467,-42.162,13.723,-43.694,6.574,-29.397C-0.104,-16.04,-11.245,37.085,12.958,41.583C41.809,46.944,64.277,-5.906,67.086,-23.779C69.802,-41.066,58.656,-45.952,50.234,-30.673C41.166,-14.223,27.843,44.077,59.937,41.326C86.746,39.028,76.916,2.264,102.898,-0.05C114.562,-1.088,119.386,9.92,118.532,21.029C117.638,32.646,106.66,42.475,95.809,40.943C85.898,39.544,80.838,25.973,83.425,17.072C86.617,6.094,96.662,0.12,102.898,-0.05C111.766,-0.29,116.234,5.327,124.149,5.199C131.179,5.086,138.27,-2.922,138.27,-2.922" />
+              </g>
+            </g>
+          </svg>
+
+          <div class="badge">
+            <span class="ping"><span></span><span></span></span>
+            Nicholas Harrison · Right to Repair Activist
+          </div>
+
+          <h1 class="card-title">You own it. You should be able to <em>fix</em> it.</h1>
+
+          <p class="card-desc">
+            I campaign for the right to open, repair, and keep the devices we buy — pushing for fair access to parts,
+            tools, and manuals, and keeping working hardware out of landfill. Every device deserves the chance to say
+            hello again.
+          </p>
+
+          <div class="hero-cta">
+            <a href="get-involved.html" id="getInvolvedBtn" class="dl-btn" style="width:auto; max-width:none; margin-bottom:0;">
+              Get involved
+              <svg class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+            <!-- TODO: point this to your manifesto / about page when it's live -->
+            <a href="mission.html" class="btn-ghost">Mission Statement</a>
+          </div>
+        </div>
+
+        <!-- ─── Featured message carousel ─── -->
+        <div class="carousel-container">
+          <div class="carousel-track-wrapper">
+            <div class="carousel-track">
+              <!-- TODO: swap the href on each slide for a real destination -->
+              <div class="carousel-slide active">
+                <a href="mission.html" class="carousel-slide-link">
+                  <div class="slide-panel"
+                    style="background: radial-gradient(120% 140% at 0% 0%, #24408f 0%, #141a3a 55%, #0a0d1f 100%);">
+                    <span class="slide-eyebrow">The campaign</span>
+                    <span class="slide-title">Repair is a <em>right</em>, not a privilege.</span>
+                  </div>
+                </a>
+              </div>
+              <div class="carousel-slide">
+                <a href="legislation.html" class="carousel-slide-link">
+                  <div class="slide-panel"
+                    style="background: radial-gradient(120% 140% at 100% 0%, #0d4a55 0%, #16283f 55%, #0a0d1f 100%);">
+                    <span class="slide-eyebrow">What we demand</span>
+                    <span class="slide-title">Parts. Tools. Manuals. For <em>everyone</em>.</span>
+                  </div>
+                </a>
+              </div>
+              <div class="carousel-slide">
+                <a href="get-involved.html" class="carousel-slide-link">
+                  <div class="slide-panel"
+                    style="background: radial-gradient(120% 140% at 100% 100%, #45256b 0%, #241a3f 55%, #0a0d1f 100%);">
+                    <span class="slide-eyebrow">Repair = climate action</span>
+                    <span class="slide-title">The greenest device is the one you <em>already own</em>.</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation Arrows -->
+          <button class="carousel-btn prev-btn" aria-label="Previous Slide">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+            </svg>
+          </button>
+          <button class="carousel-btn next-btn" aria-label="Next Slide">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
+
+          <!-- Indicators (generated by JS) -->
+          <div class="carousel-indicators"></div>
+        </div>
+
+        <!-- ─── The Work ─── -->
+        <div class="card-header" id="work" style="margin-top: 16px;">
+          <h2 class="card-title">The <em>Work:</em></h2>
+          <button id="viewServicesBtn" class="dl-btn" style="max-width: 220px; margin-top: 16px; margin-bottom: 0;">
+            Explore the work
+          </button>
+        </div>
+
+        <!-- Cards render here from the ITEMS array below -->
+        <div class="services-grid" id="servicesGrid"></div>
+
+      </div><!-- /card -->
+    </main>
+
+    <footer>
+      <div class="socials">
+        <!-- TODO: replace href="#" with your real links -->
+        <a href="#" aria-label="Email">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+          </svg>
+        </a>
+        <a href="#" aria-label="Newsletter / RSS">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12.75 19.5v-.75a7.5 7.5 0 0 0-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+          </svg>
+        </a>
+        <a href="#" aria-label="Mastodon / social">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+          </svg>
+        </a>
+        <a href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+          </svg>
+        </a>
+      </div>
+      <p class="dim">© 2026 Nicholas Harrison · Right to Repair. Built to be opened, fixed, and reused.</p>
+    </footer>
+
+  </div><!-- /page -->
+
+  <script>
+    /* ────────────────────────────────────────────────────────────
+       CONTENT — edit your projects/campaigns here.
+       Add, remove, or reorder items in this list and the cards
+       rebuild themselves. Each item:
+         icon:     one of the keys in ICONS below
+         hue:      base hue for the gradient placeholder tile (0–360)
+         title:    the button label (say the action the reader takes)
+         href:     where the card links to
+         featured: true adds the glowing highlight treatment
+         desc:     the short description under the card
+       Replace a tile with a real image later by giving the item
+       `img: 'path/to/image.jpg'` — see renderItems() below.
+       ──────────────────────────────────────────────────────────── */
+    const ITEMS = [
+      {
+        icon: 'heart', hue: 222, featured: true,
+        title: 'Get involved',
+        href: 'get-involved.html',
+        desc: 'Join the campaign for repairable products. Sign the petition, contact your representative, and help keep the pressure on manufacturers.'
+      },
+      {
+        icon: 'book', hue: 200,
+        title: 'Browse repair guides',
+        href: 'repair-guides.html',
+        desc: 'Free, step-by-step guides for fixing phones, laptops, and household electronics yourself — no proprietary tools, no gatekeeping.'
+      },
+      {
+        icon: 'gavel', hue: 258, featured: true,
+        title: 'Track the legislation',
+        href: 'legislation.html',
+        desc: 'Where right-to-repair bills stand across states and countries, what they cover, and how you can back the ones near you.'
+      },
+      {
+        icon: 'users', hue: 190,
+        title: 'Find a repair café',
+        href: 'repair-cafes.html',
+        desc: 'Community repair events where volunteers help you fix what you already own, together — and pass the skills along.'
+      },
+      {
+        icon: 'mic', hue: 275,
+        title: 'Book a talk',
+        href: 'talks.html',
+        desc: 'Talks, panels, and press on repairability, e-waste, and consumer rights. Available for schools, conferences, and newsrooms.'
+      },
+      {
+        icon: 'pen', hue: 214,
+        title: 'Read the essays',
+        href: 'writing.html',
+        desc: 'Writing and a newsletter on the economics and ethics of repair — why we throw so much away, and what a fixable future looks like.'
+      }
+    ];
+
+    /* Inline icon paths (Heroicons-style, 24x24 stroke) */
+    const ICONS = {
+      heart: '<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />',
+      book: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />',
+      gavel: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0 0 12 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 0 1-2.031.352 5.988 5.988 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971Zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 0 1-2.031.352 5.989 5.989 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971Z" />',
+      users: '<path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />',
+      mic: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />',
+      pen: '<path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />'
+    };
+
+    const ARROW = '<svg class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>';
+
+    /* Build a gradient placeholder tile from a base hue */
+    const tileBg = (h) =>
+      `linear-gradient(135deg, hsl(${h} 68% 42%) 0%, hsl(${(h + 46) % 360} 62% 30%) 100%)`;
+
+    function renderItems() {
+      const grid = document.getElementById('servicesGrid');
+      grid.innerHTML = ITEMS.map((item) => {
+        const media = item.img
+          ? `<img src="${item.img}" alt="" class="service-image">`
+          : `<div class="service-image" style="background:${tileBg(item.hue)}"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">${ICONS[item.icon] || ''}</svg></div>`;
+        const btnClass = item.featured ? 'dl-btn aio-special-btn' : 'dl-btn';
+        return `
+          <div class="service-item">
+            ${media}
+            <a href="${item.href}" class="${btnClass}">
+              ${item.title}
+              ${ARROW}
+            </a>
+            <div class="desc-card">
+              <p class="card-desc">${item.desc}</p>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // Render the cards immediately so the rest of the script can wire them up.
+    renderItems();
+
+    // Dismiss loader after fonts + DOM ready (~1s total)
+    window.addEventListener('load', () => {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+      }, 1100);
+
+      // Sticky Header Blur Effect
+      const header = document.querySelector('header');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 20) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      });
+
+      // Image Carousel Interactivity
+      const carouselTrack = document.querySelector('.carousel-track');
+      const carouselSlides = Array.from(carouselTrack.children);
+      const carouselPrevBtn = document.querySelector('.prev-btn');
+      const carouselNextBtn = document.querySelector('.next-btn');
+      const carouselIndicatorsContainer = document.querySelector('.carousel-indicators');
+      const carouselContainer = document.querySelector('.carousel-container');
+
+      // Dynamic Indicator Generation based on actual slide count
+      carouselIndicatorsContainer.innerHTML = '';
+      carouselSlides.forEach((_, idx) => {
+        const indicatorBtn = document.createElement('button');
+        indicatorBtn.className = 'indicator';
+        if (idx === 0) indicatorBtn.classList.add('active');
+        indicatorBtn.setAttribute('data-slide', idx);
+        indicatorBtn.setAttribute('aria-label', `Go to slide ${idx + 1}`);
+        carouselIndicatorsContainer.appendChild(indicatorBtn);
+      });
+
+      const carouselIndicators = Array.from(carouselIndicatorsContainer.children);
+
+      let carouselCurrentIndex = 0;
+      let carouselInterval;
+      let autoPlayDisabled = false;
+      let hoverDisableTimeout;
+
+      // Disable default browser image drag ghosting for a sleek swipe feel
+      carouselSlides.forEach(slide => {
+        const img = slide.querySelector('img');
+        if (img) {
+          img.addEventListener('dragstart', (e) => e.preventDefault());
+        }
+      });
+
+      const updateCarousel = (index) => {
+        if (index < 0) index = carouselSlides.length - 1;
+        if (index >= carouselSlides.length) index = 0;
+
+        carouselCurrentIndex = index;
+        carouselTrack.style.transform = `translateX(-${carouselCurrentIndex * 100}%)`;
+
+        carouselIndicators.forEach((indicator, i) => {
+          indicator.classList.toggle('active', i === carouselCurrentIndex);
+        });
+
+        carouselSlides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === carouselCurrentIndex);
+        });
+      };
+
+      const nextSlide = () => updateCarousel(carouselCurrentIndex + 1);
+      const prevSlide = () => updateCarousel(carouselCurrentIndex - 1);
+
+      const disableAutoplayPermanently = () => {
+        autoPlayDisabled = true;
+        clearInterval(carouselInterval);
+        clearTimeout(hoverDisableTimeout);
+      };
+
+      carouselNextBtn.addEventListener('click', () => {
+        nextSlide();
+        resetCarouselTimer();
+      });
+
+      carouselPrevBtn.addEventListener('click', () => {
+        prevSlide();
+        resetCarouselTimer();
+      });
+
+      carouselIndicators.forEach((indicator, i) => {
+        indicator.addEventListener('click', () => {
+          updateCarousel(i);
+          resetCarouselTimer();
+        });
+      });
+
+      // 8-Second slide display duration
+      const startCarouselTimer = () => {
+        if (autoPlayDisabled || reduceMotion) return;
+        carouselInterval = setInterval(nextSlide, 8000);
+      };
+
+      const resetCarouselTimer = () => {
+        clearInterval(carouselInterval);
+        startCarouselTimer();
+      };
+
+      // PC & Mobile Swiping/Dragging Logic
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+      let dragOffset = 0;
+      let carouselIsSwiping = false;
+
+      const getPositionX = (event) => event.type.includes('mouse') ? event.clientX : event.touches[0].clientX;
+      const getPositionY = (event) => event.type.includes('mouse') ? event.clientY : event.touches[0].clientY;
+
+      const dragStart = (event) => {
+        disableAutoplayPermanently();
+        isDragging = true;
+        startX = getPositionX(event);
+        startY = getPositionY(event);
+        dragOffset = 0;
+        carouselIsSwiping = false;
+        carouselTrack.style.transition = 'none';
+        if (event.type.includes('mouse')) {
+          carouselContainer.style.cursor = 'grabbing';
+        }
+      };
+
+      const dragMove = (event) => {
+        if (!isDragging) return;
+        const currentX = getPositionX(event);
+        const currentY = getPositionY(event);
+        const diffX = currentX - startX;
+        const diffY = currentY - startY;
+
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+          dragOffset = diffX;
+          const slideWidth = carouselContainer.offsetWidth;
+          const baseTranslation = -carouselCurrentIndex * slideWidth;
+          carouselTrack.style.transform = `translateX(${baseTranslation + dragOffset}px)`;
+          if (Math.abs(dragOffset) > 15) carouselIsSwiping = true;
+        }
+      };
+
+      const dragEnd = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        carouselContainer.style.cursor = '';
+        carouselTrack.style.transition = 'transform 0.7s cubic-bezier(0.25, 1, 0.5, 1)';
+
+        const slideWidth = carouselContainer.offsetWidth;
+        const movedRatio = dragOffset / slideWidth;
+
+        if (movedRatio < -0.2 && carouselCurrentIndex < carouselSlides.length - 1) {
+          updateCarousel(carouselCurrentIndex + 1);
+        } else if (movedRatio > 0.2 && carouselCurrentIndex > 0) {
+          updateCarousel(carouselCurrentIndex - 1);
+        } else {
+          updateCarousel(carouselCurrentIndex);
+        }
+
+        dragOffset = 0;
+        if (carouselIsSwiping) {
+          setTimeout(() => { carouselIsSwiping = false; }, 50);
+        }
+      };
+
+      carouselTrack.addEventListener('mousedown', dragStart);
+      carouselTrack.addEventListener('mousemove', dragMove);
+      window.addEventListener('mouseup', dragEnd);
+      carouselTrack.addEventListener('touchstart', dragStart, { passive: true });
+      carouselTrack.addEventListener('touchmove', dragMove, { passive: true });
+      carouselTrack.addEventListener('touchend', dragEnd, { passive: true });
+
+      // Prevent an accidental navigation when a drag was really a swipe
+      const carouselLinks = carouselContainer.querySelectorAll('.carousel-slide-link');
+      carouselLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          if (carouselIsSwiping) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        });
+      });
+
+      // Pause on hover; permanently stop autoplay if the mouse lingers > 6s
+      carouselContainer.addEventListener('mouseenter', () => {
+        clearInterval(carouselInterval);
+        hoverDisableTimeout = setTimeout(disableAutoplayPermanently, 6000);
+      });
+
+      carouselContainer.addEventListener('mouseleave', () => {
+        clearTimeout(hoverDisableTimeout);
+        if (!autoPlayDisabled) startCarouselTimer();
+      });
+
+      // Initialize
+      updateCarousel(0);
+      startCarouselTimer();
+
+      // Reveal the work grid
+      const viewServicesBtn = document.getElementById('viewServicesBtn');
+      const servicesGrid = document.getElementById('servicesGrid');
+
+      const showServices = () => {
+        if (!servicesGrid.classList.contains('visible')) {
+          servicesGrid.classList.add('visible');
+          if (viewServicesBtn) viewServicesBtn.style.display = 'none';
+
+          const items = servicesGrid.querySelectorAll('.service-item');
+          items.forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.04}s`;
+            item.classList.add('service-item-anim');
+          });
+        }
+      };
+
+      if (viewServicesBtn) {
+        viewServicesBtn.addEventListener('click', showServices);
+      }
+
+      // Falling Stars (skip under reduced motion)
+      const ambient = document.querySelector('.ambient');
+      if (!reduceMotion) {
+        for (let i = 0; i < 30; i++) {
+          const star = document.createElement('div');
+          star.className = 'falling-star';
+          star.style.left = `${Math.random() * 120}vw`;
+          star.style.animationDuration = `${Math.random() * 2 + 1.5}s`;
+          star.style.animationDelay = `${Math.random() * 4}s`;
+          ambient.appendChild(star);
+        }
+      }
+
+      // Mouse trail + grid spotlight (skip trail under reduced motion)
+      let lastSpawn = 0;
+      document.addEventListener('mousemove', (e) => {
+        const grid = document.getElementById('servicesGrid');
+        if (grid) {
+          const rect = grid.getBoundingClientRect();
+          grid.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+          grid.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        }
+
+        if (reduceMotion) return;
+
+        const now = Date.now();
+        if (now - lastSpawn < 40) return;
+        lastSpawn = now;
+
+        const star = document.createElement('div');
+        star.className = 'mouse-star';
+        star.innerHTML = '✦';
+        star.style.left = `${e.clientX}px`;
+        star.style.top = `${e.clientY}px`;
+        star.style.setProperty('--dx', `${(Math.random() - 0.5) * 60}px`);
+        star.style.setProperty('--dy', `${Math.random() * 60 + 20}px`);
+        star.style.setProperty('--rot', `${(Math.random() - 0.5) * 180}deg`);
+
+        document.body.appendChild(star);
+        setTimeout(() => star.remove(), 800);
+      });
+    });
+  </script>
+
+</body>
+
+</html>
