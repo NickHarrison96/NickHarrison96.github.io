@@ -49,23 +49,39 @@
           <div class="badge">Tools &amp; downloads</div>
           <h1 class="card-title">Tools &amp; <em>downloads</em>.</h1>
           <p class="page-lede">
-            Software I build and share. Most of it is hosted on GitHub and always available; anything too large for
-            that streams from a personal server, shown with a live status light.
+            Software I build and share. Tap a card to see what it does and grab it. Most is hosted on GitHub and
+            always available; larger tools stream from a personal server, shown with a live status light.
           </p>
-          <span class="status-pill" id="statusPill" role="status" aria-live="polite">
-            <span class="status-dot"></span>
-            <span id="statusText">Loading&hellip;</span>
-          </span>
         </div>
 
         <div class="prose">
-          <div class="dl-list" id="dlList">
-            <div class="dl-empty">Loading catalog&hellip;</div>
-          </div>
+          <!-- GitHub-hosted -->
+          <section class="dl-section" id="ghSection" hidden>
+            <div class="dl-section-head">
+              <span class="dl-section-title">On <em>GitHub</em></span>
+              <span class="dl-section-note">Always available</span>
+            </div>
+            <div class="dl-grid" id="ghGrid"></div>
+          </section>
+
+          <!-- Self-hosted (large files) -->
+          <section class="dl-section" id="selfSection" hidden>
+            <div class="dl-section-head">
+              <span class="dl-section-title"><em>Self-hosted</em></span>
+              <span class="status-pill" id="statusPill" role="status" aria-live="polite">
+                <span class="status-dot"></span>
+                <span id="statusText">Checking&hellip;</span>
+              </span>
+            </div>
+            <div class="dl-grid" id="selfGrid"></div>
+          </section>
+
+          <div class="dl-empty" id="dlEmpty" hidden>No downloads published yet.</div>
+
           <div class="note">
-            <strong>How hosting works here.</strong> Most tools are on GitHub and always available. Very large files
-            (multi-GB) stream from a personal server &mdash; those show a live status light and only work while it's
-            green. Verify big downloads against the listed SHA-256.
+            <strong>How hosting works here.</strong> The <em>On GitHub</em> section is always available. The
+            <em>Self-hosted</em> section streams very large files from a personal server &mdash; those work only while
+            its status light is green. Verify big downloads against the listed SHA-256.
           </div>
         </div>
       </div>
@@ -92,35 +108,61 @@
 
   <script>
     // ── Config ──────────────────────────────────────────────────────
-    // Only used by host:"self" (large) files streamed from your own server.
-    // Set to your named Cloudflare tunnel origin when that pipeline is live — no trailing slash.
+    // Only used by host:"self" (large) files. Set to your named Cloudflare
+    // tunnel origin when that pipeline is live — no trailing slash.
     const SELF_HOST_API = "https://REPLACE-WITH-YOUR-TUNNEL";
     const HEALTH_INTERVAL_MS = 30000;
 
-    // The catalog. Each entry is hosted one of two ways:
+    // The catalog. Add projects here — the grid rebuilds itself.
     //   host:"github" — always available. Set `url` to a Release asset (or repo/release page).
-    //   host:"self"   — streamed from your home server; needs SELF_HOST_API + `filename`,
-    //                   and is gated by the live status light.
-    // status:"soon" renders a disabled "coming soon" button until you flip it to "live".
+    //   host:"self"   — streamed from your home server; needs SELF_HOST_API + `filename`.
+    //   status:"soon" — renders a disabled "coming soon" button.
+    //   image:"assets/foo.png" — optional screenshot/logo; a gradient tile shows until then.
+    //   hue: base hue (0–360) for that placeholder tile.
     const DOWNLOADS = [
       {
         name: "RootForgeKit",
         host: "github",
         status: "live",
         url: "https://github.com/NickHarrison96/RootForgeKit/releases/download/v0.5.0/RootForgeKit-v0.5.0-win64.zip",
-        cta: "Download for Windows",
         version: "v0.5 · pre-alpha",
         category: "toolkit",
-        description: "Cross-platform system diagnostics, hardware health, and iOS/Android device toolkit (PySide6). Overview, hardware health, prerequisites, tech/gamer tools, plus iOS and Android device work.",
+        hue: 205,
+        image: null,
+        description: "Cross-platform system diagnostics, hardware health, and iOS/Android device toolkit (PySide6). Overview, hardware health, prerequisites, tech/gamer tools, plus iOS and Android device work — one dark, 3uTools-inspired desktop app.",
         size: 127270394,
         sha256: "54b6d562d3a13ac4ff4ffab31aa50a7ffa147bcc4274f2a6f75ca6c1733586cc"
+      },
+      {
+        name: "iRa1n",
+        host: "github",
+        status: "soon",
+        url: "",
+        version: "Coming soon",
+        category: null,
+        hue: 265,
+        image: null,
+        description: "In development — details coming soon."
+      },
+      {
+        name: "iWin-Doh",
+        host: "github",
+        status: "soon",
+        url: "",
+        version: "Coming soon",
+        category: null,
+        hue: 188,
+        image: null,
+        description: "In development — details coming soon."
       }
-      // Large multi-GB items go here, e.g.:
+      // Add more here. Large multi-GB items use host:"self", e.g.:
       // { name:"…", host:"self", filename:"foo.zip", version:"…", category:"firmware",
-      //   description:"…", size: 6900000000, sha256:"…" }
+      //   hue:150, description:"…", size: 6900000000, sha256:"…" }
     ];
 
     const DL_ICON = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>';
+    const CHEVRON = '<svg class="dl-chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>';
+    const TOOL_ICON = '<svg class="dl-thumb-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26" /></svg>';
 
     const fmtBytes = (b) => {
       if (b === null || b === undefined) return "";
@@ -129,93 +171,115 @@
       while (n >= 1024 && i < u.length - 1) { n /= 1024; i++; }
       return `${n.toFixed(n < 10 && i > 0 ? 1 : 0)} ${u[i]}`;
     };
+    const timeoutSignal = (ms) => { const c = new AbortController(); setTimeout(() => c.abort(), ms); return c.signal; };
+    const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const tileBg = (h) => `linear-gradient(135deg, hsl(${h} 68% 42%) 0%, hsl(${(h + 46) % 360} 62% 30%) 100%)`;
 
-    const timeoutSignal = (ms) => {
-      const c = new AbortController();
-      setTimeout(() => c.abort(), ms);
-      return c.signal;
-    };
-
-    const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-
-    const DISABLED = 'aria-disabled="true" tabindex="-1" style="opacity:.45;pointer-events:none"';
-
-    const pill = document.getElementById("statusPill");
-    const pillText = document.getElementById("statusText");
-    const list = document.getElementById("dlList");
-
-    function setPill(cls, text) {
-      pill.className = "status-pill" + (cls ? " " + cls : "");
-      pillText.textContent = text;
-    }
-
-    function rowHtml(d, serverUp) {
+    function cardHtml(d, enabled) {
       const isGh = d.host === "github";
       const soon = d.status === "soon" || (isGh && !d.url);
-      const enabled = !soon && (isGh || serverUp);
-      const href = isGh ? (d.url || "#")
-                        : `${SELF_HOST_API}/api/files/${encodeURIComponent(d.filename || "")}`;
+      const canDownload = !soon && (isGh || enabled);
+      const href = isGh
+        ? (d.url || "#")
+        : `${SELF_HOST_API}/api/files/${encodeURIComponent(d.filename || "")}`;
       const size = d.size ? fmtBytes(d.size) : "";
       const sha = d.sha256 ? `<code title="SHA-256">${esc(d.sha256).slice(0, 16)}&hellip;</code>` : "";
-      const hostLabel = isGh ? "GitHub" : "self-hosted";
 
-      let label, attrs;
+      const thumbInner = d.image
+        ? `<span class="dl-host">${isGh ? "GitHub" : "Self-hosted"}</span><img src="${esc(d.image)}" alt="${esc(d.name)}">`
+        : `<span class="dl-host">${isGh ? "GitHub" : "Self-hosted"}</span>${TOOL_ICON}`;
+      const thumbStyle = d.image ? "" : ` style="background:${tileBg(d.hue || 210)}"`;
+
+      let btnLabel, btnAttrs;
       if (soon) {
-        label = "Release coming soon";
-        attrs = DISABLED;
+        btnLabel = "Coming soon";
+        btnAttrs = 'aria-disabled="true"';
       } else if (isGh) {
-        label = d.cta || "Download";
-        // Direct file assets download in place; repo/release pages open in a new tab.
         const isFile = /\.(zip|exe|dmg|7z|tar\.gz|tgz|appimage|msi|pkg)$/i.test(d.url);
-        attrs = isFile ? "download" : 'target="_blank" rel="noopener noreferrer"';
+        btnLabel = `Download${size ? ` · ${size}` : ""}`;
+        btnAttrs = isFile ? "download" : 'target="_blank" rel="noopener noreferrer"';
       } else {
-        label = `Download${size ? ` · ${size}` : ""}`;
-        attrs = enabled ? "download" : DISABLED;
+        btnLabel = `Download${size ? ` · ${size}` : ""}`;
+        btnAttrs = canDownload ? "download" : 'aria-disabled="true"';
       }
 
+      const meta = (size || sha) ? `<div class="dl-meta2">${size ? `<span>${size}</span>` : ""}${sha}</div>` : "";
+
       return `
-        <div class="dl-row">
-          <div class="dl-row-head">
-            <span class="dl-name">${esc(d.name)}</span>
-            ${d.version ? `<span class="dl-ver">${esc(d.version)}</span>` : ""}
-            ${d.category ? `<span class="dl-cat">${esc(d.category)}</span>` : ""}
-          </div>
-          <p class="dl-desc">${esc(d.description)}</p>
-          <div class="dl-meta"><span>Hosted on ${hostLabel}</span>${size ? `<span>${size}</span>` : ""}${sha}</div>
-          <a class="dl-btn" href="${href}" ${attrs}>${DL_ICON} ${label}</a>
+        <div class="dl-card">
+          <button class="dl-head" aria-expanded="false">
+            <div class="dl-thumb"${thumbStyle}>${thumbInner}</div>
+            <div class="dl-info">
+              <div class="dl-titlewrap">
+                <span class="dl-name2">${esc(d.name)}</span>
+                <span class="dl-sub2">${[d.version, d.category].filter(Boolean).map(esc).join(" · ")}</span>
+              </div>
+              ${CHEVRON}
+            </div>
+          </button>
+          <div class="dl-reveal"><div><div class="dl-reveal-pad">
+            <p class="dl-desc2">${esc(d.description)}</p>
+            ${meta}
+            <a class="btn-green" href="${href}" ${btnAttrs}>${DL_ICON} ${btnLabel}</a>
+          </div></div></div>
         </div>`;
     }
 
-    function renderRows(serverUp) {
-      list.innerHTML = DOWNLOADS.length
-        ? DOWNLOADS.map((d) => rowHtml(d, serverUp)).join("")
-        : '<div class="dl-empty">No downloads published yet.</div>';
+    function wireExpand(container) {
+      container.querySelectorAll(".dl-head").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const card = btn.closest(".dl-card");
+          const open = card.classList.toggle("expanded");
+          btn.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+      });
     }
 
+    const gh = DOWNLOADS.filter((d) => d.host === "github");
+    const self_ = DOWNLOADS.filter((d) => d.host === "self");
+
+    const ghSection = document.getElementById("ghSection");
+    const ghGrid = document.getElementById("ghGrid");
+    const selfSection = document.getElementById("selfSection");
+    const selfGrid = document.getElementById("selfGrid");
+    const emptyEl = document.getElementById("dlEmpty");
+    const pill = document.getElementById("statusPill");
+    const pillText = document.getElementById("statusText");
+
+    // GitHub section — always available
+    if (gh.length) {
+      ghSection.hidden = false;
+      ghGrid.innerHTML = gh.map((d) => cardHtml(d, true)).join("");
+      wireExpand(ghGrid);
+    }
+
+    // Self-hosted section — gated by the live status light
+    function renderSelf(serverUp) {
+      selfGrid.innerHTML = self_.map((d) => cardHtml(d, serverUp)).join("");
+      wireExpand(selfGrid);
+    }
     async function pingHealth() {
       try {
         const r = await fetch(`${SELF_HOST_API}/api/health`, { signal: timeoutSignal(5000), cache: "no-store" });
         if (!r.ok) throw new Error("bad status");
-        setPill("up", "Home server online — large downloads available");
+        pill.className = "status-pill up";
+        pillText.textContent = "Online";
         return true;
       } catch {
-        setPill("down", "Home server offline — large downloads unavailable");
+        pill.className = "status-pill down";
+        pillText.textContent = "Offline";
         return false;
       }
     }
 
     (async function init() {
-      const hasSelfHosted = DOWNLOADS.some((d) => d.host === "self");
-      if (!hasSelfHosted) {
-        // Everything is on GitHub — no live server to probe.
-        setPill("", "Downloads hosted on GitHub");
-        renderRows(true);
-      } else {
+      if (self_.length) {
+        selfSection.hidden = false;
         const up = await pingHealth();
-        renderRows(up);
-        setInterval(async () => { renderRows(await pingHealth()); }, HEALTH_INTERVAL_MS);
+        renderSelf(up);
+        setInterval(async () => { renderSelf(await pingHealth()); }, HEALTH_INTERVAL_MS);
       }
+      if (!gh.length && !self_.length) emptyEl.hidden = false;
     })();
   </script>
 </body>
