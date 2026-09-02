@@ -107,13 +107,13 @@
         name: "RootForgeKit",
         host: "github",
         status: "live",
-        url: "https://github.com/NickHarrison96/RootForgeKit/releases",
-        cta: "Get it on GitHub",
+        url: "https://github.com/NickHarrison96/RootForgeKit/releases/download/v0.5.0/RootForgeKit-v0.5.0-win64.zip",
+        cta: "Download for Windows",
         version: "v0.5 · pre-alpha",
         category: "toolkit",
         description: "Cross-platform system diagnostics, hardware health, and iOS/Android device toolkit (PySide6). Overview, hardware health, prerequisites, tech/gamer tools, plus iOS and Android device work.",
-        size: null,
-        sha256: null
+        size: 127270394,
+        sha256: "54b6d562d3a13ac4ff4ffab31aa50a7ffa147bcc4274f2a6f75ca6c1733586cc"
       }
       // Large multi-GB items go here, e.g.:
       // { name:"…", host:"self", filename:"foo.zip", version:"…", category:"firmware",
@@ -166,7 +166,9 @@
         attrs = DISABLED;
       } else if (isGh) {
         label = d.cta || "Download";
-        attrs = 'target="_blank" rel="noopener noreferrer"';
+        // Direct file assets download in place; repo/release pages open in a new tab.
+        const isFile = /\.(zip|exe|dmg|7z|tar\.gz|tgz|appimage|msi|pkg)$/i.test(d.url);
+        attrs = isFile ? "download" : 'target="_blank" rel="noopener noreferrer"';
       } else {
         label = `Download${size ? ` · ${size}` : ""}`;
         attrs = enabled ? "download" : DISABLED;
