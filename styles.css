@@ -1761,3 +1761,129 @@
       pointer-events: none;
       box-shadow: none;
     }
+
+    /* ─── "Under active development" banner ─────────────────────────
+       Site-wide status notice. Dark-glass panel that reads as part of the
+       page, with a yellow/black hazard-stripe accent as an on-brand nod to
+       "under construction". Reusable — drop <div class="construction-banner">
+       onto any page. The stripe scroll + glow pulse are auto-frozen by the
+       global prefers-reduced-motion reset earlier in this file. */
+    .construction-banner {
+      position: relative;
+      width: 100%;
+      margin: 0 0 clamp(28px, 5vw, 44px);
+      display: flex;
+      align-items: center;
+      gap: clamp(14px, 3vw, 24px);
+      padding: clamp(16px, 3.2vw, 22px) clamp(18px, 4vw, 32px);
+      background: rgba(245, 197, 24, 0.045);
+      border: 1px solid rgba(245, 197, 24, 0.22);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(245, 197, 24, 0.05) inset,
+        0 18px 50px rgba(0, 0, 0, 0.35);
+      animation: cb-glow 4s ease-in-out infinite;
+    }
+
+    /* Hazard tape along the top & bottom edges — the "caution tape" accent */
+    .construction-banner::before,
+    .construction-banner::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: repeating-linear-gradient(-45deg,
+          #f5c518 0 14px,
+          #0a0a0a 14px 28px);
+      opacity: 0.9;
+      animation: cb-tape 1.4s linear infinite;
+    }
+
+    .construction-banner::before {
+      top: 0;
+    }
+
+    .construction-banner::after {
+      bottom: 0;
+    }
+
+    @keyframes cb-tape {
+      to {
+        background-position: 39.6px 0;
+      }
+    }
+
+    @keyframes cb-glow {
+
+      0%,
+      100% {
+        box-shadow:
+          0 0 0 1px rgba(245, 197, 24, 0.05) inset,
+          0 18px 50px rgba(0, 0, 0, 0.35),
+          0 0 0 rgba(245, 197, 24, 0);
+      }
+
+      50% {
+        box-shadow:
+          0 0 0 1px rgba(245, 197, 24, 0.09) inset,
+          0 18px 50px rgba(0, 0, 0, 0.35),
+          0 0 34px rgba(245, 197, 24, 0.14);
+      }
+    }
+
+    .construction-banner .cb-icons {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #f5c518;
+    }
+
+    .construction-banner .cb-icons svg {
+      width: clamp(26px, 5vw, 34px);
+      height: clamp(26px, 5vw, 34px);
+      filter: drop-shadow(0 2px 8px rgba(245, 197, 24, 0.25));
+    }
+
+    /* the shared repair mark sits a touch smaller & dimmer, as a secondary icon */
+    .construction-banner .cb-icons svg.cb-tools {
+      width: clamp(22px, 4.2vw, 28px);
+      height: clamp(22px, 4.2vw, 28px);
+      opacity: 0.7;
+    }
+
+    .construction-banner .cb-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .construction-banner .cb-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(0.95rem, 2.4vw, 1.25rem);
+      letter-spacing: 0.02em;
+      line-height: 1.15;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .construction-banner .cb-title span {
+      color: #f5c518;
+    }
+
+    .construction-banner .cb-sub {
+      font-size: clamp(0.8rem, 1.8vw, 0.92rem);
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    /* On the narrowest screens, drop the secondary icon to keep text room */
+    @media (max-width: 520px) {
+      .construction-banner .cb-icons svg.cb-tools {
+        display: none;
+      }
+    }
