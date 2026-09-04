@@ -1951,6 +1951,14 @@
       .team-grid {
         grid-template-columns: repeat(2, 1fr);
       }
+
+      /* An odd trailing card (e.g. a 3rd teammate) centers on its own row
+         instead of hugging the left edge. */
+      .team-grid > .team-card:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+        max-width: calc(50% - 10px);
+        justify-self: center;
+      }
     }
 
     .team-card {
