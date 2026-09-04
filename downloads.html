@@ -42,12 +42,12 @@
       <div class="card subpage">
         <a href="index.html" class="back-link">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
-          Back to home
+          Back to Home
         </a>
 
         <div class="page-hero">
-          <div class="badge">Tools &amp; downloads</div>
-          <h1 class="card-title">Tools &amp; <em>downloads</em>.</h1>
+          <div class="badge">Tools &amp; Downloads</div>
+          <h1 class="card-title">Tools &amp; <em>Downloads</em>.</h1>
           <p class="page-lede">
             Software I build and share. Tap a card to see what it does and grab it. Most is hosted on GitHub and
             always available; larger tools stream from a personal server, shown with a live status light.
@@ -59,7 +59,7 @@
           <section class="dl-section" id="ghSection" hidden>
             <div class="dl-section-head">
               <span class="dl-section-title">On <em>GitHub</em></span>
-              <span class="dl-section-note">Always available</span>
+              <span class="dl-section-note">Always Available</span>
             </div>
             <div class="dl-grid" id="ghGrid"></div>
           </section>
@@ -67,7 +67,7 @@
           <!-- Self-hosted (large files) -->
           <section class="dl-section" id="selfSection" hidden>
             <div class="dl-section-head">
-              <span class="dl-section-title"><em>Self-hosted</em></span>
+              <span class="dl-section-title"><em>Self-Hosted</em></span>
               <span class="status-pill" id="statusPill" role="status" aria-live="polite">
                 <span class="status-dot"></span>
                 <span id="statusText">Checking&hellip;</span>
@@ -80,7 +80,7 @@
 
           <div class="note">
             <strong>How hosting works here.</strong> The <em>On GitHub</em> section is always available. The
-            <em>Self-hosted</em> section streams very large files from a personal server &mdash; those work only while
+            <em>Self-Hosted</em> section streams very large files from a personal server &mdash; those work only while
             its status light is green. Verify big downloads against the listed SHA-256.
           </div>
         </div>
@@ -138,7 +138,7 @@
         host: "github",
         status: "soon",
         url: "",
-        version: "Coming soon",
+        version: "Coming Soon",
         category: null,
         hue: 265,
         image: null,
@@ -149,7 +149,7 @@
         host: "github",
         status: "soon",
         url: "",
-        version: "Coming soon",
+        version: "Coming Soon",
         category: null,
         hue: 188,
         image: null,
@@ -186,13 +186,13 @@
       const sha = d.sha256 ? `<code title="SHA-256">${esc(d.sha256).slice(0, 16)}&hellip;</code>` : "";
 
       const thumbInner = d.image
-        ? `<span class="dl-host">${isGh ? "GitHub" : "Self-hosted"}</span><img src="${esc(d.image)}" alt="${esc(d.name)}">`
-        : `<span class="dl-host">${isGh ? "GitHub" : "Self-hosted"}</span>${TOOL_ICON}`;
+        ? `<span class="dl-host">${isGh ? "GitHub" : "Self-Hosted"}</span><img src="${esc(d.image)}" alt="${esc(d.name)}">`
+        : `<span class="dl-host">${isGh ? "GitHub" : "Self-Hosted"}</span>${TOOL_ICON}`;
       const thumbStyle = d.image ? "" : ` style="background:${tileBg(d.hue || 210)}"`;
 
       let btnLabel, btnAttrs;
       if (soon) {
-        btnLabel = "Coming soon";
+        btnLabel = "Coming Soon";
         btnAttrs = 'aria-disabled="true"';
       } else if (isGh) {
         const isFile = /\.(zip|exe|dmg|7z|tar\.gz|tgz|appimage|msi|pkg)$/i.test(d.url);
