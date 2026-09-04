@@ -1889,3 +1889,262 @@
         display: none;
       }
     }
+
+    /* ─── Header page nav (The Team · Socials) ──────────────────────
+       Sits between the brand and the GitHub avatar; margin-left:auto
+       collapses the header's space-between so the links hug the avatar
+       while brand stays pinned left. Shared markup, repeated on every
+       page — see index.html for the canonical copy. */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(16px, 3vw, 28px);
+      margin-left: auto;
+      margin-right: clamp(14px, 3vw, 24px);
+    }
+
+    .top-nav a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      white-space: nowrap;
+      padding-bottom: 3px;
+      border-bottom: 1px solid transparent;
+      transition: color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .top-nav a:hover {
+      color: var(--text);
+    }
+
+    .top-nav a[aria-current="page"] {
+      color: var(--text);
+      border-bottom-color: var(--accent);
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-wrap: wrap;
+        row-gap: 12px;
+      }
+
+      .top-nav {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+
+    /* ─── The Team ────────────────────────────────────── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      width: 100%;
+    }
+
+    @media (min-width: 640px) {
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .team-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+      padding: clamp(24px, 4vw, 32px) clamp(20px, 4vw, 28px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .team-card:hover {
+      border-color: rgba(79, 143, 255, 0.3);
+      transform: translateY(-3px);
+    }
+
+    .team-card.placeholder {
+      border-style: dashed;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .team-avatar {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--glow-1), var(--glow-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-bottom: 6px;
+      box-shadow: 0 0 24px rgba(79, 143, 255, 0.25);
+    }
+
+    .team-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .team-avatar.ghost {
+      background: var(--step-bg);
+      border: 1px dashed var(--step-border);
+      box-shadow: none;
+    }
+
+    .team-avatar.ghost svg {
+      width: 30px;
+      height: 30px;
+      color: var(--muted);
+    }
+
+    /* For teammates without a photo yet — same gradient tile as the brand
+       mark, initials in place of an image. */
+    .team-avatar.initials span {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 26px;
+      letter-spacing: 0.02em;
+      color: #fff;
+    }
+
+    .team-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--text);
+    }
+
+    .team-role {
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: #7fb3ff;
+    }
+
+    .team-bio {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+      max-width: 40ch;
+      margin: 6px 0 4px;
+    }
+
+    .team-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      transition: border-color 0.3s ease, background 0.3s ease, transform 0.25s ease;
+    }
+
+    .team-link:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.06);
+      transform: translateY(-2px);
+    }
+
+    .team-link svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* Bottom-of-page join CTA — same green button as the downloads page,
+       sized to its label instead of stretching full-width. */
+    .team-cta {
+      display: flex;
+      justify-content: center;
+      margin-top: clamp(32px, 5vw, 48px);
+    }
+
+    .team-cta .btn-green {
+      width: auto;
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+
+    /* ─── Socials ─────────────────────────────────────── */
+    .socials-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      width: 100%;
+    }
+
+    @media (min-width: 560px) {
+      .socials-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .social-tile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      background: var(--step-bg);
+      border: 1px solid var(--step-border);
+      border-radius: 16px;
+      text-decoration: none;
+      transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+    }
+
+    .social-tile:hover {
+      border-color: rgba(79, 143, 255, 0.4);
+      background: rgba(79, 143, 255, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--glow-1), var(--glow-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .social-icon svg {
+      width: 20px;
+      height: 20px;
+      color: #fff;
+    }
+
+    .social-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .social-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+    }
+
+    .social-handle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }

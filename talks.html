@@ -29,6 +29,10 @@
           <p>Right to Repair</p>
         </div>
       </a>
+      <nav class="top-nav" aria-label="Pages">
+        <a href="team.html">The Team</a>
+        <a href="socials.html">Socials</a>
+      </nav>
       <a class="gh-link" href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="Nicholas Harrison on GitHub" title="GitHub — NickHarrison96">
         <img src="https://github.com/NickHarrison96.png?size=96" alt="Nicholas Harrison's GitHub avatar" class="gh-avatar" loading="lazy" width="44" height="44">
       </a>
@@ -70,6 +74,18 @@
       <p class="dim">&copy; 2026 Nicholas Harrison &middot; Right to Repair. Built to be opened, fixed, and reused.</p>
     </footer>
   </div>
+
+  <script>
+    // Sticky header blur on scroll — mirrors index.html's listener so
+    // header::before's opaque backdrop activates here too.
+    (function () {
+      var header = document.querySelector('header');
+      if (!header) return;
+      window.addEventListener('scroll', function () {
+        header.classList.toggle('scrolled', window.scrollY > 20);
+      });
+    })();
+  </script>
 </body>
 
 </html>
