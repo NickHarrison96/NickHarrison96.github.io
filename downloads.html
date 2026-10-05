@@ -347,21 +347,41 @@
 
       setDot(null);
       try {
-        const r = await fetch(`${SELF_HOST_API}/api/list`, { signal: timeoutSignal(8000), cache: "no-store" });
+        const r = await fetch(`${SELF_HOST_API}/api/list`, { signal: timeoutSignal(15000), cache: "no-store" });
         if (!r.ok) throw new Error("bad status");
-        const files = await r.json();
-        if (!Array.isArray(files)) throw new Error("bad payload");
+        const data = await r.json();
+        // Tolerate both shapes so an older server doesn't blank the section.
+        const loose = Array.isArray(data) ? data : (Array.isArray(data.loose) ? data.loose : null);
+        const groups = Array.isArray(data) ? [] : (Array.isArray(data.groups) ? data.groups : null);
+        if (!loose || !groups) throw new Error("bad payload");
 
         hostSection.hidden = false;
         setDot("up");
-        if (!files.length) {
+
+        const html = loose.map((f) => hostRowHtml(f, null)).join("")
+          + groups.map(hostGroupHtml).join("");
+        if (!html) {
           hostEmpty.hidden = false;
           hostNote.textContent = hostNoteSuffix().replace(" · ", "");
           return;
         }
-        hostBox.innerHTML = files.map(hostRowHtml).join("");
-        const total = files.reduce((n, f) => n + (f.size || 0), 0);
-        hostNote.textContent = `${files.length} file${files.length === 1 ? "" : "s"} · ${fmtBytes(total)}${hostNoteSuffix()}`;
+
+        hostBox.innerHTML = html;
+        // Open the first group by default so the section doesn't look inert,
+        // but only on the initial load — a later refresh shouldn't yank an
+        // open/closed choice the user made.
+        if (!hostBox.dataset.touched) {
+          const first = hostBox.querySelector(".host-group");
+          if (first) first.open = true;
+        }
+
+        let count = loose.length;
+        let bytes = loose.reduce((n, f) => n + (f.size || 0), 0);
+        groups.forEach((g) => {
+          count += g.files.length;
+          bytes += g.bytes || g.files.reduce((n, f) => n + (f.size || 0), 0);
+        });
+        hostNote.textContent = `${count} file${count === 1 ? "" : "s"} · ${fmtBytes(bytes)}${hostNoteSuffix()}`;
       } catch {
         hostSection.hidden = false;
         hostBox.innerHTML = "";
@@ -371,6 +391,14 @@
         setDot("down");
       }
     }
+
+    // Remember that the user opened a group, so the auto-open-on-load above
+    // stops interfering after the first interaction.
+    document.addEventListener("toggle", (e) => {
+      if (e.target && e.target.classList && e.target.classList.contains("host-group") && hostBox) {
+        hostBox.dataset.touched = "1";
+      }
+    }, true);
 
     (async function init() {
       if (self_.length) {
