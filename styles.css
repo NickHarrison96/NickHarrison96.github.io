@@ -1389,6 +1389,104 @@
       border-radius: var(--radius);
     }
 
+    /* Status dot to the left of the Host Folder title. Mirrors the colours
+       .status-pill.up uses so the two read as the same signal. */
+    .host-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--muted);
+      flex: 0 0 auto;
+    }
+
+    .host-dot.up {
+      background: #34d399;
+      box-shadow: 0 0 10px #34d399;
+      animation: status-pulse 1.6s ease-in-out infinite;
+    }
+
+    .host-dot.down {
+      background: #f87171;
+      box-shadow: 0 0 10px #f87171;
+    }
+
+    /* ─── Host folder: collapsible groups ─────────────────────────
+       Each subfolder of the host folder renders as a header row that
+       expands to reveal its files. Built on <details>/<summary> so
+       open/closed state, keyboard handling and screen-reader
+       semantics all come from the platform rather than hand-rolled JS. */
+    .host-group {
+      border-top: 1px solid var(--border);
+    }
+
+    .host-group:first-of-type {
+      border-top: 0;
+    }
+
+    .host-group> summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 16px;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+      transition: background-color 0.2s ease;
+    }
+
+    /* Hide the default disclosure triangle in WebKit/Blink. */
+    .host-group> summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .host-group-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 14.5px;
+      letter-spacing: -0.01em;
+    }
+
+    .host-group-count {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* Chevron on the right, rotates when open. */
+    .host-group-chev {
+      margin-left: auto;
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      color: var(--muted);
+      transition: transform 0.25s ease, color 0.2s ease;
+    }
+
+    .host-group[open]>.host-group-chev {
+      transform: rotate(180deg);
+      color: #7ef0b0;
+    }
+
+    @media (hover: hover) {
+      .host-group> summary:hover {
+        background: rgba(79, 143, 255, 0.05);
+      }
+
+      .host-group[open]> summary:hover .host-group-chev {
+        color: #7ef0b0;
+      }
+    }
+
+    .host-group> summary:focus-visible {
+      outline: 2px solid var(--glow-1);
+      outline-offset: -2px;
+    }
+
+    /* Nested rows lose their own top rule; the summary provides it. */
+    .host-group .host-row:first-of-type {
+      border-top: 1px solid var(--border);
+    }
+
     /* ─── Host folder: live file listing ──────────────────────────
        A contained box of rows, one per file found in the host folder.
        Rows are separated by a 1px rule rather than by gaps, so it reads

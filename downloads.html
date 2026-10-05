@@ -73,6 +73,8 @@
           <!-- Live listing of the host folder, populated from /api/list -->
           <section class="dl-section" id="hostSection" hidden>
             <div class="dl-section-head">
+              <span class="host-dot" id="hostDot" role="status" aria-live="polite"
+                aria-label="Host folder status"></span>
               <span class="dl-section-title">Host <em>Folder</em></span>
               <span class="dl-section-note" id="hostNote"></span>
             </div>
@@ -286,9 +288,12 @@
       }
     }
 
+    const CHEVRON_UP = '<svg class="host-group-chev" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>';
+
     /* ── Host folder listing ──────────────────────────────────────
        Reads whatever is sitting in the host folder right now, so files can be
-       added there without touching this catalog.
+       added there without touching this catalog. Files sitting loose in the
+       root render as plain rows; each subfolder becomes a collapsible group.
        The fetch is always attempted: if SELF_HOST_API is unreachable — which
        is what a deploy without a real tunnel origin looks like — the section
        says so plainly rather than pretending to be fine. */
@@ -300,12 +305,16 @@
     const hostIsLocal = /(^https?:\/\/)(127\.0\.0\.1|localhost)/i.test(SELF_HOST_API);
     const hostNoteSuffix = () => (hostIsLocal ? " · local test origin" : "");
 
-    function hostRowHtml(f) {
-      const href = `${SELF_HOST_API}/api/files/${encodeURIComponent(f.name)}`;
+    function hostRowHtml(f, group) {
+      // Each path segment is encoded separately so a folder name with a space
+      // ("iOS tools") survives the round trip.
+      const path = (group ? encodeURIComponent(group) + "/" : "") + encodeURIComponent(f.name);
+      const href = `${SELF_HOST_API}/api/files/${path}`;
       const size = f.size ? fmtBytes(f.size) : "";
+      const label = group ? `${group} / ${f.name}` : f.name;
       return `
         <div class="host-row">
-          <span class="host-name" title="${esc(f.name)}">${esc(f.name)}</span>
+          <span class="host-name" title="${esc(label)}">${esc(f.name)}</span>
           <span class="host-size">${size}</span>
           <a class="host-dl" href="${href}" download>
             ${DL_ICON}
@@ -314,7 +323,29 @@
         </div>`;
     }
 
+    function hostGroupHtml(g) {
+      const total = g.files.reduce((n, f) => n + (f.size || 0), 0);
+      const n = g.files.length;
+      return `
+        <details class="host-group">
+          <summary>
+            <span class="host-group-name">${esc(g.name)}</span>
+            <span class="host-group-count">${n} file${n === 1 ? "" : "s"} · ${fmtBytes(total)}</span>
+            ${CHEVRON_UP}
+          </summary>
+          ${g.files.map((f) => hostRowHtml(f, g.name)).join("")}
+        </details>`;
+    }
+
     async function renderHost() {
+      const dot = document.getElementById("hostDot");
+      const setDot = (state) => {
+        if (!dot) return;
+        dot.className = "host-dot" + (state ? " " + state : "");
+        dot.title = state === "up" ? "Host folder online" : state === "down" ? "Host folder offline" : "Checking host folder…";
+      };
+
+      setDot(null);
       try {
         const r = await fetch(`${SELF_HOST_API}/api/list`, { signal: timeoutSignal(8000), cache: "no-store" });
         if (!r.ok) throw new Error("bad status");
@@ -322,6 +353,7 @@
         if (!Array.isArray(files)) throw new Error("bad payload");
 
         hostSection.hidden = false;
+        setDot("up");
         if (!files.length) {
           hostEmpty.hidden = false;
           hostNote.textContent = hostNoteSuffix().replace(" · ", "");
@@ -336,6 +368,7 @@
         hostEmpty.hidden = false;
         hostEmpty.textContent = "Host folder unreachable.";
         hostNote.textContent = hostNoteSuffix().replace(" · ", "");
+        setDot("down");
       }
     }
 
