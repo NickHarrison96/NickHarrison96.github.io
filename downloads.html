@@ -134,10 +134,18 @@
     // The Worker streams from the host folder and injects the access token
     // server-side, so nothing secret is needed here. Anything pointing at the
     // origin directly must never be committed — see ~/Documents/Github/selfhost.
-    // Public on purpose: this is the Cloudflare Worker's address, which carries
-    // no secret. The real access token lives in a Worker secret and is never
-    // present in this file.
-    const SELF_HOST_API = "https://harrison-tech-files.<your-subdomain>.workers.dev";
+    // LOCAL TEST ORIGIN — a Cloudflare *quick* tunnel. Safe to commit because it
+    // carries no secret: the access token is injected server-side by the proxy
+    // Worker. Two caveats:
+    //   1. Quick-tunnel hostnames are reassigned every restart, so this line
+    //      needs updating whenever the tunnel cycles. Get the current one from
+    //      `docker compose --profile quick logs quicktunnel` or update.bat.
+    //   2. Anyone with this URL can download everything in the host folder.
+    //      It is in a public repository, so that is currently everyone.
+    //
+    // For production, replace with the Worker's workers.dev address and put
+    // Cloudflare Access in front of it. See ~/Documents/Github/selfhost/worker.
+    const SELF_HOST_API = "https://threats-purchasing-hub-exhibit.trycloudflare.com";
     const HEALTH_INTERVAL_MS = 30000;
     const HOST_LIST_INTERVAL_MS = 60000;
 
