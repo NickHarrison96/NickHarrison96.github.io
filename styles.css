@@ -1389,6 +1389,105 @@
       border-radius: var(--radius);
     }
 
+    /* ─── Host folder: live file listing ──────────────────────────
+       A contained box of rows, one per file found in the host folder.
+       Rows are separated by a 1px rule rather than by gaps, so it reads
+       as a single manifest. Filename left, then size, then the button
+       hard right. */
+    .host-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.02);
+      overflow: hidden;
+    }
+
+    .host-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Last row keeps the box's bottom edge clean. */
+    .host-row:last-child {
+      border-bottom: 0;
+    }
+
+    .host-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 14.5px;
+      letter-spacing: -0.01em;
+      /* Long filenames must not push the size and button off the row. */
+      min-width: 0;
+      flex: 1 1 auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .host-size {
+      font-size: 12.5px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .host-dl {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .host-dl svg {
+      width: 15px;
+      height: 15px;
+      flex: 0 0 auto;
+    }
+
+    .host-row:hover {
+      background: rgba(79, 143, 255, 0.05);
+    }
+
+    @media (hover: hover) {
+      .host-dl:hover {
+        background: rgba(79, 143, 255, 0.16);
+        border-color: rgba(79, 143, 255, 0.45);
+        transform: translateY(-1px);
+      }
+    }
+
+    .host-dl:focus-visible {
+      outline: 2px solid var(--glow-1);
+      outline-offset: 2px;
+    }
+
+    /* Narrow screens: size drops under the filename so the button keeps its
+       place on the right rather than being squeezed off the edge. */
+    @media (max-width: 560px) {
+      .host-row {
+        flex-wrap: wrap;
+        gap: 6px 12px;
+      }
+
+      .host-name {
+        flex: 1 1 100%;
+      }
+    }
+
     /* ─── Downloads: sections + expandable grid ────────── */
     .dl-section {
       margin-top: 8px;

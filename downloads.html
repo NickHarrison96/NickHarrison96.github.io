@@ -70,6 +70,16 @@
             <div class="dl-grid" id="ghGrid"></div>
           </section>
 
+          <!-- Live listing of the host folder, populated from /api/list -->
+          <section class="dl-section" id="hostSection" hidden>
+            <div class="dl-section-head">
+              <span class="dl-section-title">Host <em>Folder</em></span>
+              <span class="dl-section-note" id="hostNote"></span>
+            </div>
+            <div class="host-box" id="hostBox"></div>
+            <div class="dl-empty" id="hostEmpty" hidden>Nothing published in the host folder yet.</div>
+          </section>
+
           <!-- Self-hosted (large files) -->
           <section class="dl-section" id="selfSection" hidden>
             <div class="dl-section-head">
@@ -110,11 +120,20 @@
   </div>
 
   <script>
-    // ── Config ──────────────────────────────────────────────────────
-    // Only used by host:"self" (large) files. Set to your named Cloudflare
-    // tunnel origin when that pipeline is live — no trailing slash.
-    const SELF_HOST_API = "https://REPLACE-WITH-YOUR-TUNNEL";
+    // ⚠️ QUICK-TUNNEL TEST VALUE — DO NOT COMMIT OR PUSH.
+    // Two problems with this line as it stands:
+    //   1. The token is baked into a PUBLIC git repo, so committing publishes it
+    //      permanently in git history. That defeats the point of having one.
+    //   2. This is a trycloudflare.com hostname from a *quick* tunnel. Cloudflare
+    //      picks a random one every time the tunnel container restarts, so this
+    //      link dies at some arbitrary point.
+    //
+    // For production, replace with your named-tunnel origin and put Cloudflare
+    // Access in front of it — that is the only thing that makes this folder
+    // genuinely private. See ~/Documents/Github/selfhost/README.md.
+    const SELF_HOST_API = "https://route-province-neck-adipex.trycloudflare.com/REMOVED-ROTATED-TOKEN";
     const HEALTH_INTERVAL_MS = 30000;
+    const HOST_LIST_INTERVAL_MS = 60000;
 
     // The catalog. Add projects here — the grid rebuilds itself.
     //   host:"github" — always available. Set `url` to a Release asset (or repo/release page).
@@ -267,6 +286,59 @@
       }
     }
 
+    /* ── Host folder listing ──────────────────────────────────────
+       Reads whatever is sitting in the host folder right now, so files can be
+       added there without touching this catalog.
+       The fetch is always attempted: if SELF_HOST_API is unreachable — which
+       is what a deploy without a real tunnel origin looks like — the section
+       says so plainly rather than pretending to be fine. */
+    const hostSection = document.getElementById("hostSection");
+    const hostBox = document.getElementById("hostBox");
+    const hostEmpty = document.getElementById("hostEmpty");
+    const hostNote = document.getElementById("hostNote");
+
+    const hostIsLocal = /(^https?:\/\/)(127\.0\.0\.1|localhost)/i.test(SELF_HOST_API);
+    const hostNoteSuffix = () => (hostIsLocal ? " · local test origin" : "");
+
+    function hostRowHtml(f) {
+      const href = `${SELF_HOST_API}/api/files/${encodeURIComponent(f.name)}`;
+      const size = f.size ? fmtBytes(f.size) : "";
+      return `
+        <div class="host-row">
+          <span class="host-name" title="${esc(f.name)}">${esc(f.name)}</span>
+          <span class="host-size">${size}</span>
+          <a class="host-dl" href="${href}" download>
+            ${DL_ICON}
+            Download
+          </a>
+        </div>`;
+    }
+
+    async function renderHost() {
+      try {
+        const r = await fetch(`${SELF_HOST_API}/api/list`, { signal: timeoutSignal(8000), cache: "no-store" });
+        if (!r.ok) throw new Error("bad status");
+        const files = await r.json();
+        if (!Array.isArray(files)) throw new Error("bad payload");
+
+        hostSection.hidden = false;
+        if (!files.length) {
+          hostEmpty.hidden = false;
+          hostNote.textContent = hostNoteSuffix().replace(" · ", "");
+          return;
+        }
+        hostBox.innerHTML = files.map(hostRowHtml).join("");
+        const total = files.reduce((n, f) => n + (f.size || 0), 0);
+        hostNote.textContent = `${files.length} file${files.length === 1 ? "" : "s"} · ${fmtBytes(total)}${hostNoteSuffix()}`;
+      } catch {
+        hostSection.hidden = false;
+        hostBox.innerHTML = "";
+        hostEmpty.hidden = false;
+        hostEmpty.textContent = "Host folder unreachable.";
+        hostNote.textContent = hostNoteSuffix().replace(" · ", "");
+      }
+    }
+
     (async function init() {
       if (self_.length) {
         selfSection.hidden = false;
@@ -275,6 +347,8 @@
         setInterval(async () => { renderSelf(await pingHealth()); }, HEALTH_INTERVAL_MS);
       }
       if (!gh.length && !self_.length) emptyEl.hidden = false;
+      await renderHost();
+      setInterval(renderHost, HOST_LIST_INTERVAL_MS);
     })();
   </script>
 
