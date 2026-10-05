@@ -3,3 +3,7 @@
 Thumbs.db
 desktop.ini
 *.log
+
+# Local-only self-hosted origin override. May contain an access token, so it
+# must never be committed.
+selfhost.local.js

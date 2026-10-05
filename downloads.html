@@ -97,9 +97,10 @@
           <div class="dl-empty" id="dlEmpty" hidden>No downloads published yet.</div>
 
           <div class="note">
-            <strong>How hosting works here.</strong> The <em>On GitHub</em> section is always available. The
-            <em>Self-Hosted</em> section streams very large files from a personal server &mdash; those work only while
-            its status light is green. Verify big downloads against the listed SHA-256.
+            <strong>How hosting works here.</strong> The <em>On GitHub</em> section is always available and is
+            versioned with a published SHA-256. The <em>Host Folder</em> section streams very large files from my own
+            server, so it depends on that machine being up &mdash; the dot above goes red when it isn't. Verify any
+            large download against the SHA-256 I publish alongside it.
           </div>
         </div>
       </div>
@@ -121,22 +122,23 @@
     </footer>
   </div>
 
+  <!-- Local-only override. Not committed (see .gitignore). Lets you point the
+       page at a local origin WITH a token while the committed value stays
+       token-free. Absent in production, where the 404 is harmless. -->
+  <script src="selfhost.local.js"></script>
+
   <script>
-    // ⚠️ NEVER COMMIT A REAL VALUE HERE.
+    // ── Self-hosted origin ────────────────────────────────────────────────
+    // NEVER COMMIT A REAL ACCESS TOKEN HERE. SELF_HOST_API carries the token in
+    // the URL, because a plain <a download> cannot send an Authorization
+    // header. This file is served from a PUBLIC repo, so a committed token is
+    // published permanently in git history and anyone can list and download the
+    // whole host folder. One was exposed this way and had to be rotated.
     //
-    // SELF_HOST_API carries the access token in the URL, because a plain
-    // <a download> cannot send an Authorization header. This file is served
-    // from a PUBLIC repo, so a real token committed here is published
-    // permanently in git history — anyone could then list and download the
-    // entire host folder. A token from an earlier commit was exposed this way
-    // and had to be rotated out of band.
+    // A URL on its own is fine. That is the case below and the Worker case: the
+    // Worker injects the token server-side, so its address carries no secret.
     //
-    // The Worker streams from the host folder and injects the access token
-    // server-side, so nothing secret is needed here. Anything pointing at the
-    // origin directly must never be committed — see ~/Documents/Github/selfhost.
-    // LOCAL TEST ORIGIN — a Cloudflare *quick* tunnel. Safe to commit because it
-    // carries no secret: the access token is injected server-side by the proxy
-    // Worker. Two caveats:
+    // LOCAL TEST ORIGIN — a Cloudflare *quick* tunnel. Two caveats:
     //   1. Quick-tunnel hostnames are reassigned every restart, so this line
     //      needs updating whenever the tunnel cycles. Get the current one from
     //      `docker compose --profile quick logs quicktunnel` or update.bat.
@@ -146,6 +148,12 @@
     // For production, replace with the Worker's workers.dev address and put
     // Cloudflare Access in front of it. See ~/Documents/Github/selfhost/worker.
     const SELF_HOST_API = "https://threats-purchasing-hub-exhibit.trycloudflare.com";
+
+    // A committed value must never contain a token. To test against a local
+    // origin that requires one, set window.SELF_HOST_API_OVERRIDE in
+    // selfhost.local.js (gitignored) — it wins when present.
+    const SELF_HOST_BASE = (typeof window !== "undefined" && window.SELF_HOST_API_OVERRIDE)
+      || SELF_HOST_API;
     const HEALTH_INTERVAL_MS = 30000;
     const HOST_LIST_INTERVAL_MS = 60000;
 
@@ -209,7 +217,7 @@
       const canDownload = !soon && (isGh || enabled);
       const href = isGh
         ? (d.url || "#")
-        : `${SELF_HOST_API}/api/files/${encodeURIComponent(d.filename || "")}`;
+        : `${SELF_HOST_BASE}/api/files/${encodeURIComponent(d.filename || "")}`;
       const size = d.size ? fmtBytes(d.size) : "";
       const sha = d.sha256 ? `<code title="SHA-256">${esc(d.sha256).slice(0, 16)}&hellip;</code>` : "";
 
@@ -288,7 +296,7 @@
     }
     async function pingHealth() {
       try {
-        const r = await fetch(`${SELF_HOST_API}/api/health`, { signal: timeoutSignal(5000), cache: "no-store" });
+        const r = await fetch(`${SELF_HOST_BASE}/api/health`, { signal: timeoutSignal(5000), cache: "no-store" });
         if (!r.ok) throw new Error("bad status");
         pill.className = "status-pill up";
         pillText.textContent = "Online";
@@ -314,18 +322,18 @@
     const hostEmpty = document.getElementById("hostEmpty");
     const hostNote = document.getElementById("hostNote");
 
-    const hostIsLocal = /(^https?:\/\/)(127\.0\.0\.1|localhost)/i.test(SELF_HOST_API);
+    const hostIsLocal = /(^https?:\/\/)(127\.0\.0\.1|localhost)/i.test(SELF_HOST_BASE);
     const hostNoteSuffix = () => (hostIsLocal ? " · local test origin" : "");
     // An unconfigured SELF_HOST_API means the section has nothing to talk to.
     // Leave it hidden rather than showing a red dot and "unreachable", which
     // would read as an outage on a site that simply isn't using this feature.
-    const hostConfigured = /^https?:\/\//i.test(SELF_HOST_API);
+    const hostConfigured = /^https?:\/\//i.test(SELF_HOST_BASE);
 
     function hostRowHtml(f, prefix) {
       // prefix is the already-encoded folder path from the root, so nested rows
       // build correct URLs without each level having to know its ancestors.
       const path = (prefix ? prefix + "/" : "") + encodeURIComponent(f.name);
-      const href = `${SELF_HOST_API}/api/files/${path}`;
+      const href = `${SELF_HOST_BASE}/api/files/${path}`;
       const size = f.size ? fmtBytes(f.size) : "";
       return `
         <div class="host-row">
@@ -375,7 +383,7 @@
 
       setDot(null);
       try {
-        const r = await fetch(`${SELF_HOST_API}/api/list`, { signal: timeoutSignal(15000), cache: "no-store" });
+        const r = await fetch(`${SELF_HOST_BASE}/api/list`, { signal: timeoutSignal(15000), cache: "no-store" });
         if (!r.ok) throw new Error("bad status");
         const data = await r.json();
         // Tolerate both shapes so an older server doesn't blank the section.
