@@ -216,6 +216,18 @@
     }
 
     /* ─── Layout ───────────────────────────────────────── */
+    /* .page is a centered column flex, so children default to fit-content and
+       grow to their content's max-content width. Every other page's content
+       happens to fit the viewport, but downloads.html holds long unbroken
+       filenames (model .gguf names), which pushed main out to 772px and
+       overflowed narrow screens. Pinning main to the same measure .card uses
+       keeps it inside the viewport; .host-name's existing ellipsis then
+       truncates the long names instead of stretching the page. */
+    main {
+      width: 100%;
+      max-width: 1200px;
+    }
+
     .page {
       position: relative;
       z-index: 1;
