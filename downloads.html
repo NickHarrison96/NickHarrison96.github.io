@@ -129,29 +129,24 @@
 
   <script>
     // ── Self-hosted origin ────────────────────────────────────────────────
-    // NEVER COMMIT A REAL ACCESS TOKEN HERE. SELF_HOST_API carries the token in
-    // the URL, because a plain <a download> cannot send an Authorization
-    // header. This file is served from a PUBLIC repo, so a committed token is
-    // published permanently in git history and anyone can list and download the
-    // whole host folder. One was exposed this way and had to be rotated.
+    // This URL is SAFE TO COMMIT: it is the Cloudflare Worker's address and
+    // carries no secret. The Worker holds the access token in an encrypted
+    // secret and injects it server-side on every upstream request, so nothing
+    // sensitive exists in this file or in this repository's history.
     //
-    // A URL on its own is fine. That is the case below and the Worker case: the
-    // Worker injects the token server-side, so its address carries no secret.
+    // NEVER put a raw origin (a tunnel or container address) plus a token in
+    // here. That combination was committed once and published the whole host
+    // folder to anyone who read the page source; the token had to be rotated.
     //
-    // LOCAL TEST ORIGIN — a Cloudflare *quick* tunnel. Two caveats:
-    //   1. Quick-tunnel hostnames are reassigned every restart, so this line
-    //      needs updating whenever the tunnel cycles. Get the current one from
-    //      `docker compose --profile quick logs quicktunnel` or update.bat.
-    //   2. Anyone with this URL can download everything in the host folder.
-    //      It is in a public repository, so that is currently everyone.
-    //
-    // For production, replace with the Worker's workers.dev address and put
-    // Cloudflare Access in front of it. See ~/Documents/Github/selfhost/worker.
-    const SELF_HOST_API = "https://threats-purchasing-hub-exhibit.trycloudflare.com";
+    // The Worker needs no authentication, so downloads are open to anyone who
+    // can reach it. To restrict that, put Cloudflare Access in front of the
+    // Worker rather than adding auth to downloads.html — see
+    // ~/Documents/Github/selfhost/worker/README.md.
+    const SELF_HOST_API = "https://harrisontechdev.harrisontechdev.workers.dev";
 
-    // A committed value must never contain a token. To test against a local
-    // origin that requires one, set window.SELF_HOST_API_OVERRIDE in
-    // selfhost.local.js (gitignored) — it wins when present.
+    // A local origin (which does need a token) can be supplied by setting
+    // window.SELF_HOST_API_OVERRIDE in selfhost.local.js, which is gitignored.
+    // It wins when present, so the committed value above stays token-free.
     const SELF_HOST_BASE = (typeof window !== "undefined" && window.SELF_HOST_API_OVERRIDE)
       || SELF_HOST_API;
     const HEALTH_INTERVAL_MS = 30000;
