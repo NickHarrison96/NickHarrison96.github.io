@@ -122,18 +122,22 @@
   </div>
 
   <script>
-    // ⚠️ QUICK-TUNNEL TEST VALUE — DO NOT COMMIT OR PUSH.
-    // Two problems with this line as it stands:
-    //   1. The token is baked into a PUBLIC git repo, so committing publishes it
-    //      permanently in git history. That defeats the point of having one.
-    //   2. This is a trycloudflare.com hostname from a *quick* tunnel. Cloudflare
-    //      picks a random one every time the tunnel container restarts, so this
-    //      link dies at some arbitrary point.
+    // ⚠️ NEVER COMMIT A REAL VALUE HERE.
     //
-    // For production, replace with your named-tunnel origin and put Cloudflare
-    // Access in front of it — that is the only thing that makes this folder
-    // genuinely private. See ~/Documents/Github/selfhost/README.md.
-    const SELF_HOST_API = "https://route-province-neck-adipex.trycloudflare.com/REMOVED-ROTATED-TOKEN";
+    // SELF_HOST_API carries the access token in the URL, because a plain
+    // <a download> cannot send an Authorization header. This file is served
+    // from a PUBLIC repo, so a real token committed here is published
+    // permanently in git history — anyone could then list and download the
+    // entire host folder. A token from an earlier commit was exposed this way
+    // and had to be rotated out of band.
+    //
+    // The Worker streams from the host folder and injects the access token
+    // server-side, so nothing secret is needed here. Anything pointing at the
+    // origin directly must never be committed — see ~/Documents/Github/selfhost.
+    // Public on purpose: this is the Cloudflare Worker's address, which carries
+    // no secret. The real access token lives in a Worker secret and is never
+    // present in this file.
+    const SELF_HOST_API = "https://harrison-tech-files.<your-subdomain>.workers.dev";
     const HEALTH_INTERVAL_MS = 30000;
     const HOST_LIST_INTERVAL_MS = 60000;
 
@@ -304,6 +308,10 @@
 
     const hostIsLocal = /(^https?:\/\/)(127\.0\.0\.1|localhost)/i.test(SELF_HOST_API);
     const hostNoteSuffix = () => (hostIsLocal ? " · local test origin" : "");
+    // An unconfigured SELF_HOST_API means the section has nothing to talk to.
+    // Leave it hidden rather than showing a red dot and "unreachable", which
+    // would read as an outage on a site that simply isn't using this feature.
+    const hostConfigured = /^https?:\/\//i.test(SELF_HOST_API);
 
     function hostRowHtml(f, prefix) {
       // prefix is the already-encoded folder path from the root, so nested rows
@@ -420,8 +428,10 @@
         setInterval(async () => { renderSelf(await pingHealth()); }, HEALTH_INTERVAL_MS);
       }
       if (!gh.length && !self_.length) emptyEl.hidden = false;
-      await renderHost();
-      setInterval(renderHost, HOST_LIST_INTERVAL_MS);
+      if (hostConfigured) {
+        await renderHost();
+        setInterval(renderHost, HOST_LIST_INTERVAL_MS);
+      }
     })();
   </script>
 
