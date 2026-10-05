@@ -305,16 +305,15 @@
     const hostIsLocal = /(^https?:\/\/)(127\.0\.0\.1|localhost)/i.test(SELF_HOST_API);
     const hostNoteSuffix = () => (hostIsLocal ? " · local test origin" : "");
 
-    function hostRowHtml(f, group) {
-      // Each path segment is encoded separately so a folder name with a space
-      // ("iOS tools") survives the round trip.
-      const path = (group ? encodeURIComponent(group) + "/" : "") + encodeURIComponent(f.name);
+    function hostRowHtml(f, prefix) {
+      // prefix is the already-encoded folder path from the root, so nested rows
+      // build correct URLs without each level having to know its ancestors.
+      const path = (prefix ? prefix + "/" : "") + encodeURIComponent(f.name);
       const href = `${SELF_HOST_API}/api/files/${path}`;
       const size = f.size ? fmtBytes(f.size) : "";
-      const label = group ? `${group} / ${f.name}` : f.name;
       return `
         <div class="host-row">
-          <span class="host-name" title="${esc(label)}">${esc(f.name)}</span>
+          <span class="host-name" title="${esc(decodeURIComponent(prefix ? prefix + "/" + f.name : f.name))}">${esc(f.name)}</span>
           <span class="host-size">${size}</span>
           <a class="host-dl" href="${href}" download>
             ${DL_ICON}
@@ -323,9 +322,14 @@
         </div>`;
     }
 
-    function hostGroupHtml(g) {
-      const total = g.files.reduce((n, f) => n + (f.size || 0), 0);
-      const n = g.files.length;
+    function hostGroupHtml(g, path) {
+      // path is the already-encoded prefix from the root, so nested rows build
+      // correct URLs without each level having to know its ancestors.
+      const here = path ? path + "/" + encodeURIComponent(g.name) : encodeURIComponent(g.name);
+      const total = hostCountBytes(g);
+      const n = hostCountFiles(g);
+      // files/dirs arrive as null from Go when a slice is empty, so normalise
+      // before mapping — `(g.files || [])` is load-bearing, not defensive noise.
       return `
         <details class="host-group">
           <summary>
@@ -333,9 +337,17 @@
             <span class="host-group-count">${n} file${n === 1 ? "" : "s"} · ${fmtBytes(total)}</span>
             ${CHEVRON_UP}
           </summary>
-          ${g.files.map((f) => hostRowHtml(f, g.name)).join("")}
+          ${(g.files || []).map((f) => hostRowHtml(f, here)).join("")}
+          ${(g.dirs || []).map((d) => hostGroupHtml(d, here)).join("")}
         </details>`;
     }
+
+    const hostCountFiles = (g) =>
+      (g.files || []).length + (g.dirs || []).reduce((n, d) => n + hostCountFiles(d), 0);
+
+    const hostCountBytes = (g) =>
+      (g.files || []).reduce((n, f) => n + (f.size || 0), 0) +
+      (g.dirs || []).reduce((n, d) => n + hostCountBytes(d), 0);
 
     async function renderHost() {
       const dot = document.getElementById("hostDot");
@@ -359,7 +371,7 @@
         setDot("up");
 
         const html = loose.map((f) => hostRowHtml(f, null)).join("")
-          + groups.map(hostGroupHtml).join("");
+          + groups.map((g) => hostGroupHtml(g, null)).join("");
         if (!html) {
           hostEmpty.hidden = false;
           hostNote.textContent = hostNoteSuffix().replace(" · ", "");
@@ -378,8 +390,8 @@
         let count = loose.length;
         let bytes = loose.reduce((n, f) => n + (f.size || 0), 0);
         groups.forEach((g) => {
-          count += g.files.length;
-          bytes += g.bytes || g.files.reduce((n, f) => n + (f.size || 0), 0);
+          count += hostCountFiles(g);
+          bytes += hostCountBytes(g);
         });
         hostNote.textContent = `${count} file${count === 1 ? "" : "s"} · ${fmtBytes(bytes)}${hostNoteSuffix()}`;
       } catch {

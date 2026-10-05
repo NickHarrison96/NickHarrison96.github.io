@@ -1487,6 +1487,13 @@
       border-top: 1px solid var(--border);
     }
 
+    /* A folder nested inside another folder sits flush rather than double-
+       indenting, so deep trees stay readable on narrow screens. The nesting is
+       still conveyed by the header itself. */
+    .host-group .host-group {
+      border-top: 1px solid var(--border);
+    }
+
     /* ─── Host folder: live file listing ──────────────────────────
        A contained box of rows, one per file found in the host folder.
        Rows are separated by a 1px rule rather than by gaps, so it reads
