@@ -1,8 +1,8 @@
 # NickHarrison96.github.io
 
-Static, dependency-free site for **Harrison Technology Solutions** — the Right to Repair campaign and free repair/diagnostics software built by Nicholas Harrison.
+Static, dependency-free site for **Nick Harrison** — systems & AI engineering write-ups and projects, the Right to Repair campaign, and the free repair/diagnostics software he builds (Harrison Technology Solutions).
 
-No build step, no package manager, no dependencies. Deploy the folder as-is to any static host.
+No build step and no runtime dependencies: plain HTML, one stylesheet, and native ES modules. Deploy the folder as-is to any static host.
 
 **Live:** https://nickharrison96.github.io/
 
@@ -10,42 +10,46 @@ No build step, no package manager, no dependencies. Deploy the folder as-is to a
 
 | File | Purpose |
 |---|---|
-| `index.html` | Landing page. Carousel, work grid (from the `ITEMS` array), and the Free Tools grid (from the `TOOLS` array). All page JS lives inline here. |
-| `downloads.html` | Download catalog. Cards render from the `DOWNLOADS` array, split into always-available GitHub releases and a live Host Folder section. |
-| `about.html` | Who the company is and what it does. |
-| `team.html` | The three people behind it. |
-| `socials.html` | Contact links. |
-| `mission.html` | Mission statement. |
-| `get-involved.html`, `legislation.html`, `repair-guides.html`, `repair-cafes.html`, `talks.html`, `writing.html` | Campaign sub-pages. |
+| `index.html` | Homepage: live terminal, projects, featured case study, Right to Repair teardown, field log, free tools (from the catalog), manifesto. |
+| `apfs-recovery.html` | Full case study: surgical recovery of a corrupted macOS installation. |
+| `downloads.html` | Download catalog (from the shared catalog) plus the live Host Folder listing. |
+| `about.html`, `team.html`, `socials.html` | Company, people, contact. |
+| `mission.html`, `get-involved.html`, `legislation.html`, `repair-guides.html`, `repair-cafes.html`, `talks.html`, `writing.html` | Campaign pages. |
 
-Every page shares `styles.css` and the same shell: brand link home, top nav, `.card.subpage` → `.page-hero` + `.prose`, shared footer. Edit the design in `styles.css` once and it applies everywhere.
+Every page shares `styles.css` and the same header/footer shell (checked byte-for-byte by `tools/check-site.mjs`).
+
+## How it's built
+
+- **Dark-glass design**: near-black grid, sky-blue glow, glass panels; Inter + JetBrains Mono.
+- **GPU background**: a hand-written WebGL shader (`assets/js/fx-gravity.js`) — neon grid, drifting particles, a gravity lens around the cursor and click shockwaves. No three.js, no GSAP, no CDN scripts.
+- **UI physics**: magnetic buttons and tilting cards on springs (`assets/js/fx-physics.js`).
+- **Extras**: interactive terminal (try `help`), ⌘K / Ctrl+K search, a boot splash on first visit, and a Konami-code "jailbreak mode".
+- **Degrades gracefully**: FULL → LITE → STATIC tiers on `<html data-fx>`; reduced motion or no WebGL gives a static page, and every section reads fine without JavaScript.
+- All effect constants live in `assets/js/fx-config.js`.
 
 ## Downloads
 
-Two kinds of download, served two different ways:
+- **GitHub-hosted** — release assets or branch archives in public repos. Always available.
+- **Host Folder** — large files served from a home server behind a Cloudflare Worker. The section renders from a live JSON listing; a status dot shows whether the server is reachable.
 
-- **GitHub-hosted** — direct links to releases or branch archives in public repos. Always available, no server involved.
-- **Host Folder** — large files (multi-GB model files, firmware, archives) served from a home server behind a Cloudflare Worker. The section renders itself from a live JSON listing, so dropping a file into the server's data folder makes it appear with no code change. A green status dot reflects whether the server is currently reachable.
+The Worker is **public by design** and the access token never touches this repository: `downloads.html` only contains the Worker's public `*.workers.dev` address, and the Worker injects the token server-side. The server lives in the private repo `NickHarrison96/selfhost`.
 
-The Worker is the site's only backend dependency and it is **public by design** — downloads require no account. The access token never touches this repository: `downloads.html` contains only the Worker's public `*.workers.dev` address, and the Worker injects the token server-side from an encrypted secret.
+**Adding a tool:** add one entry to `TOOLS` in `assets/js/catalog.js`. The homepage, field log, search palette, terminal and downloads page all read from it.
 
-The server lives in a separate **private** repo, `NickHarrison96/selfhost`.
+## Checks
 
-## Conventions
+```sh
+node tools/check-catalog.mjs
+node tools/check-site.mjs
+cd tools && npm ci && npx playwright install chromium && node smoke.mjs
+node smoke.mjs --perf --headed   # frame-time report on your own GPU
+```
 
-- Design tokens live in `:root` at the top of `styles.css`: near-black background, blue→purple glow, Syne (display) + DM Sans (body).
-- Adding a tool means editing **two** places — `DOWNLOADS` in `downloads.html`, and `TOOLS` in `index.html` so it also shows on the landing page. These are duplicated by hand with nothing enforcing agreement, so check both. (BipPoyAI shipped on one page and silently missed the other because of this.)
-- Adding a work card: add an entry to `ITEMS` in `index.html` (icon / hue / title / href / desc) and create a matching sub-page.
-- No dead links. Every `href` resolves to a real page or a real external URL.
-- Icons are inline SVG, Heroicons-style, 24×24 stroke.
+`tools/` is dev-only (Playwright is pinned in `tools/package.json`); nothing there is served or loaded by the site.
 
 ## Security
 
-Nothing secret belongs in a tracked file here. The site's default origin is the Worker's public address; a local override goes in `selfhost.local.js`, which is gitignored. A token was once committed in `downloads.html` and had to be rotated out of band after rewriting history — before committing anything that touches download config, sweep for the live token:
-
-```sh
-git grep -n <token-from-selfhost/.env> HEAD   # must print nothing
-```
+Nothing secret belongs in a tracked file. A local override for the self-host origin goes in `selfhost.local.js`, which is gitignored. Before committing anything that touches download config, run the token sweeps in `AGENTS.md` (Secrets).
 
 ## Preview
 
@@ -53,19 +57,8 @@ git grep -n <token-from-selfhost/.env> HEAD   # must print nothing
 python -m http.server 8123
 ```
 
-Then open http://localhost:8123/.
-
-Avoid `file://` — the inline JS is wrapped in a `load` handler, so nothing renders from the filesystem.
-
-**Verifying layout:** read DOM geometry via JS rather than trusting screenshots. Two traps worth knowing:
-
-- Headless Chrome clamps its window to a ~495px minimum, so it cannot reproduce a real 360–430px phone viewport. Check `documentElement.scrollWidth - clientWidth` and confirm on a real device.
-- Screenshots catch the page mid-animation behind the splash loader and scroll-reveals. Force `opacity: 1` in a throwaway copy to get a usable image.
-
-`.page` is a centered column flex, so children size to fit-content rather than the viewport — any content with a large unbreakable minimum width will overflow narrow screens. `main` is pinned to `max-width: 1200px` to prevent that. Long filenames truncate with an ellipsis by design; see `AGENTS.md`.
+Then open http://localhost:8123/. ES modules don't run from `file://`. Add `?fx=static` for still screenshots. Layout notes and known traps are in `AGENTS.md`.
 
 ## Deploy
 
-Push to `main`. GitHub Pages serves the repo root at https://nickharrison96.github.io/ (legacy build — no Actions workflow).
-
-Pages caches aggressively through its CDN: hard-refresh (Ctrl+Shift+R) or open in a private window. Asset changes can take ~45s to appear.
+Push to `main`. GitHub Pages serves the repo root at https://nickharrison96.github.io/ (legacy build — no Actions workflow). Pages caches aggressively: hard-refresh or use a private window; changes can take ~45s to appear.

@@ -106,6 +106,14 @@ Touches: `styles.css` (rewrite), all 13 `*.html` (shell), `index.html` (rebuild)
 - Agent default: secret-pattern literals never appear in tracked files outside `docs/` (the sweep would match its own documentation); AGENTS/README quote the sweep with bracketed patterns such as `gh[p]_`, which match real tokens but not themselves.
 - Agent default: `check-site.mjs --phase=N` runs only the assertions introduced up to phase N so each phase can go green on its own; the completion run uses no flag (all assertions).
 - Agent default: Playwright pinned to 1.63.0 (the version preinstalled in the cloud container used as the fallback runner) in `tools/package.json` + lockfile.
+- Execution note: `npx playwright install chromium` is blocked in the device VM (proxy 403 on the browser CDN), so every smoke/perf run happened in the cloud container (Chromium + Playwright 1.63.0 preinstalled), against a copy of the same files. `npm ci` itself works in the VM.
+- Execution note: the device bridge dropped mid-run (after Phase 1). Phases 2–7 were built and verified in the container, snapshotted per phase, then copied to the repo and committed one phase at a time once the bridge returned.
+- Agent default: a watchdog trip goes straight to STATIC (policy table), not FULL→LITE first.
+- Agent default: WebGL is requested with `failIfMajorPerformanceCaveat` (software GL → STATIC) unless `?fx=full|lite|static` forces a tier for testing; a forced tier also skips the watchdog so `--perf` can measure it.
+- Agent default: `site.js` sets `<html data-ready="1">` once the palette and Konami listeners are wired; `smoke.mjs` waits for it (a slow shader compile had raced the first keypress). Effects now load after the UI modules.
+- Agent default: header nav = /terminal /projects /case-study /repair /log /downloads; About, The Team, Socials, Writing, Case Studies, Philosophy move to the footer. Header + footer GitHub links → github.com/nickpharrison; avatar image stays NickHarrison96.png; team/socials page content links unchanged.
+- Agent default: hero "View Repositories" → `#projects` (as in Nick's source page); teardown opens on layer 01; terminal captures Tab only when the input has text (keyboard users can still tab past an empty prompt).
+- Correction (not a relaxation): check-site's "4 timeline phases" regex also counted `phase-tag` spans; it now counts `<li class="phase…">` only.
 
 ## 구현 계획
 
@@ -163,3 +171,38 @@ Run from the repo root.
 - `cd tools && npm ci && npx playwright install chromium && node smoke.mjs` (exit 0; C5) — serves the site, then per page at 1440 and 390 wide: no console errors, `scrollWidth - clientWidth == 0`, terminal `help` prints output, ⌘K opens palette, reduced-motion emulation sets `data-fx="static"`, WebGL-disabled run sets `data-fx="static"` with content visible.
 - Measured (not a pass/fail gate): `node smoke.mjs --perf` reports median frame time on index at 1440px; target ≤ 16.7ms in FULL tier on Nick's desktop.
 - Manual attest (Nick): real-phone check of index, downloads, apfs-recovery.
+
+## 검증 결과
+
+Run 2026-11-08 by the executing agent. "VM" = Nick's repo through the device shell (Linux VM, Node 22.23.4); "container" = cloud container (Node 22.23.4, Chromium via Playwright 1.63.0, SwiftShader software GL, 2 cores). Both ran against the same files.
+
+| Command | Where | Exit | Key output |
+|---|---|---|---|
+| `node tools/check-site.mjs --selftest` | container | 0 | 19 passed, 0 failed |
+| `node tools/check-catalog.mjs --selftest` | container | 0 | 9 passed, 0 failed |
+| `node tools/check-catalog.mjs` | container | 0 | 45 passed, 0 failed |
+| `node tools/check-site.mjs` | container | 0 | 706 passed, 0 failed |
+| `cd tools && npm ci` | VM | 0 | lockfile resolves playwright 1.63.0 (Phase 0) |
+| `npx playwright install chromium` | VM | fail | "Failed to download Chrome for Testing … Download failure" — proxy 403 on the browser CDN in the VM |
+| `node smoke.mjs` | container | 0 | 190 passed, 0 failed (13 pages × 1440/390, no console errors, overflow 0, no-JS content, reduced motion → static, WebGL off → static, `?fx=full` renders, terminal/palette/boot/konami) |
+| `! git grep -n -I -E "(gh[p]_\|github_[p]at_\|Bearer [A-Za-z0-9]{20,})" HEAD -- . ':!docs'` | VM | 0 | prints nothing (Phase 0/1 run; re-run on the final HEAD pending, see below) |
+| `git grep -n <token-from-selfhost/.env> HEAD` | — | not run | file is outside the repo; Nick runs it |
+| `node smoke.mjs --perf` | container | 0 | detected tier: start=lite (2 cores) → watchdog → static, median 16.70 ms / p95 16.80 ms after the drop; forced `?fx=full`: median 150.00 ms / p95 200.00 ms on SwiftShader |
+
+**Perf is a container measurement on software GL (SwiftShader, 2 cores), not a measurement on Nick's RX 580.** It shows the watchdog working (software-rendered LITE dropped to STATIC within the gated windows) and gives a worst case for FULL. Criterion 4 (≤ 16.7 ms FULL on the RX 580) is **unverified**: run `cd tools && node smoke.mjs --perf --headed` on the desktop.
+
+Status stays `in-progress`: every agent-executable check passes, but the selfhost/.env token sweep, the RX 580 frame-time measurement and the real-phone attest are Nick's, and `npx playwright install chromium` could not run in the VM.
+
+### Final re-run after all commits (2026-11-08, main session)
+
+| Command | Where | Exit | Key output |
+|---|---|---|---|
+| `node tools/check-catalog.mjs` | VM, final tree | 0 | 45 passed, 0 failed |
+| `node tools/check-site.mjs` | VM, final tree | 0 | 706 passed, 0 failed |
+| `node tools/check-site.mjs --selftest` | VM | 0 | 19 passed, 0 failed |
+| per-phase `--phase=N` checks before each commit (2–6) | VM | 0 | all green |
+| `! git grep -n -I -E "(gh[p]_\|github_[p]at_\|Bearer [A-Za-z0-9]{20,})" -- . ':!docs'` | VM, final tree | 0 | prints nothing |
+| `node tools/smoke.mjs` | container, content-identical copy | 0 | 190 passed, 0 failed |
+| content identity VM vs container | both | — | all 39 shared files identical after CR normalisation; VM keeps each file's HEAD line endings |
+
+Still open (Nick): selfhost/.env token sweep, RX 580 `smoke.mjs --perf --headed`, real-phone check.

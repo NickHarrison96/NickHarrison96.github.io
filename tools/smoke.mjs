@@ -286,34 +286,37 @@ try {
 
   await browser.close();
 
-  /* --perf — measured, not a gate */
+  /* --perf — measured, not a gate. Detected tier first, then a forced FULL tier. */
   if (PERF) {
     const b = await launch();
-    const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
-    await stub(ctx);
-    const { page } = await open(ctx, 'index.html');
-    await page.waitForTimeout(1500);
-    const info = await page.evaluate(() => {
-      const gl = document.createElement('canvas').getContext('webgl');
-      const ext = gl && gl.getExtension('WEBGL_debug_renderer_info');
-      return { tier: document.documentElement.dataset.fx, renderer: ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : (gl ? gl.getParameter(gl.RENDERER) : 'no webgl'), cores: navigator.hardwareConcurrency, mem: navigator.deviceMemory };
-    });
-    const sampler = page.evaluate(() => new Promise((done) => {
-      const d = [];
-      let last = performance.now();
-      const end = last + 10000;
-      const tick = (t) => { d.push(t - last); last = t; if (t < end) requestAnimationFrame(tick); else done(d); };
-      requestAnimationFrame(tick);
-    }));
-    for (let i = 0; i < 200; i++) {
-      const a = i / 12;
-      await page.mouse.move(720 + Math.cos(a) * 400, 450 + Math.sin(a) * 250);
-      await page.waitForTimeout(45);
+    for (const target of ['index.html', 'index.html?fx=full']) {
+      const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+      await stub(ctx);
+      const { page } = await open(ctx, target);
+      await page.waitForTimeout(1500);
+      const info = await page.evaluate(() => {
+        const gl = document.createElement('canvas').getContext('webgl');
+        const ext = gl && gl.getExtension('WEBGL_debug_renderer_info');
+        return { tier: document.documentElement.dataset.fx, live: !!document.querySelector('#fx-bg.live'), renderer: ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : (gl ? gl.getParameter(gl.RENDERER) : 'no webgl'), cores: navigator.hardwareConcurrency, mem: navigator.deviceMemory };
+      });
+      const sampler = page.evaluate(() => new Promise((done) => {
+        const d = [];
+        let last = performance.now();
+        const end = last + 10000;
+        const tick = (t) => { d.push(t - last); last = t; if (t < end) requestAnimationFrame(tick); else done(d); };
+        requestAnimationFrame(tick);
+      }));
+      for (let i = 0; i < 200; i++) {
+        const a = i / 12;
+        await page.mouse.move(720 + Math.cos(a) * 400, 450 + Math.sin(a) * 250);
+        await page.waitForTimeout(45);
+      }
+      const deltas = (await sampler).slice(5).sort((x, y) => x - y);
+      const q = (p) => deltas[Math.min(deltas.length - 1, Math.floor(p * deltas.length))];
+      const tierAfter = await page.evaluate(() => document.documentElement.dataset.fx);
+      console.log(`PERF ${target} @1440x900 frames=${deltas.length} median=${q(0.5).toFixed(2)}ms p95=${q(0.95).toFixed(2)}ms tier(start)=${info.tier} tier(end)=${tierAfter} webglCanvasLive=${info.live} renderer="${info.renderer}" cores=${info.cores} deviceMemory=${info.mem} headed=${HEADED}`);
+      await ctx.close();
     }
-    const deltas = (await sampler).slice(5).sort((x, y) => x - y);
-    const q = (p) => deltas[Math.min(deltas.length - 1, Math.floor(p * deltas.length))];
-    const tierAfter = await page.evaluate(() => document.documentElement.dataset.fx);
-    console.log(`PERF index@1440x900 frames=${deltas.length} median=${q(0.5).toFixed(2)}ms p95=${q(0.95).toFixed(2)}ms tier(start)=${info.tier} tier(end)=${tierAfter} renderer="${info.renderer}" cores=${info.cores} deviceMemory=${info.mem} headed=${HEADED}`);
     await b.close();
   }
 } catch (e) {
