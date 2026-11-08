@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" fill="none">
+<defs>
+<linearGradient id="flow" x1="140" y1="910" x2="1510" y2="200" gradientUnits="userSpaceOnUse"><stop stop-color="#164469" stop-opacity=".1"/><stop offset=".35" stop-color="#2677b5" stop-opacity=".55"/><stop offset=".65" stop-color="#7570d8" stop-opacity=".8"/><stop offset=".84" stop-color="#46c5f2" stop-opacity=".9"/><stop offset="1" stop-color="#202b64" stop-opacity=".1"/></linearGradient>
+<linearGradient id="violet" x1="190" y1="170" x2="1410" y2="870" gradientUnits="userSpaceOnUse"><stop stop-color="#384594" stop-opacity=".1"/><stop offset=".6" stop-color="#8b7cff" stop-opacity=".6"/><stop offset="1" stop-color="#285b9b" stop-opacity=".05"/></linearGradient>
+<linearGradient id="edge" x1="50" y1="940" x2="1510" y2="180" gradientUnits="userSpaceOnUse"><stop stop-color="#2466a8" stop-opacity="0"/><stop offset=".4" stop-color="#70cfff" stop-opacity=".7"/><stop offset=".7" stop-color="#9b8cff"/><stop offset=".9" stop-color="#7dd3fc"/><stop offset="1" stop-color="#4c5ab6" stop-opacity="0"/></linearGradient>
+</defs>
+<path d="M-140 80C130 260 200 35 448 200C686 360 710 488 981 495C1212 501 1337 773 1680 740L1680 850C1336 863 1190 600 972 590C684 577 640 404 419 272C184 132 90 370-140 177Z" fill="url(#violet)"/>
+<path d="M1740 46C1440-23 1220 207 1318 427C1424 665 1070 764 858 704C601 631 510 857 286 841C69 825-79 742-145 1018L-145 1130C31 884 231 1015 449 944C695 864 747 829 981 854C1270 885 1589 704 1534 485C1470 232 1586 204 1740 170Z" fill="url(#flow)"/>
+<path d="M1740 56C1440-13 1220 217 1318 437C1424 675 1070 774 858 714C601 641 510 867 286 851C69 835-79 752-145 1028" stroke="url(#edge)" stroke-width="2"/>
+<path d="M1740 160C1572 184 1446 270 1510 482C1577 701 1269 860 984 836C754 816 687 855 446 926C227 991 30 865-145 1110" stroke="url(#edge)" stroke-width="1.5"/>
+<path d="M1680 107C1460 72 1314 238 1390 440C1477 670 1116 818 899 763C647 698 562 914 338 900C119 887 3 817-105 1061" stroke="url(#edge)" stroke-width="1" opacity=".5"/>
+<path d="M-100 115C129 300 214 84 437 234C657 381 706 530 977 542C1197 552 1347 822 1650 795" stroke="url(#violet)" stroke-width="2"/>
+</svg>

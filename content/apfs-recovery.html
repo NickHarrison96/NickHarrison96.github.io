@@ -1,0 +1,59 @@
+<article><header class="page-head article-head"><a class="back" href="writeups.html">← All write-ups</a><p class="label">CASE STUDY / SYSTEM RECOVERY</p><h1>Locked out of your own Mac?</h1><p class="lede">How I recovered a corrupted macOS install without wiping 401.5 GB of data.</p><p>Case study: a non-destructive APFS recovery on a MacPro7,1 OpenCore build.</p><dl class="stats"><div><dt>SMBIOS target</dt><dd>MacPro7,1 (AMD Zen 2)</dd></div><div><dt>Storage layout</dt><dd>APFS Container (disk1 / disk3)</dd></div><div><dt>Data preservation</dt><dd>401.5 GB volume untouched</dd></div></dl></header><div class="article-layout"><aside><nav aria-label="In this case study" class="toc"><p class="label">IN THIS WRITE-UP</p><a href="#section-1">The problem: the system treated the owner like an attacker</a><a href="#section-2">Two options</a><a href="#section-3">Phase 1: Create a parallel APFS volume</a><a href="#section-4">Phase 2: Pull a fresh installer from Apple</a><a href="#section-5">Phase 3: Get past the "Not enough space" warning</a><a href="#section-6">Phase 4: Boot, verify, and take back ownership</a><a href="#section-7">Why this matters</a><a href="#section-8">Why I publish these</a></nav></aside><div class="prose"><aside aria-label="Recovery safety note" class="notice"><strong>Before trying recovery commands</strong><p>This documents one machine, not a universal recovery procedure. Back up important data and verify your own disk identifiers and paths before changing volumes or permissions. The commands below change storage or file ownership.</p></aside><figure class="video-slot"><div class="video-label"><span class="label">VIDEO / NOT AVAILABLE</span><p>No video has been added for this write-up.</p></div><figcaption>APFS recovery — video space reserved.</figcaption></figure>
+<h2 id="section-1">The problem: the system treated the owner like an attacker</h2>
+<p>This machine hit a critical failure: the <code>dscl</code> (Directory Service Command Line) user database was desynchronized, and the PAM/security framework tokens inside macOS were corrupted.</p>
+<p>That left the classic ultimatum standard OS recovery gives you: <strong>a complete destructive wipe, or total loss of access.</strong></p>
+<h2 id="section-2">Two options</h2>
+<p><strong>The standard Apple route</strong> forces a complete erase of the drive. That means hours of backup restoration, lost ephemeral configurations, network re-authentications, and potential data loss for any folder that isn't cloud-synced.</p>
+<p><strong>The non-destructive APFS route</strong> adds a second, clean APFS volume inside the same dynamic container (<code>disk3s7</code>), streams an official Apple-signed payload through Online Recovery, and boots cleanly alongside 401.5 GB of intact user files.</p>
+<p>We took the second route. Here's how.</p>
+<h2 id="section-3">Phase 1: Create a parallel APFS volume</h2>
+<p>We didn't repartition or shrink anything. APFS shares free space dynamically across every volume in a container, so we added a new, unencrypted APFS volume named <code>Untitled</code> to the primary container.</p>
+<p>Run from the macOS Recovery Terminal:</p>
+<pre aria-label="Technical command or installer log" tabindex="0"><code class="language-bash">diskutil apfs addVolume disk3 APFS "Untitled"
+</code></pre>
+<h2 id="section-4">Phase 2: Pull a fresh installer from Apple</h2>
+<p>So the system image would match the OpenCore SMBIOS identity (<code>MacPro7,1</code>), we pulled the ~18.39 GB installation package straight from Apple's recovery servers through Online Recovery.</p>
+<p>The installer log:</p>
+<pre aria-label="Technical command or installer log" tabindex="0"><code class="language-text">[OSInstaller] Retrieving 1 packages (18.390 GB)
+[OSInstaller] Started downloading package com.apple.pkg.InstallAssistant...
+[OSInstaller] Finished extracting: succeeded
+[OSInstaller] Could not verify trust (5) using MobileSoftwareUpdate -&gt; Basic X509 fallback
+</code></pre>
+<p>Note the last line: trust verification through MobileSoftwareUpdate failed with code 5, and the installer fell back to basic X509 verification.</p>
+<h2 id="section-5">Phase 3: Get past the "Not enough space" warning</h2>
+<p>During Setup Assistant, Migration Assistant threw a <em>"Not enough space available to transfer"</em> error. It was trying to bulk-copy 365+ GB (the <code>nick</code> user profile plus apps) into the newly created APFS volume.</p>
+<p><strong>The fix:</strong> uncheck bulk migration during setup and go straight to a clean desktop. The original user data stays fully accessible as an external mount at:</p>
+<pre aria-label="Technical command or installer log" tabindex="0"><code class="language-text">/Volumes/Big Mac - Data/
+</code></pre>
+<h2 id="section-6">Phase 4: Boot, verify, and take back ownership</h2>
+<p>The system booted into macOS Tahoe (Build 26.7.2). The OpenCore bootloader recognized all of the hardware: an RX 580 8GB GPU, a Ryzen 6-core processor, and 32GB RAM.</p>
+<p>To take ownership of the extracted files from the new account:</p>
+<pre aria-label="Technical command or installer log" tabindex="0"><code class="language-bash">sudo chown -R $(whoami) "/Volumes/Big Mac - Data/Users/nick"
+</code></pre>
+<h2 id="section-7">Why this matters</h2>
+<p>Modern operating systems have made big strides in consumer security, but often at the expense of the owner's control. When macOS has a lower-level failure, like corrupted plist files, PAM token desync, or broken local Directory Services, it treats the legitimate owner like an attacker.</p>
+<ul>
+<li><strong>Black-box walls.</strong> Diagnostic utilities keep getting hidden or stripped. Standard Apple Support procedures typically recommend erasing the whole drive rather than doing a granular, low-level recovery.</li>
+<li><strong>Storage abstraction.</strong> APFS dynamic containers, Signed System Volume seals (SSV), and cryptographically signed snapshots are great for consumers, but they can lock users out when the system state desyncs.</li>
+<li><strong>Fragile auth chains.</strong> When OpenDirectory or Keybag states fail, users are stranded. Without Terminal access and manual volume mounting, recovery looks impossible.</li>
+</ul>
+<h2 id="section-8">Why I publish these</h2>
+<p>Computers should be tools for empowerment, creative work, and personal agency. When an OS fails, you shouldn't feel helpless, and you shouldn't have to accept data loss as inevitable.</p>
+<ul>
+<li><strong>Demystify the system:</strong> break UNIX, APFS, and bootloader internals down into clear, usable guides.</li>
+<li><strong>Your data belongs to you:</strong> every write-up focuses on non-destructive, zero-loss recovery.</li>
+<li><strong>Build a shared knowledge base:</strong> documented fixes create a searchable, open roadmap for anyone staring at a black screen.</li>
+<li><strong>Open engineering:</strong> the classic hacker ethic of learning how hardware and software work under the hood.</li>
+</ul>
+<p>The OpenCore EFI used on this build is on GitHub: <a href="https://github.com/NickHarrison96/MSI-MPG-x570-EFI">NickHarrison96/MSI-MPG-x570-EFI</a>.</p></div></div></article>
+<!-- Editorial review, not page copy:
+TODO(Nick): The storage layout lists both disk1 and disk3, but every command uses disk3. Confirm what disk1 was, or whether it should be dropped.
+TODO(Nick): What symptoms did the user actually see (login loop, password rejected, black screen)? And what caused the desync, if known?
+TODO(Nick): How did you identify disk3 as the right container (e.g. which `diskutil list` output)? Did the new volume come up as `disk3s7`?
+TODO(Nick): Was the "Could not verify trust (5)" warning harmless, or did you have to do anything about it?
+TODO(Nick): After the chown, did you copy the data into the new account or keep working from the mount? Was the old volume (or the broken install) ever cleaned up?
+TODO(Nick): Add a backup warning/disclaimer before readers run `diskutil` or `sudo chown -R` on their own machines?
+TODO(Nick): confirm why ownership needed fixing.
+
+-->
+<!-- Source editorial questions remain unresolved: disk1 versus disk3; initial symptoms/cause; how disk3 was identified; trust-code-5 handling; ownership rationale and subsequent data migration/cleanup. -->

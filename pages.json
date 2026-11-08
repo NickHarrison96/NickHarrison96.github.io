@@ -1,0 +1,58 @@
+[
+  {
+    "file": "about.html",
+    "title": "About",
+    "description": "Meet Nick, a security researcher and tech enthusiast, and the Harrison Technology Solutions team. Research, open-source projects and freely shared knowledge.",
+    "section": "main",
+    "variant": "article",
+    "draft": false
+  },
+  {
+    "file": "apfs-recovery.html",
+    "title": "APFS recovery: 401.5 GB preserved",
+    "description": "A non-destructive APFS recovery case study on a MacPro7,1 OpenCore build, preserving 401.5 GB of user data.",
+    "section": "writeups",
+    "variant": "article",
+    "draft": false
+  },
+  {
+    "file": "index.html",
+    "title": "Your electronics. Your choices.",
+    "description": "Nick is a security researcher and tech enthusiast exploring how devices start up, protect and recover data. Knowledge shared freely so more people can understand their technology.",
+    "section": "main",
+    "variant": "home",
+    "draft": false
+  },
+  {
+    "file": "writeup-template.html",
+    "title": "Write-up template",
+    "description": "Reusable draft structure for a research write-up. Not a published case study.",
+    "section": "writeups",
+    "variant": "article",
+    "draft": true
+  },
+  {
+    "file": "writeups.html",
+    "title": "Write-ups",
+    "description": "Security research, notes and articles, including a non-destructive APFS data recovery case study.",
+    "section": "writeups",
+    "variant": "index",
+    "draft": false
+  },
+  {
+    "file": "tutorials.html",
+    "title": "Tutorials",
+    "description": "Tutorials from Harrison Technology Solutions. No tutorials are published yet.",
+    "section": "tutorials",
+    "variant": "index",
+    "draft": false
+  },
+  {
+    "file": "tutorial-template.html",
+    "title": "Tutorial template",
+    "description": "Reusable unpublished tutorial structure.",
+    "section": "tutorials",
+    "variant": "article",
+    "draft": true
+  }
+]
