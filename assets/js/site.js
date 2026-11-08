@@ -43,4 +43,20 @@ if (menuBtn && nav) {
   });
 }
 
+/* Copy buttons: <button data-copy="text" data-copy-idle="copy">. */
+document.addEventListener('click', async (e) => {
+  const btn = e.target.closest('[data-copy]');
+  if (!btn) return;
+  let ok = true;
+  try { await navigator.clipboard.writeText(btn.dataset.copy); } catch { ok = false; }
+  const idle = btn.dataset.copyIdle || 'copy';
+  btn.textContent = ok ? 'copied ✓' : 'press Ctrl+C';
+  btn.classList.toggle('copied', ok);
+  clearTimeout(btn._t);
+  btn._t = setTimeout(() => { btn.textContent = idle; btn.classList.remove('copied'); }, 1600);
+});
+
+/* Page features, loaded only where their markup exists. */
+if (document.querySelector('main.home')) import('./home.js');
+
 export { root };
