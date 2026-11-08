@@ -7,6 +7,3 @@ desktop.ini
 # Local-only self-hosted origin override. May contain an access token, so it
 # must never be committed.
 selfhost.local.js
-
-# Dev-only tooling (Playwright etc.); never deployed
-tools/node_modules/
