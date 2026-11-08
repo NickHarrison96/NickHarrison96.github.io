@@ -6,77 +6,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#05070d">
   <meta name="description"
     content="Nicholas Harrison — Right to Repair activist. Campaigning for the right to open, repair, and keep the devices we own." />
   <title>Nicholas Harrison — Right to Repair</title>
 
-  <!-- Fonts: Syne (display) + DM Sans (body) -->
+
+  <script>/* shell: runs before first paint — see AGENTS.md "Shell" */(function(d){d.classList.add('js');try{if(localStorage.getItem('nh-jailbreak')==='1')d.dataset.theme='jailbreak'}catch(e){}if(d.hasAttribute('data-boot')&&!location.hash&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{if(!sessionStorage.getItem('nh-booted')){sessionStorage.setItem('nh-booted','1');d.classList.add('booting')}}catch(e){}}})(document.documentElement);</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
-    rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <canvas id="fx-bg" aria-hidden="true"></canvas>
 
-  <!-- ─── Loader ─────────────────────────────────────── -->
-  <div id="loader">
-    <div class="loader-logo">
-      <!-- Repair mark: wrench + screwdriver -->
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26" />
-      </svg>
-    </div>
-    <div class="loader-bar-wrap">
-      <div class="loader-bar"></div>
-    </div>
-    <p class="loader-text">Nicholas Harrison</p>
-  </div>
-
-  <!-- ─── Ambient Background ─────────────────────────── -->
-  <div class="ambient">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-  </div>
-
-  <!-- ─── Page ───────────────────────────────────────── -->
-  <div class="page">
-
-    <header>
-      <div class="brand">
-        <div class="brand-icon">
-          <!-- Repair mark: wrench + screwdriver -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26" />
-          </svg>
-        </div>
-        <div class="brand-text">
-          <h1>Nicholas <span>Harrison</span></h1>
-          <p>Right to Repair</p>
-        </div>
-      </div>
-      <!-- GitHub profile link (avatar served from GitHub; swap for a local file to self-host) -->
-<nav class="top-nav" aria-label="Pages">
-        <a href="downloads.html">Downloads</a>
-        <a href="about.html">About</a>
-        <a href="team.html">The Team</a>
-        <a href="socials.html">Socials</a>
-      </nav>
-      <a class="gh-link" href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer"
-        aria-label="Nicholas Harrison on GitHub" title="GitHub — NickHarrison96">
-        <img src="https://github.com/NickHarrison96.png?size=96" alt="Nicholas Harrison's GitHub avatar"
-          class="gh-avatar" loading="lazy" width="44" height="44">
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span class="brand-text">
+          <span class="brand-name">NICK HARRISON</span>
+          <span class="brand-role">SYSTEMS &amp; AI ENGINEER <span class="brand-role-extra">· RIGHT TO REPAIR</span></span>
+        </span>
       </a>
-    </header>
+      <nav class="site-nav" id="site-nav" aria-label="Site">
+        <a href="index.html#terminal">/terminal</a>
+        <a href="index.html#projects">/projects</a>
+        <a href="apfs-recovery.html" class="nav-feature"><span class="pulse" aria-hidden="true"></span>/case-study</a>
+        <a href="index.html#repair">/repair</a>
+        <a href="index.html#log">/log</a>
+        <a href="downloads.html">/downloads</a>
+      </nav>
+      <div class="site-actions">
+        <button class="search-btn" type="button" data-palette-open aria-label="Search (Ctrl+K)">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-label">Search</span>
+          <kbd aria-hidden="true">⌘K</kbd>
+        </button>
+        <a class="gh-link magnetic" href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer" aria-label="Nick Harrison on GitHub">
+          <img src="https://github.com/NickHarrison96.png?size=96" alt="" class="gh-avatar" width="28" height="28">
+          <span class="gh-text">github.com/nickpharrison</span>
+        </a>
+        <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+          <span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-    <main>
+  <main id="main">
       <div class="card">
 
         <!-- ─── Site status: under active development ─── -->
@@ -135,7 +116,7 @@
           <div class="hero-cta">
             <a href="downloads.html" id="getInvolvedBtn" class="dl-btn" style="width:auto; max-width:none; margin-bottom:0;">
               Get the Tools
-              <svg class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+              <svg aria-hidden="true" class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
               </svg>
@@ -181,13 +162,13 @@
 
           <!-- Navigation Arrows -->
           <button class="carousel-btn prev-btn" aria-label="Previous Slide">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
             </svg>
           </button>
           <button class="carousel-btn next-btn" aria-label="Next Slide">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
             </svg>
@@ -224,26 +205,37 @@
       </div><!-- /card -->
     </main>
 
-    <footer>
-      <div class="socials">
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span><strong>Nick Harrison</strong><span>nickharrison96.github.io</span></span>
+      </div>
+      <nav class="footer-nav" aria-label="More pages">
+        <a href="about.html">About</a>
+        <a href="team.html">The Team</a>
+        <a href="socials.html">Socials</a>
+        <a href="writing.html">Writing</a>
+        <a href="apfs-recovery.html">Case Studies</a>
+        <a href="index.html#philosophy">Philosophy</a>
+      </nav>
+      <div class="footer-social">
         <a href="mailto:harrisontechdev@gmail.com" aria-label="Email">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
         </a>
         <a href="https://www.youtube.com/@NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2.25a9.75 9.75 0 1 0 0 19.5 9.75 9.75 0 0 0 0-19.5ZM10.05 8.7l5.7 3.3-5.7 3.3V8.7Z" /></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.1 24.1 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.1 24.1 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
         </a>
-        <a href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
-          </svg>
+        <a href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
         </a>
       </div>
-      <p class="dim">© 2026 Nicholas Harrison · Right to Repair. Built to be opened, fixed, and reused.</p>
-    </footer>
+      <p class="footer-legal">&copy; 2026 Nick Harrison. Open Technical License. <span>Right to Repair &mdash; built to be opened, fixed, and reused.</span></p>
+      <a class="to-top" href="#main">Top &uarr;</a>
+    </div>
+  </footer>
 
-  </div><!-- /page -->
+<!-- /page -->
 
   <script type="module">
     // Free-tools grid, rendered from the shared catalog (assets/js/catalog.js).
@@ -334,7 +326,7 @@
       download: '<path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />'
     };
 
-    const ARROW = '<svg class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>';
+    const ARROW = '<svg aria-hidden="true" class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>';
 
     /* Build a gradient placeholder tile from a base hue */
     const tileBg = (h) =>
@@ -347,7 +339,7 @@
       grid.innerHTML = ITEMS.map((item) => {
         const media = item.img
           ? `<img src="${item.img}" alt="" class="service-image">`
-          : `<div class="service-image" style="background:${tileBg(item.hue)}"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">${ICONS[item.icon] || ''}</svg></div>`;
+          : `<div class="service-image" style="background:${tileBg(item.hue)}"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">${ICONS[item.icon] || ''}</svg></div>`;
         const btnClass = item.featured ? 'dl-btn aio-special-btn' : 'dl-btn';
         return `
           <div class="service-item">
@@ -370,19 +362,6 @@
     window.addEventListener('load', () => {
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      setTimeout(() => {
-        document.getElementById('loader').classList.add('hidden');
-      }, 1100);
-
-      // Sticky Header Blur Effect
-      const header = document.querySelector('header');
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > 20) {
-          header.classList.add('scrolled');
-        } else {
-          header.classList.remove('scrolled');
-        }
-      });
 
       // Image Carousel Interactivity
       const carouselTrack = document.querySelector('.carousel-track');
@@ -587,50 +566,10 @@
         viewServicesBtn.addEventListener('click', showServices);
       }
 
-      // Falling Stars (skip under reduced motion)
-      const ambient = document.querySelector('.ambient');
-      if (!reduceMotion) {
-        for (let i = 0; i < 30; i++) {
-          const star = document.createElement('div');
-          star.className = 'falling-star';
-          star.style.left = `${Math.random() * 120}vw`;
-          star.style.animationDuration = `${Math.random() * 2 + 1.5}s`;
-          star.style.animationDelay = `${Math.random() * 4}s`;
-          ambient.appendChild(star);
-        }
-      }
-
-      // Mouse trail + grid spotlight (skip trail under reduced motion)
-      let lastSpawn = 0;
-      document.addEventListener('mousemove', (e) => {
-        const grid = document.getElementById('servicesGrid');
-        if (grid) {
-          const rect = grid.getBoundingClientRect();
-          grid.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-          grid.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-        }
-
-        if (reduceMotion) return;
-
-        const now = Date.now();
-        if (now - lastSpawn < 40) return;
-        lastSpawn = now;
-
-        const star = document.createElement('div');
-        star.className = 'mouse-star';
-        star.innerHTML = '✦';
-        star.style.left = `${e.clientX}px`;
-        star.style.top = `${e.clientY}px`;
-        star.style.setProperty('--dx', `${(Math.random() - 0.5) * 60}px`);
-        star.style.setProperty('--dy', `${Math.random() * 60 + 20}px`);
-        star.style.setProperty('--rot', `${(Math.random() - 0.5) * 180}deg`);
-
-        document.body.appendChild(star);
-        setTimeout(() => star.remove(), 800);
-      });
     });
   </script>
 
+  <script type="module" src="assets/js/site.js"></script>
 </body>
 
 </html>

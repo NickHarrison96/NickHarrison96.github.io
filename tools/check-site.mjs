@@ -17,6 +17,9 @@ const ALLOWED_RUNTIME_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com', 'git
 // Referenced on purpose but never committed (gitignored local override; see AGENTS.md "Secrets").
 const ALLOWED_MISSING = new Set(['selfhost.local.js']);
 // Links every homepage must keep (the old ITEMS grid + carousel targets).
+// Link targets that only exist from a later phase on (skipped by --phase runs before then).
+const FUTURE_TARGETS = { 'apfs-recovery.html': 4 };
+const FUTURE_INDEX_IDS = { terminal: 3, projects: 3, 'case-study': 3, repair: 3, log: 3, tools: 3, philosophy: 3 };
 const ITEMS_LINKS = ['mission.html', 'get-involved.html', 'repair-guides.html', 'legislation.html',
   'repair-cafes.html', 'talks.html', 'writing.html', 'downloads.html'];
 
@@ -165,6 +168,8 @@ function run() {
           continue;
         }
         if (ALLOWED_MISSING.has(file)) continue;
+        if ((FUTURE_TARGETS[file] ?? 0) > PHASE) continue;
+        if (file === 'index.html' && frag && (FUTURE_INDEX_IDS[frag] ?? 0) > PHASE) continue;
         const ok = exists(file);
         r.check(`${f}: ${t.name} → ${v} resolves`, ok);
         if (ok && frag && file.endsWith('.html')) r.check(`${f}: ${v} fragment exists`, ids(read(file)).has(frag));

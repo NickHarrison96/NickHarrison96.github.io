@@ -134,7 +134,7 @@ try {
         check(`${f} @${width}: scrollWidth - clientWidth == 0`, ov.over === 0, `${ov.over}px`);
         check(`${f} @${width}: html/body x-overflow not masked`, ov.html === 'visible' && ov.body === 'visible', `${ov.html}/${ov.body}`);
         check(`${f} @${width}: header visible`, await visible(page, '.site-header'));
-        check(`${f} @${width}: data-fx set`, ['full', 'lite', 'static'].includes(await page.evaluate(() => document.documentElement.dataset.fx)));
+        if (at(5)) check(`${f} @${width}: data-fx set`, ['full', 'lite', 'static'].includes(await page.evaluate(() => document.documentElement.dataset.fx)));
         if (f === 'downloads.html') {
           const n = await page.evaluate(() => ({ cards: document.querySelectorAll('#ghGrid .dl-card').length, rows: document.querySelectorAll('#hostBox .host-row').length }));
           check(`downloads @${width}: catalog cards rendered`, n.cards === 3, `${n.cards}`);
@@ -146,16 +146,21 @@ try {
     }
   }
 
-  /* Phase 2 — reduced motion and no-JS keep content visible */
-  if (at(2)) {
+  /* Phase 5 — reduced motion forces the static tier */
+  if (at(5)) {
     const rm = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
     await stub(rm);
-    for (const f of ['index.html', 'downloads.html']) {
+    for (const f of ['index.html', 'downloads.html', 'apfs-recovery.html']) {
       const { page } = await open(rm, f);
       check(`${f}: reduced motion → data-fx="static"`, (await page.evaluate(() => document.documentElement.dataset.fx)) === 'static');
+      check(`${f}: reduced motion → canvas hidden`, !(await visible(page, '#fx-bg')));
       await page.close();
     }
     await rm.close();
+  }
+
+  /* Phase 2 — no-JS keeps content visible */
+  if (at(2)) {
 
     const nojs = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1440, height: 900 } });
     await stub(nojs);
