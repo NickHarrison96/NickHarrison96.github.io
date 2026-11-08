@@ -127,7 +127,9 @@
        token-free. Absent in production, where the 404 is harmless. -->
   <script src="selfhost.local.js"></script>
 
-  <script>
+  <script type="module">
+    import { TOOLS } from './assets/js/catalog.js';
+
     // ── Self-hosted origin ────────────────────────────────────────────────
     // This URL is SAFE TO COMMIT: it is the Cloudflare Worker's address and
     // carries no secret. The Worker holds the access token in an encrypted
@@ -152,58 +154,8 @@
     const HEALTH_INTERVAL_MS = 30000;
     const HOST_LIST_INTERVAL_MS = 60000;
 
-    // The catalog. Add projects here — the grid rebuilds itself.
-    //   host:"github" — always available. Set `url` to a Release asset (or repo/release page).
-    //   host:"self"   — streamed from your home server; needs SELF_HOST_API + `filename`.
-    //   status:"soon" — renders a disabled "coming soon" button.
-    //   image:"assets/foo.png" — optional screenshot/logo; a gradient tile shows until then.
-    //   hue: base hue (0–360) for that placeholder tile.
-    const DOWNLOADS = [
-      {
-        name: "RootForgeKit",
-        host: "github",
-        status: "live",
-        url: "https://github.com/NickHarrison96/RootForgeKit/releases/download/v0.5.0/RootForgeKit-v0.5.0-win64.zip",
-        version: "v0.5 · pre-alpha",
-        category: "toolkit",
-        hue: 205,
-        image: "assets/dl-rootforgekit.png",
-        description: "Cross-platform system diagnostics, hardware health, and iOS/Android device toolkit (PySide6). Overview, hardware health, prerequisites, tech/gamer tools, plus iOS and Android device work — one dark, 3uTools-inspired desktop app.",
-        size: 127270394,
-        sha256: "54b6d562d3a13ac4ff4ffab31aa50a7ffa147bcc4274f2a6f75ca6c1733586cc"
-      },
-      {
-        name: "Pymobile3-GUI",
-        host: "github",
-        status: "live",
-        url: "https://github.com/NickHarrison96/Pymobile3-GUI/archive/refs/heads/feature/sshrd-ramdisk.zip",
-        version: "v0.1 · pre-release",
-        category: "toolkit",
-        hue: 265,
-        image: "assets/dl-pymobile3.png",
-        description: "A PySide6 desktop app for iOS and Android device work — live syslog streaming, forensic acquisition (Logical, Logical+, or PRFS), and a file browser for installed app bundles. This download is the source archive from the development branch; it runs from source and needs Python and PySide6 installed."
-      },
-      {
-        name: "BipPoyAI",
-        host: "github",
-        status: "live",
-        // No release assets published yet, so this is the source archive of the
-        // default branch. Swap for a /releases/download/... asset URL once one
-        // is cut.
-        url: "https://github.com/NickHarrison96/BipPoyAI/archive/refs/heads/main.zip",
-        version: "v0.1 · pre-alpha",
-        category: "assistant",
-        hue: 32,
-        image: "assets/dl-bippoyai.png",
-        description: "Qwythos AI — a local-only desktop assistant for Windows that runs entirely on your own hardware. PySide6 Pip-Boy GUI with CRT scanlines and hardware dials, routing through LiteLLM into Ollama so the Claude CLI works offline with no internet. Detects CPU threads, RAM, and GPU VRAM, then recommends context size and layer offloading. Source archive — needs Python 3.11+, Ollama running, and model weights."
-      },
-      // iWin-Doh: hidden until there's something to download.
-      // { name:"iWin-Doh", host:"github", status:"soon", url:"", version:"Coming Soon",
-      //   category:null, hue:188, image:null, description:"In development — details coming soon." }
-      // Add more here. Large multi-GB items use host:"self", e.g.:
-      // { name:"…", host:"self", filename:"foo.zip", version:"…", category:"firmware",
-      //   hue:150, description:"…", size: 6900000000, sha256:"…" }
-    ];
+    // The catalog lives in assets/js/catalog.js (shared with the homepage).
+    // Add tools there, not here.
 
     const DL_ICON = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>';
     const CHEVRON = '<svg class="dl-chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>';
@@ -280,8 +232,8 @@
       });
     }
 
-    const gh = DOWNLOADS.filter((d) => d.host === "github");
-    const self_ = DOWNLOADS.filter((d) => d.host === "self");
+    const gh = TOOLS.filter((d) => d.host === "github");
+    const self_ = TOOLS.filter((d) => d.host === "self");
 
     const ghSection = document.getElementById("ghSection");
     const ghGrid = document.getElementById("ghGrid");
