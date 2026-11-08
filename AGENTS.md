@@ -1,14 +1,20 @@
 # AGENTS.md
 
-Static, dependency-free personal site for Nick (Nicholas) Harrison: systems & AI engineering portfolio (projects, the APFS recovery case study) merged with the Right to Repair campaign and free tools. No build step, no runtime dependencies — deploy the folder as-is.
+Static, dependency-free personal site for Nick Harrison: systems & AI engineering portfolio (projects, the APFS recovery case study) merged with the Right to Repair campaign and free tools. Use "Nick Harrison" in titles, meta and prose; `check-site.mjs` fails if the long form of the first name appears in any tracked site file outside URLs, emails and handles. No build step, no runtime dependencies — deploy the folder as-is.
 
 ## Architecture
-- 13 pages share `styles.css` and one shell: `index.html`, `apfs-recovery.html`, `downloads.html`, `about.html`, `team.html`, `socials.html`, `mission.html`, `get-involved.html`, `repair-guides.html`, `legislation.html`, `repair-cafes.html`, `talks.html`, `writing.html`. Sub-pages use `<body class="sub">` with `.card.subpage` → `.page-hero` + `.prose`.
-- **Shell (identical on every page):** inline `<head>` snippet (adds `.js` to `<html>`, applies a saved jailbreak theme, decides the boot splash before first paint), Inter + JetBrains Mono from Google Fonts, `<canvas id="fx-bg" aria-hidden="true">`, `<header class="site-header">`, `<footer class="site-footer">`, and one entry module `<script type="module" src="assets/js/site.js">`. `tools/check-site.mjs` fails if the header or footer differ by a single byte between pages, so edit them on every page together (the current-page highlight is set by `site.js`, not in markup).
+- **Five hubs** (header nav, in this order): Work `work.html` · Writing `writing.html` · Right to Repair `repair.html` · Tools `downloads.html` · About `about.html`. The homepage `index.html` is an overview (hero + terminal → featured work → latest writing → Right to Repair teardown → free tools). `apfs-recovery.html` is a sub-page of Writing.
+- 7 real pages share `styles.css` and one shell: `index.html`, `work.html`, `writing.html`, `repair.html`, `downloads.html`, `about.html`, `apfs-recovery.html` (`PAGES` in `tools/lib.mjs`). Sub-pages use `<body class="sub">`; hub pages use `<main class="hub">` with `.hub-hero` and `.card.subpage.hub-section` blocks.
+- `repair.html` sections, in order: `#mission`, `#legislation`, `#get-involved`, `#guides`, `#cafes`, `#talks`. `about.html`: `#about`, `#team`, `#socials`. `writing.html`: `#featured` (APFS case study), `#essays`, `#log` (field log), `#philosophy` (manifesto). Both `repair.html` and `about.html` have a sticky `.section-nav`.
+- **Redirect stubs** keep the old URLs alive (GitHub Pages has no server redirects): `mission.html`, `legislation.html`, `get-involved.html`, `repair-guides.html`, `repair-cafes.html`, `talks.html` → `repair.html#…`; `team.html`, `socials.html` → `about.html#…` (`STUBS` in `tools/lib.mjs`). Each stub has a canonical link, `noindex`, an inline `location.replace` that keeps any extra `#hash`, a `<noscript>` meta refresh, a visible "This page moved to …" link and the site background. Stubs have no shell. **Never link to a stub**; link to the new location (`check-site.mjs` fails otherwise). Old homepage anchors `index.html#log` / `#philosophy` are forwarded to `writing.html` by `home.js`.
+- **Shell (identical on every real page):** inline `<head>` snippet (adds `.js` to `<html>`, applies a saved jailbreak theme, decides the boot splash before first paint), Inter + JetBrains Mono from Google Fonts, `<canvas id="fx-bg" aria-hidden="true">`, `<header class="site-header">`, `<footer class="site-footer">`, and one entry module `<script type="module" src="assets/js/site.js">`. `tools/check-site.mjs` fails if the header or footer differ by a single byte between pages, so edit them on every page together (the current-hub highlight is set by `site.js`, not in markup; `apfs-recovery.html` highlights Writing). The footer repeats the five hubs plus email, YouTube and GitHub.
 - **JS modules** (`assets/js/`, plain ES modules, no bundler):
   - `catalog.js` — the tool catalog (`TOOLS`). The only place tools are listed.
-  - `site.js` — entry: tier, header/menu, copy buttons; lazy-loads the rest by page.
-  - `home.js` — homepage tools grid + tool entries in the field log (from the catalog), log filters/search, Right to Repair teardown.
+  - `projects.js` — the project list (`PROJECTS`) and `projectCard()`. The only place projects are listed.
+  - `site.js` — entry: tier, header/menu, hub highlight, copy buttons; lazy-loads the rest by page.
+  - `home.js` — homepage tools grid (from the catalog), Right to Repair teardown, forwarding of moved homepage anchors.
+  - `log.js` — field log on `writing.html`: tool entries from the catalog, filters/search.
+  - `sections.js` — marks the current item of a `.section-nav`.
   - `case.js` — case-study timeline nodes light as they scroll in.
   - `terminal.js` (homepage terminal), `palette.js` (⌘K / Ctrl+K), `scramble.js` (eyebrow decode), `boot.js` (splash timing), `konami.js` (jailbreak mode).
   - `fx-config.js` — **every effect constant** (plan policy table). Change numbers here only; `check-site.mjs` asserts them.
@@ -25,9 +31,11 @@ Static, dependency-free personal site for Nick (Nicholas) Harrison: systems & AI
 
 ## Conventions
 - **Content is visible without JS.** Any hidden-then-revealed state is gated behind `html.js` (or a class JS adds, e.g. `.term.ready`, `.log-list.enhanced`). Never ship `opacity: 0` content that only JS reveals.
-- **Adding a tool:** add one entry to `TOOLS` in `assets/js/catalog.js` (`name, host, status, url, version, category, hue, image, summary, description`, optional `size`, `sha256`). The homepage grid, field log, palette, terminal `ls ./tools` and downloads page all pick it up. `node tools/check-catalog.mjs` fails if an inline `TOOLS`/`DOWNLOADS` array reappears in either page.
-- **Field log** (`index.html#log`): static `<li class="log-entry" data-type="case|project|writeup|campaign">` entries; tool releases are added from the catalog. Real content only — no placeholder entries or invented dates.
-- **Homepage page links:** the old `ITEMS` grid is now static markup in the teardown layers; `check-site.mjs` asserts every one of its links (mission, get-involved, repair-guides, legislation, repair-cafes, talks, writing, downloads) is still on the homepage.
+- **Adding a tool:** add one entry to `TOOLS` in `assets/js/catalog.js` (`name, host, status, url, version, category, hue, image, summary, description`, optional `size`, `sha256`). The homepage grid, field log, palette, terminal `ls ./tools` and downloads page all pick it up. `node tools/check-catalog.mjs` fails if an inline `TOOLS`/`DOWNLOADS` array reappears in a consumer page.
+- **Adding a project:** add one entry to `PROJECTS` in `assets/js/projects.js`, run `node tools/check-ia.mjs --print-projects`, and paste the output into the `.project-grid` of both `work.html` and `index.html` (static markup, so the cards read without JS; `check-site.mjs` fails until both match `PROJECTS`). Add a matching `data-type="project"` entry to the field log on `writing.html`. The palette picks it up by itself.
+- **Field log** (`writing.html#log`): static `<li class="log-entry" data-type="case|project|writeup|campaign">` entries; tool releases are added from the catalog. Real content only — no placeholder entries or invented dates.
+- **Homepage page links:** the teardown layers link to the matching `repair.html` sections; `check-site.mjs` asserts all six (`#mission`, `#get-involved`, `#guides`, `#legislation`, `#cafes`, `#talks`) plus `writing.html`, `work.html` and `downloads.html` are on the homepage.
+- **Content preservation:** `tools/check-ia.mjs` compares every paragraph, list item, heading, note and link text of the old pages (read from `main` with `git show`) and of the pre-restructure homepage (commit `5ebcd41`) against the pages that now carry them. Moving copy is fine; dropping or rewording it fails the check.
 - Unfinished links use `href="#"` with a `.note` callout.
 - The header avatar is hotlinked from `https://github.com/NickHarrison96.png?size=96` (kept on purpose). Runtime external requests are limited to Google Fonts and that avatar; zero third-party scripts.
 - Design tokens are `:root` custom properties at the top of `styles.css` (`--bg #05070d`, `--card #0c101a`, `--border #172033`, `--brand #38bdf8`, `--neon #00f0ff`). Inter for UI/headings, JetBrains Mono for labels/terminal/code.
@@ -38,7 +46,8 @@ Static, dependency-free personal site for Nick (Nicholas) Harrison: systems & AI
 Run from the repo root:
 ```sh
 node tools/check-catalog.mjs                 # catalog is the single source
-node tools/check-site.mjs                    # shell, links, a11y basics, fonts, verbatim copy, fx-config values
+node tools/check-site.mjs                    # shell, links, a11y basics, fonts, verbatim copy, fx-config values, five-hub IA (runs check-ia.mjs)
+node tools/check-ia.mjs                      # five-hub IA on its own: nav, old URLs/stubs, content preservation, names (needs git)
 cd tools && npm ci && npx playwright install chromium && node smoke.mjs   # browser smoke, 1440 + 390 wide
 node smoke.mjs --perf                         # frame-time report (not a gate); add --headed for the real GPU
 ```

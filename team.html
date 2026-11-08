@@ -3,140 +3,22 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#05070d">
-  <title>The Team &mdash; Nicholas Harrison</title>
-  <script>/* shell: runs before first paint — see AGENTS.md "Shell" */(function(d){d.classList.add('js');try{if(localStorage.getItem('nh-jailbreak')==='1')d.dataset.theme='jailbreak'}catch(e){}if(d.hasAttribute('data-boot')&&!location.hash&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{if(!sessionStorage.getItem('nh-booted')){sessionStorage.setItem('nh-booted','1');d.classList.add('booting')}}catch(e){}}})(document.documentElement);</script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <meta name="robots" content="noindex">
+  <title>The Team (moved) &mdash; Nick Harrison</title>
+  <link rel="canonical" href="about.html#team">
+  <!-- Redirect stub: GitHub Pages has no server redirects. With JS, location.replace keeps any extra #hash;
+       without JS, the meta refresh below goes to the section (it sits in <noscript> so the two never race). -->
+  <script>(function(){var t='about.html',d='#team',h=location.hash;location.replace(t+(h&&h!=='#main'?h:d))})();</script>
+  <noscript><meta http-equiv="refresh" content="0; url=about.html#team"></noscript>
+  <style>html,body{margin:0;background:#05070d;color:#cbd5e1}body{font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}main{max-width:40rem;margin:0 auto;padding:48px 16px}a{color:#38bdf8}</style>
 </head>
 
-<body class="sub">
-  <a class="skip-link" href="#main">Skip to content</a>
-  <canvas id="fx-bg" aria-hidden="true"></canvas>
-
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a class="brand" href="index.html">
-        <span class="brand-mark" aria-hidden="true">&gt;_</span>
-        <span class="brand-text">
-          <span class="brand-name">NICK HARRISON</span>
-          <span class="brand-role">SYSTEMS &amp; AI ENGINEER <span class="brand-role-extra">· RIGHT TO REPAIR</span></span>
-        </span>
-      </a>
-      <nav class="site-nav" id="site-nav" aria-label="Site">
-        <a href="index.html#terminal">/terminal</a>
-        <a href="index.html#projects">/projects</a>
-        <a href="apfs-recovery.html" class="nav-feature"><span class="pulse" aria-hidden="true"></span>/case-study</a>
-        <a href="index.html#repair">/repair</a>
-        <a href="index.html#log">/log</a>
-        <a href="downloads.html">/downloads</a>
-      </nav>
-      <div class="site-actions">
-        <button class="search-btn" type="button" data-palette-open aria-label="Search (Ctrl+K)">
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <span class="search-label">Search</span>
-          <kbd aria-hidden="true">⌘K</kbd>
-        </button>
-        <a class="gh-link magnetic" href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer" aria-label="Nick Harrison on GitHub">
-          <img src="https://github.com/NickHarrison96.png?size=96" alt="" class="gh-avatar" width="28" height="28">
-          <span class="gh-text">github.com/nickpharrison</span>
-        </a>
-        <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
-          <span aria-hidden="true"></span><span aria-hidden="true"></span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main id="main">
-      <div class="card subpage">
-        <a href="index.html" class="back-link"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg> Back to Home</a>
-        <div class="page-hero">
-          <div class="badge">Who's Behind It</div>
-          <h1 class="card-title">The <em>Team</em>.</h1>
-          <p class="page-lede">A small crew fighting for the right to open, repair, and keep the things we own. Here's who's behind the campaign.</p>
-        </div>
-
-        <div class="prose">
-          <h2>Where This Started</h2>
-          <p>This didn't begin as a business plan. It began with a phone nobody else would fix, a technician who refused to accept &ldquo;the board's dead, just buy a new one,&rdquo; and a quiet, stubborn belief that the knowledge locked inside every device belongs to the person holding it &mdash; not the company that sold it to them.</p>
-          <p>So the kid with more determination than money taught himself &mdash; studied, researched, and built his own path into repair with nothing to go on but stubbornness and a firm belief that people deserve far more control over what they own than they're ever given.</p>
-          <p>So we started building, fixing, and teaching. One repair, one guide, one late-night troubleshooting call at a time, we've been handing that knowledge back &mdash; because a fixable world isn't built by companies protecting their margins, it's built by people who refuse to be locked out of what they already own.</p>
-        </div>
-
-        <!-- Duplicate a .team-card block to add a member. -->
-        <div class="team-grid">
-          <div class="team-card">
-            <div class="team-avatar"><img src="https://github.com/NickHarrison96.png?size=200" alt="Nick Harrison" loading="lazy"></div>
-            <div class="team-name">Nick Harrison</div>
-            <div class="team-role">Founder &middot; CEO &middot; CTO</div>
-            <p class="team-bio">Founded the company to prove repair still works. Sets the technical direction and leads product and security strategy, while staying hands-on with the diagnostics and repairs that got this started in the first place.</p>
-            <a class="team-link" href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer">
-              GitHub
-              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
-            </a>
-          </div>
-
-          <div class="team-card">
-            <div class="team-avatar initials"><span>KP</span></div>
-            <div class="team-name">Kate-Lyn Pigeon</div>
-            <div class="team-role">Community Experience &amp; Creative Lead</div>
-            <p class="team-bio">If we are the one bringing the hardware back to life, Kate-Lyn is the heartbeat of the client experience. Drawing on a background in the arts and a natural talent for making people feel heard, she handles the day-to-day operations and client relations with a level of patience and warmth that turns stressful tech problems into a breeze. Whether she's walking an elderly client through a repair step-by-step or coordinating schedules around family life, she ensures every single person who reaches out feels like family.</p>
-          </div>
-
-          <div class="team-card">
-            <div class="team-avatar initials"><span>SH</span></div>
-            <div class="team-name">Shiloh Hudgins</div>
-            <div class="team-role">Social Media Manager &middot; QA &amp; Beta Testing Lead</div>
-            <p class="team-bio">Runs the brand's voice across every platform and is the last set of eyes on every build before it reaches the public &mdash; breaking things on purpose so users never have to. If it ships polished, it's because Shiloh caught the rough edges first.</p>
-          </div>
-        </div>
-
-        <div class="team-cta">
-          <a href="get-involved.html" class="btn-green">
-            Join the Team
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
-          </a>
-        </div>
-      </div>
-    </main>
-
-  <footer class="site-footer">
-    <div class="site-footer-inner">
-      <div class="footer-brand">
-        <span class="brand-mark" aria-hidden="true">&gt;_</span>
-        <span><strong>Nick Harrison</strong><span>nickharrison96.github.io</span></span>
-      </div>
-      <nav class="footer-nav" aria-label="More pages">
-        <a href="about.html">About</a>
-        <a href="team.html">The Team</a>
-        <a href="socials.html">Socials</a>
-        <a href="writing.html">Writing</a>
-        <a href="apfs-recovery.html">Case Studies</a>
-        <a href="index.html#philosophy">Philosophy</a>
-      </nav>
-      <div class="footer-social">
-        <a href="mailto:harrisontechdev@gmail.com" aria-label="Email">
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
-        </a>
-        <a href="https://www.youtube.com/@NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.1 24.1 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.1 24.1 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
-        </a>
-        <a href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-        </a>
-      </div>
-      <p class="footer-legal">&copy; 2026 Nick Harrison. Open Technical License. <span>Right to Repair &mdash; built to be opened, fixed, and reused.</span></p>
-      <a class="to-top" href="#main">Top &uarr;</a>
-    </div>
-  </footer>
-
-  <script type="module" src="assets/js/site.js"></script>
+<body>
+  <main>
+    <p>This page moved to <a href="about.html#team">About &middot; The Team</a>.</p>
+  </main>
 </body>
 
 </html>

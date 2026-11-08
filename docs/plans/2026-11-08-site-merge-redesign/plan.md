@@ -114,6 +114,10 @@ Touches: `styles.css` (rewrite), all 13 `*.html` (shell), `index.html` (rebuild)
 - Agent default: header nav = /terminal /projects /case-study /repair /log /downloads; About, The Team, Socials, Writing, Case Studies, Philosophy move to the footer. Header + footer GitHub links → github.com/nickpharrison; avatar image stays NickHarrison96.png; team/socials page content links unchanged.
 - Agent default: hero "View Repositories" → `#projects` (as in Nick's source page); teardown opens on layer 01; terminal captures Tab only when the input has text (keyboard users can still tab past an empty prompt).
 - Correction (not a relaxation): check-site's "4 timeline phases" regex also counted `phase-tag` spans; it now counts `<li class="phase…">` only.
+- **IA restructure (2026-11-08, Nick, final)** → (1) five hubs: header nav exactly Work · Writing · Right to Repair · Tools · About, plus the ⌘K search button and the GitHub avatar link (avatar hotlink and github.com/nickpharrison unchanged); the mobile menu shows the same five; the current hub is highlighted (apfs-recovery.html → Writing); header and footer stay byte-identical across real pages. (2) "Nick Harrison" everywhere in titles, meta, headers, footers and prose; URLs, email addresses, handles (NickHarrison96, nickharrison96.github.io) and repo links unchanged. Old campaign/team/socials URLs become redirect stubs; content moves verbatim into repair.html / about.html; the homepage field log and manifesto move to writing.html; projects get work.html driven by `assets/js/projects.js`.
+- Agent default (IA): project cards stay static markup in index.html and work.html (readable without JS); `check-ia.mjs` asserts that markup equals `PROJECTS.map(projectCard)` and `--print-projects` regenerates it.
+- Agent default (IA): stubs use `location.replace` (keeps an extra `#hash`) plus a meta refresh inside `<noscript>`, so the JS and no-JS redirects never race.
+- Agent default (IA): the footer legal line keeps its year and tagline ("© 2026 Nick Harrison. Open Technical License. Right to Repair — built to be opened, fixed, and reused."); the homepage "All Downloads →" label became "All tools →" (the only renamed copy, listed in `RENAMED` in check-ia).
 
 ## 구현 계획
 
@@ -206,3 +210,22 @@ Status stays `in-progress`: every agent-executable check passes, but the selfhos
 | content identity VM vs container | both | — | all 39 shared files identical after CR normalisation; VM keeps each file's HEAD line endings |
 
 Still open (Nick): selfhost/.env token sweep, RX 580 `smoke.mjs --perf --headed`, real-phone check.
+
+### IA restructure checks
+
+Five-hub restructure (2026-11-08, executing agent). Commit 1 adds the checks (red on their own), commit 2 the restructure. "VM" = Nick's repo through the device shell (Node 22); "container" = cloud container (Chromium + Playwright 1.63.0, SwiftShader), run against the full tree staged from the VM (content-identical apart from the unstaged CLAUDE.md line endings).
+
+| Command | Where | Exit | Key output |
+|---|---|---|---|
+| `node tools/check-site.mjs` (checks only, before the restructure) | VM | 1 | 476 passed, 159 failed (expected red: hubs, stubs, preservation targets missing) |
+| `node tools/check-ia.mjs` (before the restructure) | VM | 1 | 126 passed, 138 failed |
+| `node tools/smoke.mjs` (before the restructure) | container | 1 | 116 passed, 73 failed (harness stopped at the writing-page log) |
+| `node tools/check-catalog.mjs` | VM | 0 | 50 passed, 0 failed |
+| `node tools/check-catalog.mjs --selftest` | VM | 0 | 9 passed, 0 failed |
+| `node tools/check-site.mjs` | VM | 0 | 773 passed, 0 failed (includes check-ia) |
+| `node tools/check-site.mjs --selftest` | VM | 0 | 34 passed, 0 failed (19 site + 15 IA detectors) |
+| `node tools/check-ia.mjs` | VM | 0 | 335 passed, 0 failed; content preservation verified 257 text blocks (10 old pages from `main` + homepage log/manifesto/projects/whole `<main>` from `5ebcd41`) |
+| `node tools/check-ia.mjs --selftest` | VM | 0 | 15 passed, 0 failed |
+| `! git grep -n -I -E "(gh[p]_\|github_[p]at_\|Bearer [A-Za-z0-9]{20,})" -- . ':!docs'` | VM | 0 | prints nothing |
+| `NODE_PATH=$(npm root -g) node tools/smoke.mjs` | container, staged VM tree | 0 | 197 passed, 0 failed (7 real pages × 1440/390, no console errors, overflow 0; stubs → page+anchor with and without JS; hub highlight per page; terminal `open repair`/`open legislation`/`open work`; palette "legislation" → `repair.html#legislation`; writing-page log filters/search; sticky section nav; phone menu = five hubs) |
+| screenshots `ia-{index,work,writing,repair,about}-{1440,390}.png` (`?fx=static`) | container | — | read back: nav correct, no empty sections, no overlap |

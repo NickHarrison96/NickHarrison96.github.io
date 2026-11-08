@@ -11,12 +11,21 @@ const header = document.querySelector('.site-header');
 setTier(detectTier());
 
 /* aria-current: the header is byte-identical on every page (checked by
-   tools/check-site.mjs), so the current page is marked at runtime. */
+   tools/check-site.mjs), so the current hub is marked at runtime. A sub-page marks
+   the hub it lives under (aria-current="true"); the hub page itself gets "page". */
 const fileOf = (url) => url.pathname.split('/').pop() || 'index.html';
 const here = fileOf(location);
+const HUB_OF = { 'apfs-recovery.html': 'writing.html' };
 for (const a of document.querySelectorAll('.site-nav a, .footer-nav a')) {
   const u = new URL(a.href, location.href);
-  if (u.origin === location.origin && fileOf(u) === here && !u.hash) a.setAttribute('aria-current', 'page');
+  if (u.origin !== location.origin || u.hash) continue;
+  if (fileOf(u) === here) a.setAttribute('aria-current', 'page');
+  else if (fileOf(u) === HUB_OF[here]) a.setAttribute('aria-current', 'true');
+}
+
+/* Real header height (it wraps on narrow screens) for sticky offsets and anchor scrolling. */
+if (header && 'ResizeObserver' in window) {
+  new ResizeObserver(() => root.style.setProperty('--header-real', `${header.offsetHeight}px`)).observe(header);
 }
 
 /* Shortcut hint: ⌘K on Apple platforms, Ctrl K elsewhere. */
@@ -68,6 +77,8 @@ if (root.classList.contains('booting')) import('./boot.js');
 if (document.getElementById('term-input')) import('./terminal.js');
 if (document.querySelector('[data-scramble]')) import('./scramble.js').then((m) => m.startScramble());
 if (document.querySelector('main.home')) import('./home.js');
+if (document.getElementById('log-list')) import('./log.js');
+if (document.querySelector('.section-nav')) import('./sections.js');
 if (document.querySelector('main.case')) import('./case.js');
 
 /* Effects last: the shader compile must not delay the UI modules above. */

@@ -110,7 +110,7 @@ export function strayNicholas(text) {
 
 const squash = (s) => s.replace(/\s+/g, ' ').replace(/> </g, '><').trim();
 
-/** Inner HTML of the first <div class="project-grid…"> (cards are <article>s, so no nested divs at its level). */
+/** Inner HTML of the first <div class="project-grid…">: up to the first </article> directly followed by </div>. */
 export function projectGrid(html) {
   const m = /<div class="project-grid[^"]*">([\s\S]*?<\/article>)\s*<\/div>/.exec(html);
   return m ? m[1] : null;
@@ -290,6 +290,7 @@ export async function runIA(r) {
     if (r.check(`ia preserve BASELINE homepage <main> → index/work/writing (${n} blocks)`, miss.length === 0, `${miss.length} missing: ${showMissing(miss)}`)) preserved += n;
   }
   r.check(`ia preserve: total blocks verified = ${preserved}`, preserved > 0);
+  console.log(`check-ia: content preservation verified ${preserved} text blocks (old pages from main, homepage from ${BASELINE.slice(0, 7)})`);
 
   // "Nicholas" nowhere in tracked site files (outside URLs / emails / handles).
   let files = [];

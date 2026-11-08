@@ -10,10 +10,12 @@ const body = document.getElementById('term-body');
 const PROMPT = 'nick@nicks-iMac:~$ ';
 const SPECS = ['{', '  "host": "nick@nicks-iMac.local",', '  "smbios": "MacPro7,1",', '  "bootloader": "OpenCore 1.0.8",', '  "motherboard": "MSI MPG X570 Gaming Edge WiFi",', '  "cpu": "AMD Ryzen 5 3600",', '  "gpu": "AMD Radeon RX 580 8GB (Metal: 48,799)",', '  "ram": "16GB DDR4 (9490MiB / 16384MiB active)"', '}'];
 const PAGES = {
-  home: 'index.html', projects: 'index.html#projects', 'case-study': 'apfs-recovery.html', repair: 'index.html#repair',
-  log: 'index.html#log', tools: 'index.html#tools', downloads: 'downloads.html', about: 'about.html', team: 'team.html',
-  socials: 'socials.html', writing: 'writing.html', talks: 'talks.html', mission: 'mission.html', legislation: 'legislation.html',
-  'get-involved': 'get-involved.html', 'repair-guides': 'repair-guides.html', 'repair-cafes': 'repair-cafes.html',
+  home: 'index.html', work: 'work.html', projects: 'work.html', writing: 'writing.html', 'case-study': 'apfs-recovery.html',
+  essays: 'writing.html#essays', log: 'writing.html#log', manifesto: 'writing.html#philosophy',
+  repair: 'repair.html', mission: 'repair.html#mission', legislation: 'repair.html#legislation',
+  'get-involved': 'repair.html#get-involved', guides: 'repair.html#guides', 'repair-guides': 'repair.html#guides',
+  cafes: 'repair.html#cafes', 'repair-cafes': 'repair.html#cafes', talks: 'repair.html#talks',
+  tools: 'downloads.html', downloads: 'downloads.html', about: 'about.html', team: 'about.html#team', socials: 'about.html#socials',
 };
 
 const COMMANDS = {

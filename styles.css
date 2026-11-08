@@ -60,7 +60,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-h) + 16px);
+  scroll-padding-top: calc(var(--header-real, var(--header-h)) + 16px);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -294,7 +294,7 @@ main {
 }
 
 .site-nav a:hover,
-.site-nav a[aria-current="page"] {
+.site-nav a[aria-current] {
   color: #fff;
   background: var(--raised);
 }
@@ -564,7 +564,7 @@ html:not(.js) [data-palette-open] {
 }
 
 .footer-nav a:hover,
-.footer-nav a[aria-current="page"] {
+.footer-nav a[aria-current] {
   color: #fff;
 }
 
@@ -3325,6 +3325,125 @@ html[data-theme="jailbreak"][data-fx="full"] body::after {
 
 @keyframes crt-flicker {
   50% { opacity: 0.85; }
+}
+
+/* ─── Hub pages (work, writing, repair, about) ───────────────────────────── */
+/* Hub intro without a card: same badge / title / lede as sub-page heroes. */
+.hub-hero {
+  max-width: 960px;
+  margin: clamp(24px, 5vw, 56px) auto 0;
+}
+
+.hub-hero .page-hero {
+  margin-bottom: 0;
+}
+
+.hub-top {
+  padding-top: clamp(32px, 6vw, 64px);
+}
+
+/* In-page section nav: sticks under the header (whose real height site.js
+   publishes as --header-real) and scrolls sideways on phones, inside itself. */
+.section-nav {
+  position: sticky;
+  top: var(--header-real, var(--header-h));
+  z-index: 40;
+  display: flex;
+  gap: 2px;
+  max-width: 960px;
+  margin: 24px auto 0;
+  padding: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: rgba(2, 6, 23, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  font: 400 12px var(--font-mono);
+}
+
+.section-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.section-nav a {
+  flex: none;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  color: var(--soft);
+  white-space: nowrap;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.section-nav a:hover,
+.section-nav a[aria-current] {
+  color: #fff;
+  background: var(--raised);
+}
+
+/* Anchor jumps clear the sticky section nav as well as the header. */
+.hub-section {
+  scroll-margin-top: 64px;
+}
+
+.prose h3 {
+  font: 700 clamp(20px, 3vw, 26px) / 1.25 var(--font-sans);
+  color: var(--text-strong);
+  letter-spacing: -0.015em;
+  margin-top: 18px;
+}
+
+.prose h3:first-child {
+  margin-top: 0;
+}
+
+.hub > .section-deep {
+  scroll-margin-top: 16px;
+}
+
+/* Homepage: compact featured-work cards and the essay teasers. */
+.project-grid.compact .project {
+  padding: 20px;
+  gap: 10px;
+}
+
+.project-grid.compact .project h3 {
+  font-size: 17px;
+}
+
+.project-grid.compact .project p {
+  font-size: 13.5px;
+}
+
+#writing .section-deep {
+  margin-top: 0;
+}
+
+.essay-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.essay-grid .essay-card {
+  height: 100%;
+  min-height: 0;
+}
+
+.section-cta-row {
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+@media (max-width: 760px) {
+  .essay-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* ─── Reduced motion: no animation, no transitions, no smooth scroll ─────── */

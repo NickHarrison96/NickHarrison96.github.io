@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 // Catalog checks (dev-only, no dependencies).
-// The tool catalog lives in ONE place, assets/js/catalog.js, and both index.html and
-// downloads.html reach it through their module graph. ITEMS (homepage page links) is
+// The tool catalog lives in ONE place, assets/js/catalog.js, and index.html, downloads.html
+// and writing.html (field log, since phase 8) reach it through their module graph. ITEMS (homepage page links) is
 // out of scope on purpose (plan C6).
 //   node tools/check-catalog.mjs             run against the repo
 //   node tools/check-catalog.mjs --selftest  prove the detectors catch known-bad input
 import { read, exists, moduleGraph, reporter } from './lib.mjs';
 
 const CATALOG = 'assets/js/catalog.js';
-const CONSUMERS = ['index.html', 'downloads.html'];
+const CONSUMERS = ['index.html', 'downloads.html', 'writing.html'];
 
 // Entries that existed before the shared module; their links must not change.
 const LEGACY = {

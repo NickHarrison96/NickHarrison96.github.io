@@ -1,31 +1,34 @@
 // Site-wide command palette: ⌘K / Ctrl+K (or the header Search button) searches pages,
 // projects, tools and case studies. Full keyboard support; Esc returns focus.
 import { TOOLS } from './catalog.js';
+import { PROJECTS } from './projects.js';
 
+const R2R = 'right to repair';
 const ITEMS = [
   { label: 'Home', kind: 'page', href: 'index.html' },
+  { label: 'Work', kind: 'hub', href: 'work.html', keys: 'projects repositories github' },
+  { label: 'Writing', kind: 'hub', href: 'writing.html', keys: 'essays write-ups newsletter' },
+  { label: 'Right to Repair', kind: 'hub', href: 'repair.html', keys: 'campaign' },
+  { label: 'Tools', kind: 'hub', href: 'downloads.html', keys: 'downloads free software host folder' },
+  { label: 'About', kind: 'hub', href: 'about.html', keys: 'company harrison technology solutions' },
   { label: 'APFS Recovery Case Study', kind: 'case study', href: 'apfs-recovery.html', keys: 'macos recovery opencore disk' },
-  { label: 'Projects', kind: 'section', href: 'index.html#projects' },
   { label: 'Live terminal', kind: 'section', href: 'index.html#terminal' },
-  { label: 'Right to Repair', kind: 'section', href: 'index.html#repair' },
-  { label: 'Field log', kind: 'section', href: 'index.html#log' },
+  { label: 'Projects', kind: 'section', href: 'work.html#projects' },
+  { label: 'Essays', kind: 'section', href: 'writing.html#essays' },
+  { label: 'Field log', kind: 'section', href: 'writing.html#log' },
+  { label: 'Philosophy · The Core Manifesto', kind: 'section', href: 'writing.html#philosophy' },
   { label: 'Free tools', kind: 'section', href: 'index.html#tools' },
-  { label: 'Philosophy · The Core Manifesto', kind: 'section', href: 'index.html#philosophy' },
-  { label: 'LiteLLM Proxy & SDK', kind: 'project', href: 'https://github.com/nickpharrison', keys: 'ai llm gateway python' },
-  { label: 'Stable Diffusion WebUI', kind: 'project', href: 'https://github.com/nickpharrison', keys: 'ml pytorch generative' },
-  { label: 'MacPro7,1 X570 EFI Architecture', kind: 'project', href: 'https://github.com/NickHarrison96/MSI-MPG-x570-EFI', keys: 'opencore hackintosh efi' },
+  { label: 'Mission Statement', kind: R2R, href: 'repair.html#mission' },
+  { label: 'Legislation', kind: R2R, href: 'repair.html#legislation', keys: 'bills law policy tracker' },
+  { label: 'Get Involved', kind: R2R, href: 'repair.html#get-involved', keys: 'petition volunteer representative' },
+  { label: 'Repair Guides', kind: R2R, href: 'repair.html#guides', keys: 'fix it yourself phones laptops batteries' },
+  { label: 'Repair Cafés', kind: R2R, href: 'repair.html#cafes', keys: 'repair cafe events community' },
+  { label: 'Talks & Press', kind: R2R, href: 'repair.html#talks', keys: 'speaking media workshops' },
+  { label: 'Who We Are', kind: 'about', href: 'about.html#about' },
+  { label: 'The Team', kind: 'about', href: 'about.html#team', keys: 'people' },
+  { label: 'Socials', kind: 'about', href: 'about.html#socials', keys: 'email youtube github contact' },
+  ...PROJECTS.map((p) => ({ label: p.plain, kind: 'project', href: p.url, keys: p.keys })),
   ...TOOLS.filter((t) => t.status === 'live').map((t) => ({ label: t.name, kind: 'tool', href: 'downloads.html', keys: `${t.version} ${t.category || ''} download` })),
-  { label: 'Downloads', kind: 'page', href: 'downloads.html' },
-  { label: 'Mission Statement', kind: 'page', href: 'mission.html' },
-  { label: 'Get Involved', kind: 'page', href: 'get-involved.html' },
-  { label: 'Repair Guides', kind: 'page', href: 'repair-guides.html' },
-  { label: 'Legislation', kind: 'page', href: 'legislation.html' },
-  { label: 'Repair Cafés', kind: 'page', href: 'repair-cafes.html' },
-  { label: 'Talks', kind: 'page', href: 'talks.html' },
-  { label: 'Writing', kind: 'page', href: 'writing.html' },
-  { label: 'About', kind: 'page', href: 'about.html' },
-  { label: 'The Team', kind: 'page', href: 'team.html' },
-  { label: 'Socials', kind: 'page', href: 'socials.html' },
 ];
 
 const backdrop = document.createElement('div');

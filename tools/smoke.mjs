@@ -398,7 +398,7 @@ try {
     // repair.html: the section nav stays on screen while scrolling and tracks the section.
     {
       const { page } = await open(ctx, 'repair.html');
-      await page.evaluate(() => document.getElementById('cafes').scrollIntoView());
+      await page.evaluate(() => document.getElementById('cafes').scrollIntoView({ behavior: 'instant' }));
       await page.waitForTimeout(500);
       const st = await page.evaluate(() => {
         const n = document.querySelector('.section-nav').getBoundingClientRect();
