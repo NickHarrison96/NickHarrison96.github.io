@@ -15,7 +15,7 @@ import { createServer } from 'node:http';
 import { createRequire } from 'node:module';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
-import { ROOT, PAGES, phaseFromArgs } from './lib.mjs';
+import { ROOT, PAGES, STUBS, HUBS, HUB_OF, phaseFromArgs } from './lib.mjs';
 
 const require = createRequire(import.meta.url);
 let chromium;
@@ -179,8 +179,24 @@ try {
     const nojs = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 900 } });
     await stub(nojs);
     const { page } = await open(nojs, 'index.html', { skipBoot: false, ready: false });
-    for (const sel of ['#terminal pre', '#projects .project', '#case-study h2', '#repair .layer-panel', '#log .log-entry', '#philosophy h2']) {
+    // Phase 8 moved the field log and the manifesto to writing.html (checked there).
+    const homeSel = ['#terminal pre', '#projects .project', '#case-study h2', '#repair .layer-panel', '#tools h2'];
+    if (!at(8)) homeSel.push('#log .log-entry', '#philosophy h2');
+    for (const sel of homeSel) {
       check(`index no-JS: ${sel} visible`, await visible(page, sel));
+    }
+    if (at(8)) {
+      const noJs = {
+        'writing.html': ['#featured a[href="apfs-recovery.html"]', '#essays li', '#log .log-entry', '#philosophy h2'],
+        'work.html': ['.project-grid .project', '.project-foot a'],
+        'repair.html': ['#mission h2', '#legislation h2', '#get-involved h2', '#guides h2', '#cafes h2', '#talks h2', '#mission .note', '.section-nav'],
+        'about.html': ['#about h1', '#team .team-card', '#socials .social-tile'],
+      };
+      for (const [f, sels] of Object.entries(noJs)) {
+        const p = await open(nojs, f, { skipBoot: false, ready: false });
+        for (const sel of sels) check(`${f} no-JS: ${sel} visible`, await visible(p.page, sel));
+        await p.page.close();
+      }
     }
     await nojs.close();
   }
@@ -279,9 +295,138 @@ try {
     const deep = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     await stub(deep);
     const dp = await deep.newPage();
-    await dp.goto(BASE + '/index.html#log', { waitUntil: 'domcontentloaded' });
+    // Was index.html#log; the log moved to writing.html in phase 8, so use a section that stays home.
+    await dp.goto(BASE + '/index.html#tools', { waitUntil: 'domcontentloaded' });
     check('boot: deep link skips splash', !(await visible(dp, '#boot')));
     await deep.close();
+  }
+
+  /* Phase 8 — five-hub information architecture */
+  if (at(8)) {
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    await stub(ctx);
+    const here = (page) => page.evaluate(() => location.pathname.split('/').pop() + location.hash);
+
+    // Header: five hubs in order, current hub highlighted (apfs-recovery.html → Writing, index → none).
+    for (const f of pages) {
+      const { page, errors } = await open(ctx, f);
+      const nav = await page.evaluate(() => [...document.querySelectorAll('.site-nav a')].map((a) => [a.textContent.trim(), a.getAttribute('href'), a.getAttribute('aria-current')]));
+      check(`${f}: header nav = five hubs`, JSON.stringify(nav.map(([t, h]) => [t, h])) === JSON.stringify(HUBS), JSON.stringify(nav));
+      const cur = nav.filter(([, , c]) => c).map(([, h]) => h);
+      const want = HUB_OF[f] ? [HUB_OF[f]] : [];
+      check(`${f}: highlighted hub = ${want[0] || 'none'}`, JSON.stringify(cur) === JSON.stringify(want), JSON.stringify(cur));
+      check(`${f}: no errors (IA pass)`, errors.length === 0, errors.join(' | '));
+      await page.close();
+    }
+
+    // Each stub lands on its new page + section; an extra hash is carried over.
+    for (const [f, target, id] of STUBS) {
+      const page = await ctx.newPage();
+      await page.goto(`${BASE}/${f}`, { waitUntil: 'load' });
+      await page.waitForURL((u) => u.pathname.endsWith('/' + target), { timeout: 5000 }).catch(() => {});
+      await page.waitForTimeout(200);
+      check(`stub ${f} → ${target}#${id}`, (await here(page)) === `${target}#${id}`, await here(page));
+      check(`stub ${f}: #${id} on the landing page`, await page.evaluate((x) => !!document.getElementById(x), id));
+      await page.close();
+    }
+    {
+      const page = await ctx.newPage();
+      await page.goto(`${BASE}/talks.html#formats`, { waitUntil: 'load' });
+      await page.waitForURL((u) => u.pathname.endsWith('/repair.html'), { timeout: 5000 }).catch(() => {});
+      check('stub talks.html#formats keeps the extra hash', (await here(page)) === 'repair.html#formats', await here(page));
+      await page.close();
+    }
+    {
+      // Without JS the meta refresh still redirects.
+      const nojs = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1440, height: 900 } });
+      await stub(nojs);
+      const page = await nojs.newPage();
+      await page.goto(`${BASE}/mission.html`, { waitUntil: 'load' });
+      await page.waitForURL((u) => u.pathname.endsWith('/repair.html'), { timeout: 5000 }).catch(() => {});
+      check('stub mission.html (no JS) → repair.html#mission via meta refresh', (await here(page)) === 'repair.html#mission', await here(page));
+      await nojs.close();
+    }
+
+    // Old homepage anchors that moved follow their content.
+    for (const [from, to] of [['index.html#log', 'writing.html#log'], ['index.html#philosophy', 'writing.html#philosophy']]) {
+      const page = await ctx.newPage();
+      await page.goto(`${BASE}/${from}`, { waitUntil: 'load' });
+      await page.waitForURL((u) => u.pathname.endsWith('/writing.html'), { timeout: 5000 }).catch(() => {});
+      check(`${from} → ${to}`, (await here(page)) === to, await here(page));
+      await page.close();
+    }
+
+    // Terminal: open repair / open legislation.
+    for (const [cmd, to] of [['open repair', 'repair.html'], ['open legislation', 'repair.html#legislation'], ['open work', 'work.html']]) {
+      const { page } = await open(ctx, 'index.html');
+      await page.locator('#term-input').fill(cmd);
+      await page.locator('#term-input').press('Enter');
+      await page.waitForURL((u) => u.pathname.endsWith('/' + to.split('#')[0]), { timeout: 5000 }).catch(() => {});
+      check(`terminal: ${cmd} → ${to}`, (await here(page)) === to, await here(page));
+      await page.close();
+    }
+
+    // Palette: "legislation" → repair.html#legislation (from a sub-page too).
+    for (const from of ['index.html', 'about.html']) {
+      const { page } = await open(ctx, from);
+      await page.keyboard.press('Control+k');
+      await page.keyboard.type('legislation');
+      await page.keyboard.press('Enter');
+      await page.waitForURL((u) => u.pathname.endsWith('/repair.html'), { timeout: 5000 }).catch(() => {});
+      check(`palette (${from}): "legislation" → repair.html#legislation`, (await here(page)) === 'repair.html#legislation', await here(page));
+      await page.close();
+    }
+
+    // Writing hub: the field log behaves as it did on the homepage.
+    {
+      const { page, errors } = await open(ctx, 'writing.html');
+      const count = () => page.evaluate(() => [...document.querySelectorAll('#log .log-entry')].filter((e) => !e.hidden).length);
+      const total = await count();
+      check('writing log: tool entries appended from the catalog', (await page.evaluate(() => document.querySelectorAll('#log .log-entry[data-type="tool"]').length)) === 3);
+      check('writing log: all entries shown', total >= 12, String(total));
+      await page.click('#log .chip[data-filter="writeup"]');
+      check('writing log: Write-ups filter → 3', (await count()) === 3, String(await count()));
+      await page.click('#log .chip[data-filter="all"]');
+      await page.fill('#log-q', 'legislation');
+      check('writing log: search narrows', (await count()) === 1, String(await count()));
+      await page.fill('#log-q', 'zzzz-nothing');
+      check('writing log: empty state', await visible(page, '#log .log-empty'));
+      check('writing: no errors after log interaction', errors.length === 0, errors.join(' | '));
+      await page.close();
+    }
+
+    // repair.html: the section nav stays on screen while scrolling and tracks the section.
+    {
+      const { page } = await open(ctx, 'repair.html');
+      await page.evaluate(() => document.getElementById('cafes').scrollIntoView());
+      await page.waitForTimeout(500);
+      const st = await page.evaluate(() => {
+        const n = document.querySelector('.section-nav').getBoundingClientRect();
+        const h = document.querySelector('.site-header').getBoundingClientRect();
+        return { top: n.top, headerBottom: h.bottom, current: document.querySelector('.section-nav a[aria-current]')?.getAttribute('href') };
+      });
+      check('repair: section nav sticks under the header', st.top >= 0 && Math.abs(st.top - st.headerBottom) <= 2, JSON.stringify(st));
+      check('repair: section nav marks the visible section', st.current === '#cafes', String(st.current));
+      await page.close();
+    }
+    await ctx.close();
+
+    // Phone: the menu shows the same five hubs.
+    const phone = await browser.newContext({ viewport: { width: 390, height: 900 } });
+    await stub(phone);
+    for (const f of ['index.html', 'repair.html']) {
+      const { page } = await open(phone, f);
+      await page.click('.menu-btn');
+      await page.waitForTimeout(200);
+      const shown = await page.evaluate(() => [...document.querySelectorAll('#site-nav a')].filter((a) => a.getBoundingClientRect().height > 0).map((a) => a.textContent.trim()));
+      check(`${f} @390: menu shows the five hubs`, JSON.stringify(shown) === JSON.stringify(HUBS.map(([t]) => t)), JSON.stringify(shown));
+      if (f === 'repair.html') {
+        const ov = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+        check('repair @390 (menu open): no horizontal overflow', ov === 0, `${ov}px`);
+      }
+      await page.close();
+    }
+    await phone.close();
   }
 
   await browser.close();

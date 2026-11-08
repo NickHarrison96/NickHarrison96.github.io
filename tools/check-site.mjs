@@ -6,9 +6,10 @@
 import { readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import {
-  ROOT, read, exists, PAGES, phaseFromArgs, pageText, norm, tags, attr, hasAttr, elements, ids,
+  ROOT, read, exists, PAGES, STUBS, phaseFromArgs, pageText, norm, tags, attr, hasAttr, elements, ids,
   moduleGraph, reporter,
 } from './lib.mjs';
+import { runIA, selftestIA } from './check-ia.mjs';
 
 const PHASE = phaseFromArgs();
 
@@ -16,12 +17,14 @@ const PHASE = phaseFromArgs();
 const ALLOWED_RUNTIME_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com', 'github.com'];
 // Referenced on purpose but never committed (gitignored local override; see AGENTS.md "Secrets").
 const ALLOWED_MISSING = new Set(['selfhost.local.js']);
-// Links every homepage must keep (the old ITEMS grid + carousel targets).
 // Link targets that only exist from a later phase on (skipped by --phase runs before then).
-const FUTURE_TARGETS = { 'apfs-recovery.html': 4 };
-const FUTURE_INDEX_IDS = { terminal: 3, projects: 3, 'case-study': 3, repair: 3, log: 3, tools: 3, philosophy: 3 };
-const ITEMS_LINKS = ['mission.html', 'get-involved.html', 'repair-guides.html', 'legislation.html',
-  'repair-cafes.html', 'talks.html', 'writing.html', 'downloads.html'];
+const FUTURE_TARGETS = { 'apfs-recovery.html': 4, 'work.html': 8, 'repair.html': 8 };
+const FUTURE_INDEX_IDS = { terminal: 3, projects: 3, 'case-study': 3, repair: 3, writing: 8, tools: 3 };
+// Links the homepage must keep. Phase 8 replaced the old ITEMS grid targets (mission.html, get-involved.html,
+// repair-guides.html, legislation.html, repair-cafes.html, talks.html — now redirect stubs) with the
+// repair.html sections they moved to; writing.html and downloads.html stay.
+const ITEMS_LINKS = ['repair.html#mission', 'repair.html#get-involved', 'repair.html#guides', 'repair.html#legislation',
+  'repair.html#cafes', 'repair.html#talks', 'writing.html', 'downloads.html'];
 
 /* ── detectors (pure functions, exercised by --selftest) ─────────────────── */
 
@@ -110,6 +113,7 @@ function selftest() {
   r.check('runtimeHosts sees CDN', runtimeHosts('<script src="https://cdn.jsdelivr.net/x.js"></script>')[0] === 'cdn.jsdelivr.net');
   r.check('shellBlock extracts header', shellBlock('<header class="site-header"><a>x</a></header>', 'header') !== null);
   r.check('shellBlock misses unclassed header', shellBlock('<header><a>x</a></header>', 'header') === null);
+  selftestIA(r);
   return r.done();
 }
 
@@ -124,7 +128,7 @@ async function run() {
   /* Phase 2 — tokens + shared shell on every page */
   if (at(2)) {
     for (const f of pages) r.check(`page exists: ${f}`, exists(f));
-    const extra = readdirSync(ROOT).filter((f) => f.endsWith('.html') && !PAGES.some(([p]) => p === f));
+    const extra = readdirSync(ROOT).filter((f) => f.endsWith('.html') && !PAGES.some(([p]) => p === f) && !STUBS.some(([s]) => s === f));
     r.check('no unlisted root pages', extra.length === 0, extra.join(', '));
 
     const headers = new Map();
@@ -201,14 +205,24 @@ async function run() {
     const h = html['index.html'];
     const text = pageText(h);
     const own = ids(h);
-    for (const id of ['terminal', 'projects', 'case-study', 'repair', 'log', 'tools', 'philosophy']) {
-      r.check(`index: section #${id}`, own.has(id));
+    // #log and #philosophy moved to writing.html in phase 8 (asserted there below and in check-ia).
+    for (const id of ['terminal', 'projects', 'case-study', 'repair', 'writing', 'tools']) {
+      if ((FUTURE_INDEX_IDS[id] ?? 0) <= PHASE) r.check(`index: section #${id}`, own.has(id));
     }
-    for (const href of ITEMS_LINKS) r.check(`index: keeps link ${href}`, new RegExp(`href="${href.replace('.', '\\.')}"`).test(h));
+    if (at(8)) for (const id of ['log', 'philosophy']) r.check(`writing: section #${id}`, ids(html['writing.html'] || '').has(id));
+    if (at(8)) for (const href of ITEMS_LINKS) r.check(`index: keeps link ${href}`, h.includes(`href="${href}"`));
     r.check('index: marquee', /class="marquee"/.test(h));
     r.check('index: EFI repo link', h.includes('https://github.com/NickHarrison96/MSI-MPG-x570-EFI'));
-    for (const phrase of VERBATIM_HOME) r.check(`index verbatim: "${phrase.slice(0, 48)}…"`, text.includes(phrase));
-    r.check('index: no canvas stand-in entries', !/Diagnostics Suite|water-damaged|key fact or stat/.test(h));
+    if (at(8)) r.check('work: EFI repo link', (html['work.html'] || '').includes('https://github.com/NickHarrison96/MSI-MPG-x570-EFI'));
+    const texts = {};
+    const textOf = (f) => (texts[f] ??= pageText(html[f] || ''));
+    for (const [phrase, where] of VERBATIM_HOME) {
+      const f = at(8) ? where : 'index.html';
+      r.check(`${f.replace('.html', '')} verbatim: "${phrase.slice(0, 48)}…"`, (f === 'index.html' ? text : textOf(f)).includes(phrase));
+    }
+    for (const f of ['index.html', 'writing.html', 'work.html']) {
+      if (html[f]) r.check(`${f}: no canvas stand-in entries`, !/Diagnostics Suite|water-damaged|key fact or stat/.test(html[f]));
+    }
   }
 
   /* Phase 4 — case study page */
@@ -267,27 +281,31 @@ async function run() {
     }
   }
 
+  /* Phase 8 — five-hub information architecture (tools/check-ia.mjs) */
+  if (at(8)) await runIA(r);
+
   return r.done();
 }
 
 // Copy that must survive verbatim (Nick's own writing).
+// [phrase, page]: from phase 8 the projects live on work.html and the manifesto on writing.html.
 const VERBATIM_HOME = [
-  'Systems developer, AI pipeline creator, and hardware troubleshooter. I specialize in building proxy proxies, generative machine learning workflows, kernel/OpenCore configurations, and deep-dive technical write-ups.',
-  'Open source projects, AI integrations, and system-level tools maintained on GitHub.',
-  'Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware.',
-  'Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions.',
-  'Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning.',
-  'How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.',
-  'APFS Directory Services desync bypass completed. 401.5 GB user payload mounted at /Volumes/Big Mac - Data without data loss.',
-  'Hackintosh (SMBIOS: MacPro7,1)',
-  'Computers are meant to be tools of empowerment, creative expression, and personal agency.',
-  'Breaking down UNIX, APFS, and bootloader internals into transparent, actionable guides.',
-  'Your data belongs to you. Every write-up emphasizes non-destructive, zero-loss recovery methodologies.',
-  'Documenting solutions creates an indexable, open roadmap for developers faced with black screens.',
-  'Honoring the classical hacker ethos of learning how software and hardware work under the hood.',
-  'Repair Is a Right, Not a Privilege.',
-  'Parts. Tools. Manuals. For Everyone.',
-  'The Greenest Device Is the One You Already Own.',
+  ['Systems developer, AI pipeline creator, and hardware troubleshooter. I specialize in building proxy proxies, generative machine learning workflows, kernel/OpenCore configurations, and deep-dive technical write-ups.', 'index.html'],
+  ['Open source projects, AI integrations, and system-level tools maintained on GitHub.', 'work.html'],
+  ['Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware.', 'work.html'],
+  ['Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions.', 'work.html'],
+  ['Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning.', 'work.html'],
+  ['How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.', 'index.html'],
+  ['APFS Directory Services desync bypass completed. 401.5 GB user payload mounted at /Volumes/Big Mac - Data without data loss.', 'index.html'],
+  ['Hackintosh (SMBIOS: MacPro7,1)', 'index.html'],
+  ['Computers are meant to be tools of empowerment, creative expression, and personal agency.', 'writing.html'],
+  ['Breaking down UNIX, APFS, and bootloader internals into transparent, actionable guides.', 'writing.html'],
+  ['Your data belongs to you. Every write-up emphasizes non-destructive, zero-loss recovery methodologies.', 'writing.html'],
+  ['Documenting solutions creates an indexable, open roadmap for developers faced with black screens.', 'writing.html'],
+  ['Honoring the classical hacker ethos of learning how software and hardware work under the hood.', 'writing.html'],
+  ['Repair Is a Right, Not a Privilege.', 'index.html'],
+  ['Parts. Tools. Manuals. For Everyone.', 'index.html'],
+  ['The Greenest Device Is the One You Already Own.', 'index.html'],
 ];
 
 const VERBATIM_CASE = [

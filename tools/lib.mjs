@@ -8,13 +8,37 @@ export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const read = (rel) => readFileSync(join(ROOT, rel), 'utf8').replace(/\r\n/g, '\n');
 export const exists = (rel) => existsSync(join(ROOT, rel));
 
-/** Every page the site ships, and the phase that introduced it. */
+/** Every real page the site ships (full shell), and the phase that introduced it. */
 export const PAGES = [
-  ['index.html', 0], ['about.html', 0], ['downloads.html', 0], ['get-involved.html', 0],
-  ['legislation.html', 0], ['mission.html', 0], ['repair-cafes.html', 0], ['repair-guides.html', 0],
-  ['socials.html', 0], ['talks.html', 0], ['team.html', 0], ['writing.html', 0],
+  ['index.html', 0], ['about.html', 0], ['downloads.html', 0], ['writing.html', 0],
   ['apfs-recovery.html', 4],
+  ['work.html', 8], ['repair.html', 8],
 ];
+
+/**
+ * Pre-redesign URLs that became redirect stubs in phase 8 (five-hub IA): [stub, target page, target id].
+ * Stubs carry no site shell, so they are excluded from the shell checks and the browser page loop.
+ */
+export const STUBS = [
+  ['mission.html', 'repair.html', 'mission'],
+  ['legislation.html', 'repair.html', 'legislation'],
+  ['get-involved.html', 'repair.html', 'get-involved'],
+  ['repair-guides.html', 'repair.html', 'guides'],
+  ['repair-cafes.html', 'repair.html', 'cafes'],
+  ['talks.html', 'repair.html', 'talks'],
+  ['team.html', 'about.html', 'team'],
+  ['socials.html', 'about.html', 'socials'],
+];
+
+/** Header nav: the five hubs, in order (phase 8). Sub-pages map to the hub they live under. */
+export const HUBS = [
+  ['Work', 'work.html'], ['Writing', 'writing.html'], ['Right to Repair', 'repair.html'],
+  ['Tools', 'downloads.html'], ['About', 'about.html'],
+];
+export const HUB_OF = {
+  'index.html': null, 'work.html': 'work.html', 'writing.html': 'writing.html', 'apfs-recovery.html': 'writing.html',
+  'repair.html': 'repair.html', 'downloads.html': 'downloads.html', 'about.html': 'about.html',
+};
 
 /** Parse `--phase=N`; no flag means every assertion (the completion run). */
 export function phaseFromArgs(argv = process.argv.slice(2)) {
