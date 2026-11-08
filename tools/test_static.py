@@ -27,11 +27,12 @@ def check():
    if frag:
     other=Parse(); other.feed(target.read_text()); assert frag in other.ids,f'{file}: missing #{frag}'
   assert 'assets/motion.js' in text,file
+  assert 'class="motion-toggle"' in text and 'aria-pressed="false"' in text,f'Missing explicit ambient motion control: {file}'
   for excluded in ['repair','teardown','disassembly']:
    assert excluded not in text.lower(),f'Excluded positioning returned: {file} / {excluded}'
  home=(ROOT/'index.html').read_text()
  for discipline in ['behind the scenes','protect your personal data every day','help companies and their teams','share it freely']:assert discipline in home.lower(),discipline
- assert 'I’m Nick, a security researcher and tech enthusiast.' in home
+ assert 'I’m Nick, a security researcher and tech enthusiast. I explore how devices work behind the scenes and how they protect your personal data every day. Through that research, I help companies and their teams make the devices you rely on safer and more secure.' in home
  assert 'Repair grew out' not in home
  assert 'repair services' not in home.lower()
  assert 'writeup-card' not in home and 'hero-art' not in home
