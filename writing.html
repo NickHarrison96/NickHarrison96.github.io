@@ -6,84 +6,204 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Writing &mdash; Nicholas Harrison</title>
+  <meta name="theme-color" content="#05070d">
+  <meta name="description"
+    content="Writing by Nick Harrison: the APFS recovery case study, essays on the economics and ethics of repair, the field log and the manifesto." />
+  <title>Writing &mdash; Nick Harrison</title>
+  <script>/* shell: runs before first paint — see AGENTS.md "Shell" */(function(d){d.classList.add('js');try{if(localStorage.getItem('nh-jailbreak')==='1')d.dataset.theme='jailbreak'}catch(e){}if(d.hasAttribute('data-boot')&&!location.hash&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{if(!sessionStorage.getItem('nh-booted')){sessionStorage.setItem('nh-booted','1');d.classList.add('booting')}}catch(e){}}})(document.documentElement);</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="sub">
-  <div class="ambient">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-  </div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <canvas id="fx-bg" aria-hidden="true"></canvas>
 
-  <div class="page">
-    <header>
-      <a href="index.html" class="brand">
-        <div class="brand-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26" /></svg></div>
-        <div class="brand-text">
-          <h1>Nicholas <span>Harrison</span></h1>
-          <p>Right to Repair</p>
-        </div>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span class="brand-text">
+          <span class="brand-name">NICK HARRISON</span>
+          <span class="brand-role">SYSTEMS &amp; AI ENGINEER <span class="brand-role-extra">· RIGHT TO REPAIR</span></span>
+        </span>
       </a>
-      <nav class="top-nav" aria-label="Pages">
-        <a href="downloads.html">Downloads</a>
+      <nav class="site-nav" id="site-nav" aria-label="Site">
+        <a href="work.html">Work</a>
+        <a href="writing.html">Writing</a>
+        <a href="repair.html">Right to Repair</a>
+        <a href="downloads.html">Tools</a>
         <a href="about.html">About</a>
-        <a href="team.html">The Team</a>
-        <a href="socials.html">Socials</a>
       </nav>
-      <a class="gh-link" href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="Nicholas Harrison on GitHub" title="GitHub — NickHarrison96">
-        <img src="https://github.com/NickHarrison96.png?size=96" alt="Nicholas Harrison's GitHub avatar" class="gh-avatar" loading="lazy" width="44" height="44">
-      </a>
-    </header>
+      <div class="site-actions">
+        <button class="search-btn" type="button" data-palette-open aria-label="Search (Ctrl+K)">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-label">Search</span>
+          <kbd aria-hidden="true">⌘K</kbd>
+        </button>
+        <a class="gh-link magnetic" href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer" aria-label="Nick Harrison on GitHub">
+          <img src="https://github.com/NickHarrison96.png?size=96" alt="" class="gh-avatar" width="28" height="28">
+          <span class="gh-text">github.com/nickpharrison</span>
+        </a>
+        <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+          <span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-    <main>
-      <div class="card subpage">
-        <a href="index.html" class="back-link"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg> Back to Home</a>
+  <main id="main" class="hub">
+      <div class="hub-hero">
         <div class="page-hero">
           <div class="badge">Essays &amp; Newsletter</div>
           <h1 class="card-title"><em>Writing</em>.</h1>
           <p class="page-lede">Essays and a newsletter on the economics and ethics of repair &mdash; why we throw so much away, who profits from it, and what a fixable future looks like.</p>
         </div>
+      </div>
+
+    <!-- ─── Featured case study (full write-up on apfs-recovery.html) ─── -->
+    <section class="section-deep" id="featured" aria-labelledby="featured-title">
+      <div class="teaser">
+        <div class="pill"><span class="pulse" aria-hidden="true"></span>FEATURED CASE STUDY • INCIDENT &amp; SYSTEM RECOVERY</div>
+        <h2 id="featured-title" class="teaser-title">Surgical Recovery of a <br><span class="grad">Corrupted macOS Installation</span></h2>
+        <p class="teaser-lede">How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.</p>
+        <dl class="spec-grid">
+          <div class="spec"><dt>SMBIOS TARGET</dt><dd>MacPro7,1 (AMD Zen 2)</dd></div>
+          <div class="spec"><dt>STORAGE LAYOUT</dt><dd>APFS Container (disk1 / disk3)</dd></div>
+          <div class="spec spec-ok"><dt>DATA PRESERVATION</dt><dd>401.5 GB Volume Untouched</dd></div>
+        </dl>
+        <ol class="mini-timeline">
+          <li><span class="node" aria-hidden="true">1</span><b>Creating the Parallel APFS Volume</b><code>diskutil apfs addVolume disk3 APFS "Untitled"</code></li>
+          <li><span class="node" aria-hidden="true">2</span><b>Online Recovery Payload Retrieval</b><span>~18.39 GB fetched directly from Apple recovery servers.</span></li>
+          <li><span class="node" aria-hidden="true">3</span><b>Resolving Storage Space Warnings</b><span>Unchecked bulk migration; data stayed mounted at /Volumes/Big Mac - Data/.</span></li>
+          <li class="ok"><span class="node" aria-hidden="true">4</span><b>Desktop Landing &amp; Granular Data Recovery</b><code>sudo chown -R $(whoami) "/Volumes/Big Mac - Data/Users/nick"</code></li>
+        </ol>
+        <div class="teaser-cta">
+          <a href="apfs-recovery.html" class="dl-btn magnetic">Read the full case study <svg aria-hidden="true" class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+    </section>
+
+      <section class="card subpage hub-section" id="essays" aria-labelledby="essays-title">
         <div class="prose">
-          <h2>Recent Pieces</h2><ul class="feature-list"><li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><div><b>Why &lsquo;Authorized&rsquo; Repair Is a Moat</b><span>How the approved-repair label quietly kills competition.</span></div></li><li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><div><b>The True Cost of a Glued-In Battery</b><span>What a two-dollar design choice does over a decade.</span></div></li><li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><div><b>Ownership After the Sale</b><span>When the thing you bought keeps answering to someone else.</span></div></li></ul><p>New pieces land in the newsletter first.</p>
+          <h2 id="essays-title">Recent Pieces</h2><ul class="feature-list"><li><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><div><b>Why &lsquo;Authorized&rsquo; Repair Is a Moat</b><span>How the approved-repair label quietly kills competition.</span></div></li><li><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><div><b>The True Cost of a Glued-In Battery</b><span>What a two-dollar design choice does over a decade.</span></div></li><li><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><div><b>Ownership After the Sale</b><span>When the thing you bought keeps answering to someone else.</span></div></li></ul><p>Long-form engineering write-up: <a href="apfs-recovery.html">Surgical Recovery of a Corrupted macOS Installation</a> &mdash; the APFS case study.</p><p>New pieces land in the newsletter first.</p>
         </div>
         <div class="page-cta">
-          <a href="https://www.facebook.com/profile.php?id=100090229520700" target="_blank" rel="noopener noreferrer" class="dl-btn">Subscribe <svg class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></a>
+          <a href="https://www.facebook.com/profile.php?id=100090229520700" target="_blank" rel="noopener noreferrer" class="dl-btn">Subscribe <svg aria-hidden="true" class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></a>
         </div>
-      </div>
-    </main>
+      </section>
 
-    <footer>
-      <div class="socials">
+    <!-- ─── Field log ────────────────────────────────────────── -->
+    <section class="section section-deep" id="log" aria-labelledby="log-title">
+      <div class="log-wrap">
+        <p class="eyebrow" data-scramble>Field Log</p>
+        <h2 id="log-title" class="section-title">Case Studies, Write-ups &amp; <span class="grad">Releases</span></h2>
+        <div class="log-controls">
+          <div class="chips" role="group" aria-label="Filter the log">
+            <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span class="n"></span></button>
+            <button type="button" class="chip" data-filter="case" aria-pressed="false">Case studies <span class="n"></span></button>
+            <button type="button" class="chip" data-filter="project" aria-pressed="false">Projects <span class="n"></span></button>
+            <button type="button" class="chip" data-filter="tool" aria-pressed="false">Tools <span class="n"></span></button>
+            <button type="button" class="chip" data-filter="writeup" aria-pressed="false">Write-ups <span class="n"></span></button>
+            <button type="button" class="chip" data-filter="campaign" aria-pressed="false">Campaign <span class="n"></span></button>
+          </div>
+          <label class="log-search">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span class="visually-hidden">Search the log</span>
+            <input type="search" id="log-q" placeholder="grep the log…" autocomplete="off" spellcheck="false">
+          </label>
+        </div>
+        <p class="log-empty" role="status" hidden>grep: no matches. Try another word or clear the filter.</p>
+        <ol class="log-list" id="log-list">
+          <li class="log-entry" data-type="case">
+            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Case study</span><span class="log-meta">Featured</span><span class="log-title">Surgical Recovery of a Corrupted macOS Installation</span></button>
+            <div class="log-body"><p>How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.</p><a href="apfs-recovery.html">Open case study <span aria-hidden="true">→</span></a></div>
+          </li>
+          <li class="log-entry" data-type="project">
+            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Project</span><span class="log-meta">Python / AI</span><span class="log-title">LiteLLM Proxy &amp; SDK</span></button>
+            <div class="log-body"><p>Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware.</p><a href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer">View repo <span aria-hidden="true">↗</span></a></div>
+          </li>
+          <li class="log-entry" data-type="project">
+            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Project</span><span class="log-meta">PyTorch / ML</span><span class="log-title">Stable Diffusion WebUI</span></button>
+            <div class="log-body"><p>Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions.</p><a href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer">View repo <span aria-hidden="true">↗</span></a></div>
+          </li>
+          <li class="log-entry" data-type="project">
+            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Project</span><span class="log-meta">OpenCore / macOS</span><span class="log-title">MacPro7,1 X570 EFI Architecture</span></button>
+            <div class="log-body"><p>Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning.</p><a href="https://github.com/NickHarrison96/MSI-MPG-x570-EFI" target="_blank" rel="noopener noreferrer">View repo <span aria-hidden="true">↗</span></a></div>
+          </li>
+          <!-- Tool releases are appended here from assets/js/catalog.js (home.js). -->
+          <li class="log-entry" data-type="writeup">
+            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Write-up</span><span class="log-meta">Essay</span><span class="log-title">Why &lsquo;Authorized&rsquo; Repair Is a Moat</span></button>
+            <div class="log-body"><p>How the approved-repair label quietly kills competition.</p><a href="#essays">Open write-up <span aria-hidden="true">→</span></a></div>
+          </li>
+          <li class="log-entry" data-type="writeup">
+            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Write-up</span><span class="log-meta">Essay</span><span class="log-title">The True Cost of a Glued-In Battery</span></button>
+            <div class="log-body"><p>What a two-dollar design choice does over a decade.</p><a href="#essays">Open write-up <span aria-hidden="true">→</span></a></div>
+          </li>
+          <li class="log-entry" data-type="writeup">
+            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Write-up</span><span class="log-meta">Essay</span><span class="log-title">Ownership After the Sale</span></button>
+            <div class="log-body"><p>When the thing you bought keeps answering to someone else.</p><a href="#essays">Open write-up <span aria-hidden="true">→</span></a></div>
+          </li>
+          <li class="log-entry" data-type="campaign">
+            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Campaign</span><span class="log-meta">Mission</span><span class="log-title">Mission Statement</span></button>
+            <div class="log-body"><p>If you bought it, you own it — and owning something means being allowed to understand it, open it, and fix it.</p><a href="repair.html#mission">Open campaign <span aria-hidden="true">→</span></a></div>
+          </li>
+          <li class="log-entry" data-type="campaign">
+            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Campaign</span><span class="log-meta">Legislation</span><span class="log-title">Track the Legislation</span></button>
+            <div class="log-body"><p>Where right-to-repair bills stand across states and countries, what they cover, and how you can back the ones near you.</p><a href="repair.html#legislation">Open campaign <span aria-hidden="true">→</span></a></div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ─── Manifesto ────────────────────────────────────────── -->
+    <section class="section" id="philosophy" aria-labelledby="philosophy-title">
+      <div class="manifesto">
+        <p class="eyebrow" data-scramble>The Core Manifesto</p>
+        <h2 id="philosophy-title" class="manifesto-title">Why We Publish &amp; Share These Write-Ups</h2>
+        <p class="manifesto-lede">Computers are meant to be tools of empowerment, creative expression, and personal agency. When an operating system fails, users shouldn't feel helpless, nor should they be forced to accept data loss as an inevitability.</p>
+        <ul class="manifesto-grid">
+          <li><span class="m-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span><div><b>Demystifying Systems</b><span>Breaking down UNIX, APFS, and bootloader internals into transparent, actionable guides.</span></div></li>
+          <li><span class="m-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span><div><b>Promoting Data Rights</b><span>Your data belongs to you. Every write-up emphasizes non-destructive, zero-loss recovery methodologies.</span></div></li>
+          <li><span class="m-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><div><b>Community Knowledge Base</b><span>Documenting solutions creates an indexable, open roadmap for developers faced with black screens.</span></div></li>
+          <li><span class="m-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></span><div><b>Open Engineering Spirit</b><span>Honoring the classical hacker ethos of learning how software and hardware work under the hood.</span></div></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span><strong>Nick Harrison</strong><span>nickharrison96.github.io</span></span>
+      </div>
+      <nav class="footer-nav" aria-label="Site hubs">
+        <a href="work.html">Work</a>
+        <a href="writing.html">Writing</a>
+        <a href="repair.html">Right to Repair</a>
+        <a href="downloads.html">Tools</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="footer-social">
         <a href="mailto:harrisontechdev@gmail.com" aria-label="Email">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
         </a>
         <a href="https://www.youtube.com/@NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2.25a9.75 9.75 0 1 0 0 19.5 9.75 9.75 0 0 0 0-19.5ZM10.05 8.7l5.7 3.3-5.7 3.3V8.7Z" /></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.1 24.1 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.1 24.1 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
         </a>
-        <a href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" /></svg>
+        <a href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
         </a>
       </div>
-      <p class="dim">&copy; 2026 Nicholas Harrison &middot; Right to Repair. Built to be opened, fixed, and reused.</p>
-    </footer>
-  </div>
+      <p class="footer-legal">&copy; 2026 Nick Harrison. Open Technical License. <span>Right to Repair &mdash; built to be opened, fixed, and reused.</span></p>
+      <a class="to-top" href="#main">Top &uarr;</a>
+    </div>
+  </footer>
 
-  <script>
-    // Sticky header blur on scroll — mirrors index.html's listener so
-    // header::before's opaque backdrop activates here too.
-    (function () {
-      var header = document.querySelector('header');
-      if (!header) return;
-      window.addEventListener('scroll', function () {
-        header.classList.toggle('scrolled', window.scrollY > 20);
-      });
-    })();
-  </script>
+  <script type="module" src="assets/js/site.js"></script>
 </body>
 
 </html>
