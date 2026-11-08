@@ -21,3 +21,7 @@ Design thesis: a luminous data-interface perimeter around calm, stationary resea
 - [x] Save cyber-* screenshot variants, cyber-checks.json and an optional short headless recording; inspect representative desktop/mobile visuals. Update README motion lifecycle/test instructions. Rebuild twice to prove deterministic output. No git, publishing or deployment.
 
 Verification: complete headless suite passed after fixing a visible-label/accessibility-name mismatch on the new motion control. Final evidence is `/workspace/site-fresh-shots/cyber-checks.json`; desktop/mobile images were inspected. The generated WebM is provided for human review and has not been manually watched.
+
+## Current approved visual pass
+
+The immersive direction supersedes the earlier right-hand etched/chip appearance. Current design, implementation sequence and self-review: `docs/immersive-design.md`, `docs/immersive-implementation-plan.md`. Existing content and motion preference behavior are preserved; historical completed tasks above are not a request to restore the old composition.

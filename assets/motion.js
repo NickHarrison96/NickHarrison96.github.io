@@ -1,10 +1,10 @@
 /* Optional decorative system. Content, selection and native links are independent. */
-const region = document.querySelector('.cyber-region');
+const region = document.querySelector('.atmosphere');
 const button = document.querySelector('.motion-toggle');
 if (region && button) {
-  const plane = region.querySelector('.etch-plane');
-  const light = region.querySelector('.etch-light');
-  const joints = region.querySelector('.etch-joints');
+  const plane = region.querySelector('.atmosphere-depth');
+  const light = region.querySelector('.atmosphere-light');
+  const joints = region.querySelector('.atmosphere-detail');
   const state = button.querySelector('[data-motion-state]');
   const fine = matchMedia('(hover: hover) and (pointer: fine)');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
@@ -18,10 +18,10 @@ if (region && button) {
   function allowed() { return fine.matches && !reduce.matches && !forced.matches; }
   function eligible() { return enabled && allowed() && visible && !document.hidden && !disposed; }
   function paint() {
-    plane.style.transform = `translate3d(${current.x * 10}px,${current.y * 10}px,0)`;
-    joints.style.transform = `translate3d(${current.x * 14}px,${current.y * 14}px,0)`;
-    light.style.transform = `translate3d(${current.x * 100}px,${current.y * 140}px,0)`;
-    light.style.opacity = String(current.light * 0.24);
+    plane.style.transform = `translate3d(${current.x * 12}px,${current.y * 10}px,0)`;
+    joints.style.transform = `translate3d(${current.x * 18}px,${current.y * 16}px,0)`;
+    light.style.transform = `translate3d(${current.x * 120}px,${current.y * 160}px,0)`;
+    light.style.opacity = String(current.light * 0.16);
   }
   function stop() {
     cancelAnimationFrame(frame); frame = 0; previous = 0;
