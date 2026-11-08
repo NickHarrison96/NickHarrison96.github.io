@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#05070d">
+  <meta name="description"
+    content="Case study: surgical recovery of a corrupted macOS installation — a parallel APFS volume that preserved 401.5 GB of user data on a MacPro7,1 OpenCore build." />
+  <title>APFS Recovery Case Study &mdash; Nick Harrison</title>
+  <script>/* shell: runs before first paint — see AGENTS.md "Shell" */(function(d){d.classList.add('js');try{if(localStorage.getItem('nh-jailbreak')==='1')d.dataset.theme='jailbreak'}catch(e){}if(d.hasAttribute('data-boot')&&!location.hash&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{if(!sessionStorage.getItem('nh-booted')){sessionStorage.setItem('nh-booted','1');d.classList.add('booting')}}catch(e){}}})(document.documentElement);</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="sub">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <canvas id="fx-bg" aria-hidden="true"></canvas>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span class="brand-text">
+          <span class="brand-name">NICK HARRISON</span>
+          <span class="brand-role">SYSTEMS &amp; AI ENGINEER <span class="brand-role-extra">· RIGHT TO REPAIR</span></span>
+        </span>
+      </a>
+      <nav class="site-nav" id="site-nav" aria-label="Site">
+        <a href="work.html">Work</a>
+        <a href="writing.html">Writing</a>
+        <a href="repair.html">Right to Repair</a>
+        <a href="downloads.html">Tools</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="site-actions">
+        <button class="search-btn" type="button" data-palette-open aria-label="Search (Ctrl+K)">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-label">Search</span>
+          <kbd aria-hidden="true">⌘K</kbd>
+        </button>
+        <a class="gh-link magnetic" href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer" aria-label="Nick Harrison on GitHub">
+          <img src="https://github.com/NickHarrison96.png?size=96" alt="" class="gh-avatar" width="28" height="28">
+          <span class="gh-text">github.com/nickpharrison</span>
+        </a>
+        <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+          <span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="case">
+    <article class="case-article">
+      <a href="writing.html#featured" class="back-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to Writing</a>
+
+      <header class="case-head">
+        <div class="pill"><span class="pulse" aria-hidden="true"></span>FEATURED CASE STUDY • INCIDENT &amp; SYSTEM RECOVERY</div>
+        <h1 class="teaser-title">Surgical Recovery of a <br><span class="grad">Corrupted macOS Installation</span></h1>
+        <p class="teaser-lede">How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.</p>
+        <dl class="spec-grid">
+          <div class="spec"><dt>SMBIOS TARGET</dt><dd>MacPro7,1 (AMD Zen 2)</dd></div>
+          <div class="spec"><dt>STORAGE LAYOUT</dt><dd>APFS Container (disk1 / disk3)</dd></div>
+          <div class="spec spec-ok"><dt>DATA PRESERVATION</dt><dd>401.5 GB Volume Untouched</dd></div>
+        </dl>
+      </header>
+
+      <section class="case-section" aria-labelledby="incident">
+        <p class="eyebrow" data-scramble>01. Incident Breakdown</p>
+        <h2 id="incident" class="case-h2">The Dilemma: Locked Out of System Integrity</h2>
+        <p class="case-p">The machine encountered a critical failure involving a desynchronized <code>dscl</code> (Directory Service Command Line) user database and corrupted PAM/security framework tokens within macOS. The user faced the classic, terrifying ultimatum presented by standard OS recovery paradigms: <strong>a complete destructive wipe or total loss of access.</strong></p>
+        <div class="versus">
+          <div class="vs-card vs-bad">
+            <span class="vs-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+            <h3>Standard Apple Protocol</h3>
+            <p>Forces a complete erase of the drive, requiring hours of backup restoration, loss of ephemeral configurations, network re-authentications, and potential data loss for non-cloud synced folders.</p>
+          </div>
+          <div class="vs-card vs-good">
+            <span class="vs-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></span>
+            <h3>Non-Destructive APFS Strategy</h3>
+            <p>Adds a secondary, clean APFS volume inside the same dynamic container (<code>disk3s7</code>), streams an official Apple-signed payload via Online Recovery, and boots cleanly alongside 401.5 GB of intact user files.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section" aria-labelledby="timeline">
+        <p class="eyebrow" data-scramble>02. Technical Execution Timeline</p>
+        <h2 id="timeline" class="visually-hidden">Technical Execution Timeline</h2>
+        <ol class="timeline">
+          <li class="phase">
+            <span class="node" aria-hidden="true">1</span>
+            <span class="phase-tag">Phase 01: Dynamic Storage Allocation</span>
+            <h3>Creating the Parallel APFS Volume</h3>
+            <p>Rather than repartitioning or shrinking existing allocations, we took advantage of APFS dynamic space sharing. We allocated a new, unencrypted APFS volume named <code>Untitled</code> into the primary container.</p>
+            <div class="code-block"><span class="c-comment"># Command executed in macOS Recovery Terminal</span><br><span class="c-cmd">diskutil</span> apfs addVolume disk3 APFS <span class="c-str">"Untitled"</span><button type="button" class="copy-btn" data-copy='diskutil apfs addVolume disk3 APFS "Untitled"' aria-label="Copy the diskutil command">copy</button></div>
+          </li>
+          <li class="phase">
+            <span class="node" aria-hidden="true">2</span>
+            <span class="phase-tag">Phase 02: Image Fetch &amp; Verification</span>
+            <h3>Online Recovery Payload Retrieval</h3>
+            <p>To ensure total system image integrity matching the OpenCore SMBIOS identity (<code>MacPro7,1</code>), we fetched the ~18.39 GB installation package directly from Apple recovery servers.</p>
+            <div class="code-block log">
+              <div><span class="c-dim">[OSInstaller]</span> Retrieving 1 packages (18.390 GB)</div>
+              <div><span class="c-dim">[OSInstaller]</span> Started downloading package com.apple.pkg.InstallAssistant...</div>
+              <div><span class="c-cmd">[OSInstaller]</span> Finished extracting: succeeded</div>
+              <div><span class="c-warn">[OSInstaller]</span> Could not verify trust (5) using MobileSoftwareUpdate -&gt; Basic X509 fallback</div>
+            </div>
+          </li>
+          <li class="phase">
+            <span class="node" aria-hidden="true">3</span>
+            <span class="phase-tag">Phase 03: Migration Overhead Bypassing</span>
+            <h3>Resolving Storage Space Warnings</h3>
+            <p>During Setup Assistant initialization, Migration Assistant flagged a <em>"Not enough space available to transfer"</em> error due to attempting a bulk copy of 365+ GB (<code>nick</code> user profile + apps) into the newly initialized APFS footprint.</p>
+            <div class="callout-warn"><strong>Solution:</strong> Unchecked bulk migration during setup to land directly on the clean desktop. The original user data remained fully accessible as an external mount at <code>/Volumes/Big Mac - Data/</code>.</div>
+          </li>
+          <li class="phase phase-ok">
+            <span class="node" aria-hidden="true">4</span>
+            <span class="phase-tag">Phase 04: Desktop Verification &amp; Ownership Fix</span>
+            <h3>Desktop Landing &amp; Granular Data Recovery</h3>
+            <p>The system booted smoothly into macOS Tahoe (Build 26.7.2). The OpenCore bootloader recognized all hardware components (RX 580 8GB GPU, Ryzen 6-Core processor, 32GB RAM).</p>
+            <div class="code-block"><span class="c-comment"># Direct permission ownership override command for extracted files</span><br><span class="c-cmd">sudo</span> chown -R <span class="c-str">$(whoami)</span> <span class="c-path">"/Volumes/Big Mac - Data/Users/nick"</span><button type="button" class="copy-btn" data-copy='sudo chown -R $(whoami) "/Volumes/Big Mac - Data/Users/nick"' aria-label="Copy the chown command">copy</button></div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="case-section case-box" aria-labelledby="ecosystem">
+        <p class="eyebrow eyebrow-warn" data-scramble>03. Ecosystem Analysis</p>
+        <h2 id="ecosystem" class="case-h2">The Troubles of the Average Apple User</h2>
+        <p class="case-p">Modern operating systems have made incredible strides in consumer security, but these gains often come at the expense of user sovereignty. When macOS experiences lower-level infrastructure failures—such as corrupted Plist files, PAM token desynchronization, or broken local Directory Services—the system treats the legitimate owner like an attacker.</p>
+        <div class="eco-grid">
+          <div><h3>Black-Box Walls</h3><p>Diagnostic utilities are continually hidden or stripped. Standard Apple Support procedures typically recommend complete drive erasure rather than granular low-level repair.</p></div>
+          <div><h3>Storage Abstraction</h3><p>APFS dynamic containers, System Volume Seals (SSV), and cryptographically signed snapshots are great for consumers, but can lock out users during system state desyncs.</p></div>
+          <div><h3>Fragile Auth Chains</h3><p>When OpenDirectory or Keybag states fail, users are left stranded. Without Terminal access and manual volume mounting, recovery seems impossible.</p></div>
+        </div>
+      </section>
+
+      <section class="case-section" aria-labelledby="manifesto">
+        <div class="manifesto">
+          <p class="eyebrow" data-scramble>04. The Core Manifesto</p>
+          <h2 id="manifesto" class="manifesto-title">Why We Publish &amp; Share These Write-Ups</h2>
+          <p class="manifesto-lede">Computers are meant to be tools of empowerment, creative expression, and personal agency. When an operating system fails, users shouldn't feel helpless, nor should they be forced to accept data loss as an inevitability.</p>
+          <ul class="manifesto-grid">
+            <li><span class="m-icon" aria-hidden="true">01</span><div><b>Demystifying Systems</b><span>Breaking down UNIX, APFS, and bootloader internals into transparent, actionable guides.</span></div></li>
+            <li><span class="m-icon" aria-hidden="true">02</span><div><b>Promoting Data Rights</b><span>Your data belongs to you. Every write-up emphasizes non-destructive, zero-loss recovery methodologies.</span></div></li>
+            <li><span class="m-icon" aria-hidden="true">03</span><div><b>Community Knowledge Base</b><span>Documenting solutions creates an indexable, open roadmap for developers faced with black screens.</span></div></li>
+            <li><span class="m-icon" aria-hidden="true">04</span><div><b>Open Engineering Spirit</b><span>Honoring the classical hacker ethos of learning how software and hardware work under the hood.</span></div></li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="page-cta">
+        <a href="work.html" class="dl-btn magnetic">See the projects <svg aria-hidden="true" class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+        <a href="https://github.com/NickHarrison96/MSI-MPG-x570-EFI" class="btn-ghost magnetic" target="_blank" rel="noopener noreferrer">The EFI on GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span><strong>Nick Harrison</strong><span>nickharrison96.github.io</span></span>
+      </div>
+      <nav class="footer-nav" aria-label="Site hubs">
+        <a href="work.html">Work</a>
+        <a href="writing.html">Writing</a>
+        <a href="repair.html">Right to Repair</a>
+        <a href="downloads.html">Tools</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="footer-social">
+        <a href="mailto:harrisontechdev@gmail.com" aria-label="Email">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.1 24.1 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.1 24.1 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+        </a>
+        <a href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        </a>
+      </div>
+      <p class="footer-legal">&copy; 2026 Nick Harrison. Open Technical License. <span>Right to Repair &mdash; built to be opened, fixed, and reused.</span></p>
+      <a class="to-top" href="#main">Top &uarr;</a>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/site.js"></script>
+</body>
+
+</html>

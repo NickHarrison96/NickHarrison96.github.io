@@ -1,672 +1,354 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-boot>
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#05070d">
   <meta name="description"
-    content="Nicholas Harrison — Right to Repair activist. Campaigning for the right to open, repair, and keep the devices we own." />
-  <title>Nicholas Harrison — Right to Repair</title>
-
-  <!-- Fonts: Syne (display) + DM Sans (body) -->
+    content="Nick Harrison — systems &amp; AI engineer, hardware troubleshooter and Right to Repair campaigner. Projects, the APFS recovery case study, free tools and field notes." />
+  <title>Nick Harrison — Systems &amp; AI Engineer · Right to Repair</title>
+  <script>/* shell: runs before first paint — see AGENTS.md "Shell" */(function(d){d.classList.add('js');try{if(localStorage.getItem('nh-jailbreak')==='1')d.dataset.theme='jailbreak'}catch(e){}if(d.hasAttribute('data-boot')&&!location.hash&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{if(!sessionStorage.getItem('nh-booted')){sessionStorage.setItem('nh-booted','1');d.classList.add('booting')}}catch(e){}}})(document.documentElement);</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
-    rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <canvas id="fx-bg" aria-hidden="true"></canvas>
 
-  <!-- ─── Loader ─────────────────────────────────────── -->
-  <div id="loader">
-    <div class="loader-logo">
-      <!-- Repair mark: wrench + screwdriver -->
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26" />
-      </svg>
+  <div id="boot" class="boot" aria-hidden="true">
+    <div class="boot-inner">
+      <div class="boot-mark">&gt;_</div>
+      <pre class="boot-log"><span style="--i:0">OpenCore 1.0.8 · MacPro7,1 · MSI MPG X570 Gaming Edge WiFi</span>
+<span style="--i:1">OCC: AMD Ryzen 5 3600 · 6 cores / 12 threads ....... ok</span>
+<span style="--i:2">OCGPU: AMD Radeon RX 580 8GB · Metal ............... ok</span>
+<span style="--i:3">OCAPFS: container disk3 · 'Untitled' (disk3s7) ..... ok</span>
+<span style="--i:4">OCB: /Volumes/Big Mac - Data · 401.5 GB ........ mounted</span>
+<span style="--i:5" class="boot-go">OCB: booting nickharrison96.github.io_</span></pre>
+      <p class="boot-skip">press any key to skip</p>
     </div>
-    <div class="loader-bar-wrap">
-      <div class="loader-bar"></div>
-    </div>
-    <p class="loader-text">Nicholas Harrison</p>
   </div>
 
-  <!-- ─── Ambient Background ─────────────────────────── -->
-  <div class="ambient">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+  <div class="marquee" role="region" aria-label="Highlights">
+    <div class="marquee-track">
+      <div class="marquee-group"><span>LATEST CASE STUDY: macOS APFS Recovery &amp; Bypass</span><span class="mq-sep" aria-hidden="true">•</span><span>nickharrison96.github.io</span><span class="mq-sep" aria-hidden="true">•</span><span>iMac20,1 OpenCore Systems Architecture</span><span class="mq-sep" aria-hidden="true">•</span><span>LiteLLM AI Gateway Contributions</span><span class="mq-sep" aria-hidden="true">•</span><span>Non-Destructive Data Preservation</span><span class="mq-sep" aria-hidden="true">•</span><span>Right to Repair: You own it. You should be able to fix it.</span><span class="mq-sep" aria-hidden="true">•</span><span>Free tools: no account, no strings</span><span class="mq-sep" aria-hidden="true">•</span></div>
+      <div class="marquee-group" aria-hidden="true"><span>LATEST CASE STUDY: macOS APFS Recovery &amp; Bypass</span><span class="mq-sep" aria-hidden="true">•</span><span>nickharrison96.github.io</span><span class="mq-sep" aria-hidden="true">•</span><span>iMac20,1 OpenCore Systems Architecture</span><span class="mq-sep" aria-hidden="true">•</span><span>LiteLLM AI Gateway Contributions</span><span class="mq-sep" aria-hidden="true">•</span><span>Non-Destructive Data Preservation</span><span class="mq-sep" aria-hidden="true">•</span><span>Right to Repair: You own it. You should be able to fix it.</span><span class="mq-sep" aria-hidden="true">•</span><span>Free tools: no account, no strings</span><span class="mq-sep" aria-hidden="true">•</span></div>
+    </div>
   </div>
 
-  <!-- ─── Page ───────────────────────────────────────── -->
-  <div class="page">
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span class="brand-text">
+          <span class="brand-name">NICK HARRISON</span>
+          <span class="brand-role">SYSTEMS &amp; AI ENGINEER <span class="brand-role-extra">· RIGHT TO REPAIR</span></span>
+        </span>
+      </a>
+      <nav class="site-nav" id="site-nav" aria-label="Site">
+        <a href="work.html">Work</a>
+        <a href="writing.html">Writing</a>
+        <a href="repair.html">Right to Repair</a>
+        <a href="downloads.html">Tools</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="site-actions">
+        <button class="search-btn" type="button" data-palette-open aria-label="Search (Ctrl+K)">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-label">Search</span>
+          <kbd aria-hidden="true">⌘K</kbd>
+        </button>
+        <a class="gh-link magnetic" href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer" aria-label="Nick Harrison on GitHub">
+          <img src="https://github.com/NickHarrison96.png?size=96" alt="" class="gh-avatar" width="28" height="28">
+          <span class="gh-text">github.com/nickpharrison</span>
+        </a>
+        <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+          <span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-    <header>
-      <div class="brand">
-        <div class="brand-icon">
-          <!-- Repair mark: wrench + screwdriver -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26" />
-          </svg>
+  <main id="main" class="home">
+
+    <!-- ─── Hero + live terminal ─────────────────────────────── -->
+    <section class="hero spot" aria-labelledby="hero-title">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="status-pill-lg"><span class="dot" aria-hidden="true"></span>nickharrison96.github.io<span class="sep" aria-hidden="true">|</span><span class="hl">Open For Systems &amp; AI Architecture</span></div>
+          <h1 id="hero-title" class="hero-title">Engineering <br><span class="grad">Systems &amp; AI</span> <br>From the Inside Out.</h1>
+          <p class="hero-motto"><span class="t-ok">$</span> You own it. You should be able to <strong>fix</strong> it.</p>
+          <p class="hero-lede">Systems developer, AI pipeline creator, and hardware troubleshooter. I specialize in building proxy proxies, generative machine learning workflows, kernel/OpenCore configurations, and deep-dive technical write-ups.</p>
+          <p class="hero-lede hero-lede-sm">I also campaign for the right to open, repair, and keep the devices we buy — pushing for fair access to parts, tools, and manuals, and keeping working hardware out of landfill.</p>
+          <ul class="badges" aria-label="Focus areas">
+            <li style="--c:#38bdf8">MacPro7,1 OpenCore</li>
+            <li style="--c:#818cf8">LiteLLM Gateway</li>
+            <li style="--c:#34d399">APFS Recovery</li>
+            <li style="--c:#fbbf24">Stable Diffusion</li>
+            <li style="--c:#f9a8d4">Right to Repair</li>
+          </ul>
+          <div class="hero-cta">
+            <a href="apfs-recovery.html" class="dl-btn magnetic">Read APFS Recovery Case Study</a>
+            <a href="work.html" class="btn-ghost magnetic">View Repositories</a>
+            <a href="#tools" class="btn-outline-ok magnetic"><span aria-hidden="true">↓</span> Get the Tools</a>
+          </div>
         </div>
-        <div class="brand-text">
-          <h1>Nicholas <span>Harrison</span></h1>
-          <p>Right to Repair</p>
+
+        <div class="term" id="terminal" role="region" aria-label="Live terminal">
+          <div class="term-bar">
+            <span class="term-lights" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="term-title">nick@nicks-iMac.local ~ zsh</span>
+            <span class="term-live">LIVE SESSION</span>
+          </div>
+          <div class="term-body" id="term-body">
+            <div><span class="t-user">nick@nicks-iMac</span>:<span class="t-path">~</span>$ neofetch</div>
+<pre class="neofetch">                    'c.         <b class="nf-host">nick@nicks-iMac.local</b>
+                 ,xNMM.         ---------------------
+               .OMMMMo          <b>OS:</b> <span>macOS 26.7.2 25G332 x86_64</span>
+               OMMM0,           <b>Host:</b> <span>Hackintosh (SMBIOS: MacPro7,1)</span>
+     .;loddo:' loolloddol;.     <b>Kernel:</b> <span>25.6.0</span>
+   cKMMMMMMMMMMNWMMMMMMMMMM0:   <b>Uptime:</b> <span>43 mins</span>
+ .KMMMMMMMMMMMMMMMMMMMMMMMWd.   <b>Packages:</b> <span>96 (brew)</span>
+ XMMMMMMMMMMMMMMMMMMMMMMMX.     <b>Shell:</b> <span>zsh 5.9</span>
+;MMMMMMMMMMMMMMMMMMMMMMMM:      <b>Resolution:</b> <span>1920x1080</span>
+:MMMMMMMMMMMMMMMMMMMMMMMM:      <b>DE:</b> <span>Aqua</span>
+.MMMMMMMMMMMMMMMMMMMMMMMMX.     <b>WM:</b> <span>Quartz Compositor</span>
+ kMMMMMMMMMMMMMMMMMMMMMMMMWd.   <b>Terminal:</b> <span>Apple_Terminal</span>
+ .XMMMMMMMMMMMMMMMMMMMMMMMMMMk  <b>CPU:</b> <span>AMD Ryzen 5 3600</span>
+  .XMMMMMMMMMMMMMMMMMMMMMMMMK.  <b>GPU:</b> <span>AMD Radeon RX 580</span>
+    kMMMMMMMMMMMMMMMMMMMMMMd    <b>Memory:</b> <span>9490MiB / 16384MiB</span>
+     ;KMMMMMMMWXXWMMMMMMMk.
+       .cooc,.    .,coo:.</pre>
+            <div><span class="t-user">nick@nicks-iMac</span>:<span class="t-path">~</span>$ status --latest-incident</div>
+            <div class="t-incident"><strong>[RESOLVED]</strong> APFS Directory Services desync bypass completed. 401.5 GB user payload mounted at <code>/Volumes/Big Mac - Data</code> without data loss.</div>
+            <div id="term-out" class="term-out" aria-live="polite"></div>
+            <form class="term-input-row" autocomplete="off">
+              <label for="term-input"><span class="t-user">nick@nicks-iMac</span>:<span class="t-path">~</span>$ </label>
+              <input id="term-input" type="text" spellcheck="false" autocapitalize="off" placeholder="type help + Enter" aria-describedby="term-hint">
+              <span id="term-hint" class="visually-hidden">Commands: help, cat specs.json, recovery --status, ls ./tools, cat manifesto, whoami, open, clear. Up and down arrows recall history, Tab completes.</span>
+            </form>
+          </div>
+          <div class="term-cmds">
+            <span class="term-cmds-label">Run Command:</span>
+            <button type="button" data-cmd="help">help</button>
+            <button type="button" data-cmd="cat specs.json">cat specs.json</button>
+            <button type="button" data-cmd="recovery --status">recovery --status</button>
+            <button type="button" data-cmd="ls ./tools">ls ./tools</button>
+            <button type="button" data-cmd="whoami">whoami</button>
+            <button type="button" data-cmd="clear">clear</button>
+          </div>
         </div>
       </div>
-      <!-- GitHub profile link (avatar served from GitHub; swap for a local file to self-host) -->
-<nav class="top-nav" aria-label="Pages">
-        <a href="downloads.html">Downloads</a>
+    </section>
+
+    <!-- ─── Projects ─────────────────────────────────────────── -->
+    <section class="section" id="projects" aria-labelledby="projects-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-scramble>Featured Work</p>
+          <h2 id="projects-title" class="section-title">Software &amp; Hardware Engineering</h2>
+        </div>
+        <p class="section-note">Open source projects, AI integrations, and system-level tools maintained on GitHub.</p>
+      </div>
+      <div class="project-grid compact">
+        <article class="project tilt" style="--accent:#38bdf8;--accent-tint:rgba(56,189,248,.1);--accent-ring:rgba(56,189,248,.25)">
+          <div class="project-top"><span class="project-mark" aria-hidden="true">AI</span><span class="project-tag">Python / AI</span></div>
+          <h3>LiteLLM Proxy &amp; SDK</h3>
+          <p>Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware.</p>
+          <div class="project-foot"><span><span class="sq" aria-hidden="true">■</span> AI Infrastructure</span><a href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer">View Repo <span aria-hidden="true">↗</span></a></div>
+        </article>
+        <article class="project tilt" style="--accent:#818cf8;--accent-tint:rgba(129,140,248,.1);--accent-ring:rgba(129,140,248,.25)">
+          <div class="project-top"><span class="project-mark" aria-hidden="true">SD</span><span class="project-tag">PyTorch / ML</span></div>
+          <h3>Stable Diffusion WebUI</h3>
+          <p>Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions.</p>
+          <div class="project-foot"><span><span class="sq" aria-hidden="true">■</span> Generative Pipelines</span><a href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer">View Repo <span aria-hidden="true">↗</span></a></div>
+        </article>
+        <article class="project tilt" style="--accent:#34d399;--accent-tint:rgba(52,211,153,.1);--accent-ring:rgba(52,211,153,.25)">
+          <div class="project-top"><span class="project-mark" aria-hidden="true">OC</span><span class="project-tag">OpenCore / macOS</span></div>
+          <h3>MacPro7,1 X570 EFI Architecture</h3>
+          <p>Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning.</p>
+          <div class="project-foot"><span><span class="sq" aria-hidden="true">■</span> Hackintosh &amp; Boot</span><a href="https://github.com/NickHarrison96/MSI-MPG-x570-EFI" target="_blank" rel="noopener noreferrer">View Repo <span aria-hidden="true">↗</span></a></div>
+        </article>
+      </div>
+      <div class="section-cta"><a href="work.html" class="btn-ghost magnetic">All work <span aria-hidden="true">→</span></a></div>
+    </section>
+
+    <!-- ─── Latest writing: case-study teaser + essays (all on writing.html) ─── -->
+    <section class="section" id="writing" aria-labelledby="writing-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-scramble>Latest Writing</p>
+          <h2 id="writing-title" class="section-title">Case Studies &amp; <span class="grad">Essays</span></h2>
+        </div>
+        <p class="section-note">Essays and a newsletter on the economics and ethics of repair &mdash; why we throw so much away, who profits from it, and what a fixable future looks like.</p>
+      </div>
+    <article class="section-deep" id="case-study" aria-labelledby="case-title">
+      <div class="teaser">
+        <div class="pill"><span class="pulse" aria-hidden="true"></span>FEATURED CASE STUDY • INCIDENT &amp; SYSTEM RECOVERY</div>
+        <h2 id="case-title" class="teaser-title">Surgical Recovery of a <br><span class="grad">Corrupted macOS Installation</span></h2>
+        <p class="teaser-lede">How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.</p>
+        <dl class="spec-grid">
+          <div class="spec"><dt>SMBIOS TARGET</dt><dd>MacPro7,1 (AMD Zen 2)</dd></div>
+          <div class="spec"><dt>STORAGE LAYOUT</dt><dd>APFS Container (disk1 / disk3)</dd></div>
+          <div class="spec spec-ok"><dt>DATA PRESERVATION</dt><dd>401.5 GB Volume Untouched</dd></div>
+        </dl>
+        <ol class="mini-timeline">
+          <li><span class="node" aria-hidden="true">1</span><b>Creating the Parallel APFS Volume</b><code>diskutil apfs addVolume disk3 APFS "Untitled"</code></li>
+          <li><span class="node" aria-hidden="true">2</span><b>Online Recovery Payload Retrieval</b><span>~18.39 GB fetched directly from Apple recovery servers.</span></li>
+          <li><span class="node" aria-hidden="true">3</span><b>Resolving Storage Space Warnings</b><span>Unchecked bulk migration; data stayed mounted at /Volumes/Big Mac - Data/.</span></li>
+          <li class="ok"><span class="node" aria-hidden="true">4</span><b>Desktop Landing &amp; Granular Data Recovery</b><code>sudo chown -R $(whoami) "/Volumes/Big Mac - Data/Users/nick"</code></li>
+        </ol>
+        <div class="teaser-cta">
+          <a href="apfs-recovery.html" class="dl-btn magnetic">Read the full case study <svg aria-hidden="true" class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+    </article>
+      <ul class="essay-grid" aria-label="Essays">
+        <li><a class="essay-card lp-card tilt" href="writing.html#essays"><b>Why &lsquo;Authorized&rsquo; Repair Is a Moat</b><span>How the approved-repair label quietly kills competition.</span></a></li>
+        <li><a class="essay-card lp-card tilt" href="writing.html#essays"><b>The True Cost of a Glued-In Battery</b><span>What a two-dollar design choice does over a decade.</span></a></li>
+        <li><a class="essay-card lp-card tilt" href="writing.html#essays"><b>Ownership After the Sale</b><span>When the thing you bought keeps answering to someone else.</span></a></li>
+      </ul>
+      <div class="section-cta"><a href="writing.html" class="btn-ghost magnetic">All writing <span aria-hidden="true">→</span></a></div>
+    </section>
+
+    <!-- ─── Right to Repair: teardown stack ──────────────────── -->
+    <section class="section" id="repair" aria-labelledby="repair-title">
+      <p class="eyebrow" data-scramble>Right to Repair</p>
+      <div class="repair-grid">
+        <div class="repair-copy">
+          <h2 id="repair-title" class="repair-title">You Own It. You Should Be Able to <span class="grad">Fix</span> It.</h2>
+          <p class="repair-lede">I campaign for the right to open, repair, and keep the devices we buy. Take the device apart: the campaign, the tools and the notes are its layers.</p>
+          <ol class="layer-list" aria-label="Layers">
+            <li><a href="#layer-5" data-layer="4"><span class="ld" aria-hidden="true"></span><span>05</span><span>Field Notes</span></a></li>
+            <li><a href="#layer-4" data-layer="3"><span class="ld" aria-hidden="true"></span><span>04</span><span>Free Tools</span></a></li>
+            <li><a href="#layer-3" data-layer="2"><span class="ld" aria-hidden="true"></span><span>03</span><span>Repair = Climate Action</span></a></li>
+            <li><a href="#layer-2" data-layer="1"><span class="ld" aria-hidden="true"></span><span>02</span><span>What We Demand</span></a></li>
+            <li><a href="#layer-1" data-layer="0"><span class="ld" aria-hidden="true"></span><span>01</span><span>The Campaign</span></a></li>
+          </ol>
+        </div>
+        <div class="stack-stage" aria-hidden="true">
+          <div class="stack">
+            <div class="plate" style="--i:0" data-layer="0"><span>01 The Campaign</span></div>
+            <div class="plate" style="--i:1" data-layer="1"><span>02 What We Demand</span></div>
+            <div class="plate" style="--i:2" data-layer="2"><span>03 Repair = Climate Action</span></div>
+            <div class="plate" style="--i:3" data-layer="3"><span>04 Free Tools</span></div>
+            <div class="plate" style="--i:4" data-layer="4"><span>05 Field Notes</span></div>
+          </div>
+          <p class="stack-hint">hover to take it apart</p>
+        </div>
+      </div>
+
+      <div class="layer-panels">
+        <section class="layer-panel" id="layer-1" aria-labelledby="layer-1-t">
+          <div class="lp-head">
+            <p class="lp-label">Layer 01 · The Campaign</p>
+            <h3 id="layer-1-t" class="lp-title">Repair Is a <span class="grad">Right</span>, Not a Privilege.</h3>
+            <a class="lp-cta" href="repair.html#mission">Read the campaign <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="lp-body">
+            <p>If you bought it, you own it — and owning something means being allowed to understand it, open it, and fix it.</p>
+          </div>
+        </section>
+        <section class="layer-panel" id="layer-2" aria-labelledby="layer-2-t">
+          <div class="lp-head">
+            <p class="lp-label">Layer 02 · What We Demand</p>
+            <h3 id="layer-2-t" class="lp-title">Parts. Tools. Manuals. For <span class="grad">Everyone</span>.</h3>
+            <a class="lp-cta" href="repair.html#legislation">See the legislation <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="lp-body">
+            <p>Where right-to-repair bills stand across states and countries, what they cover, and how you can back the ones near you.</p>
+          </div>
+        </section>
+        <section class="layer-panel" id="layer-3" aria-labelledby="layer-3-t">
+          <div class="lp-head">
+            <p class="lp-label">Layer 03 · Repair = Climate Action</p>
+            <h3 id="layer-3-t" class="lp-title">The Greenest Device Is the One You <span class="grad">Already Own</span>.</h3>
+            <a class="lp-cta" href="repair.html#get-involved">Get involved <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="lp-body lp-cards">
+            <a class="lp-card tilt" href="repair.html#get-involved"><b>Get Involved</b><span>Join the campaign for repairable products. Sign the petition, contact your representative, and help keep the pressure on manufacturers.</span></a>
+            <a class="lp-card tilt" href="repair.html#cafes"><b>Find a Repair Café</b><span>Community repair events where volunteers help you fix what you already own, together — and pass the skills along.</span></a>
+          </div>
+        </section>
+        <section class="layer-panel" id="layer-4" aria-labelledby="layer-4-t">
+          <div class="lp-head">
+            <p class="lp-label">Layer 04 · Free Tools</p>
+            <h3 id="layer-4-t" class="lp-title">Free <span class="grad">Tools</span></h3>
+            <a class="lp-cta" href="downloads.html">All downloads <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="lp-body">
+            <p>Diagnostics and repair software I build and host myself. Free to download, no account, no strings.</p>
+            <p><a href="#tools">Jump to the tools <span aria-hidden="true">↓</span></a></p>
+          </div>
+        </section>
+        <section class="layer-panel" id="layer-5" aria-labelledby="layer-5-t">
+          <div class="lp-head">
+            <p class="lp-label">Layer 05 · Field Notes</p>
+            <h3 id="layer-5-t" class="lp-title">Field <span class="grad">Notes</span></h3>
+            <a class="lp-cta" href="writing.html">All write-ups <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="lp-body lp-cards">
+            <a class="lp-card tilt" href="repair.html#guides"><b>Browse Repair Guides</b><span>Free, step-by-step guides for fixing phones, laptops, and household electronics yourself — no proprietary tools, no gatekeeping.</span></a>
+            <a class="lp-card tilt" href="writing.html#essays"><b>Read the Essays</b><span>Writing and a newsletter on the economics and ethics of repair — why we throw so much away, and what a fixable future looks like.</span></a>
+            <a class="lp-card tilt" href="repair.html#talks"><b>Book a Talk</b><span>Talks, panels, and press on repairability, e-waste, and consumer rights. Available for schools, conferences, and newsrooms.</span></a>
+          </div>
+        </section>
+      </div>
+      <div class="section-cta"><a href="repair.html" class="btn-ghost magnetic">Right to Repair <span aria-hidden="true">→</span></a></div>
+    </section>
+
+    <!-- ─── Free tools (rendered from assets/js/catalog.js) ──── -->
+    <section class="section" id="tools" aria-labelledby="tools-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-scramble>Free Tools</p>
+          <h2 id="tools-title" class="section-title">Free <span class="grad">Tools</span></h2>
+        </div>
+        <p class="section-note">Diagnostics and repair software I build and host myself. Free to download, no account, no strings.</p>
+      </div>
+      <div class="tool-grid" id="toolsGrid"></div>
+      <noscript><p class="note">The tool cards need JavaScript. Everything is listed on <a href="downloads.html">the downloads page</a>.</p></noscript>
+      <div class="section-cta"><a href="downloads.html" class="btn-ghost magnetic">All tools <span aria-hidden="true">→</span></a></div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span><strong>Nick Harrison</strong><span>nickharrison96.github.io</span></span>
+      </div>
+      <nav class="footer-nav" aria-label="Site hubs">
+        <a href="work.html">Work</a>
+        <a href="writing.html">Writing</a>
+        <a href="repair.html">Right to Repair</a>
+        <a href="downloads.html">Tools</a>
         <a href="about.html">About</a>
-        <a href="team.html">The Team</a>
-        <a href="socials.html">Socials</a>
       </nav>
-      <a class="gh-link" href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer"
-        aria-label="Nicholas Harrison on GitHub" title="GitHub — NickHarrison96">
-        <img src="https://github.com/NickHarrison96.png?size=96" alt="Nicholas Harrison's GitHub avatar"
-          class="gh-avatar" loading="lazy" width="44" height="44">
-      </a>
-    </header>
-
-    <main>
-      <div class="card">
-
-        <!-- ─── Site status: under active development ─── -->
-        <div class="construction-banner" role="status" aria-label="Site status: under active development">
-          <div class="cb-icons">
-            <!-- Hard hat -->
-            <svg class="cb-hardhat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M2.5 17.5h19" />
-              <path d="M4.5 17.5v-2a7.5 7.5 0 0 1 15 0v2" />
-              <path d="M10 8.2V5.6A1.4 1.4 0 0 1 11.4 4.2h1.2A1.4 1.4 0 0 1 14 5.6v2.6" />
-              <path d="M12 4.2V3" />
-            </svg>
-            <!-- Repair mark: wrench + screwdriver (shared site mark) -->
-            <svg class="cb-tools" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-              stroke-width="1.6" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26" />
-            </svg>
-          </div>
-          <div class="cb-text">
-            <span class="cb-title">Under <span>active development</span></span>
-            <span class="cb-sub">This site is being built in the open — expect rough edges and pages still coming
-              together.</span>
-          </div>
-        </div>
-
-        <!-- ─── Hero: the self-drawing "hello" + intro ─── -->
-        <div class="card-header" id="welcomeHeader">
-          <!-- Signature: cursive "hello" that writes itself on, iPhone-setup style.
-               Inline SVG + CSS so it's self-contained and respects reduced-motion. -->
-          <svg class="hello-anim" viewBox="0 0 350 197" fill="none" role="img"
-            aria-label="hello" xmlns="http://www.w3.org/2000/svg">
-            <g transform="matrix(1.181,0,0,1.195,-119.835,-198.027)">
-              <g transform="matrix(1,0,0,1,252,245.918)">
-                <path class="hello-path" pathLength="100" stroke="#ffffff" stroke-width="9" stroke-linecap="round"
-                  stroke-linejoin="round" fill="none"
-                  d="M-145.66,43.747C-145.66,43.747,-86.107,10.264,-81.851,-26.162C-79.424,-46.943,-98.573,-44.137,-101.426,-23.013C-103.757,-5.755,-109.596,40.561,-109.596,40.561C-109.596,40.561,-103.979,-0.034,-85.851,1.753C-65.936,4.083,-91.979,40.05,-69,40.305C-48.573,40.532,-27.639,22.688,-26.873,10.943C-25.99,-2.599,-44.362,-4.886,-50.022,11.966C-55.226,27.461,-43.584,44.902,-23.54,40.581C7.341,33.922,22.483,-10.827,23.936,-26.077C25.467,-42.162,13.723,-43.694,6.574,-29.397C-0.104,-16.04,-11.245,37.085,12.958,41.583C41.809,46.944,64.277,-5.906,67.086,-23.779C69.802,-41.066,58.656,-45.952,50.234,-30.673C41.166,-14.223,27.843,44.077,59.937,41.326C86.746,39.028,76.916,2.264,102.898,-0.05C114.562,-1.088,119.386,9.92,118.532,21.029C117.638,32.646,106.66,42.475,95.809,40.943C85.898,39.544,80.838,25.973,83.425,17.072C86.617,6.094,96.662,0.12,102.898,-0.05C111.766,-0.29,116.234,5.327,124.149,5.199C131.179,5.086,138.27,-2.922,138.27,-2.922" />
-              </g>
-            </g>
-          </svg>
-
-          <div class="badge">
-            <span class="ping"><span></span><span></span></span>
-            Nicholas Harrison · Right to Repair Activist
-          </div>
-
-          <h1 class="card-title">You Own It. You Should Be Able to <em>Fix</em> It.</h1>
-
-          <p class="card-desc">
-            I campaign for the right to open, repair, and keep the devices we buy — pushing for fair access to parts,
-            tools, and manuals, and keeping working hardware out of landfill. Every device deserves the chance to say
-            hello again.
-          </p>
-
-          <div class="hero-cta">
-            <a href="downloads.html" id="getInvolvedBtn" class="dl-btn" style="width:auto; max-width:none; margin-bottom:0;">
-              Get the Tools
-              <svg class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-              </svg>
-            </a>
-            <a href="get-involved.html" class="btn-ghost">Get Involved</a>
-          </div>
-        </div>
-
-        <!-- ─── Featured message carousel ─── -->
-        <div class="carousel-container">
-          <div class="carousel-track-wrapper">
-            <div class="carousel-track">
-              <!-- TODO: swap the href on each slide for a real destination -->
-              <div class="carousel-slide active">
-                <a href="mission.html" class="carousel-slide-link">
-                  <div class="slide-panel"
-                    style="background: radial-gradient(120% 140% at 0% 0%, #24408f 0%, #141a3a 55%, #0a0d1f 100%);">
-                    <span class="slide-eyebrow">The Campaign</span>
-                    <span class="slide-title">Repair Is a <em>Right</em>, Not a Privilege.</span>
-                  </div>
-                </a>
-              </div>
-              <div class="carousel-slide">
-                <a href="legislation.html" class="carousel-slide-link">
-                  <div class="slide-panel"
-                    style="background: radial-gradient(120% 140% at 100% 0%, #0d4a55 0%, #16283f 55%, #0a0d1f 100%);">
-                    <span class="slide-eyebrow">What We Demand</span>
-                    <span class="slide-title">Parts. Tools. Manuals. For <em>Everyone</em>.</span>
-                  </div>
-                </a>
-              </div>
-              <div class="carousel-slide">
-                <a href="get-involved.html" class="carousel-slide-link">
-                  <div class="slide-panel"
-                    style="background: radial-gradient(120% 140% at 100% 100%, #45256b 0%, #241a3f 55%, #0a0d1f 100%);">
-                    <span class="slide-eyebrow">Repair = Climate Action</span>
-                    <span class="slide-title">The Greenest Device Is the One You <em>Already Own</em>.</span>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Navigation Arrows -->
-          <button class="carousel-btn prev-btn" aria-label="Previous Slide">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-            </svg>
-          </button>
-          <button class="carousel-btn next-btn" aria-label="Next Slide">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-          </button>
-
-          <!-- Indicators (generated by JS) -->
-          <div class="carousel-indicators"></div>
-        </div>
-
-        <!-- ─── Free tools (mirrors the downloads catalog) ─── -->
-        <div class="card-header" id="tools" style="margin-top: 16px;">
-          <h2 class="card-title">Free <em>Tools</em>:</h2>
-          <p class="card-desc" style="margin-top: 12px;">
-            Diagnostics and repair software I build and host myself. Free to download, no account, no strings.
-          </p>
-          <a href="downloads.html" class="dl-btn" style="max-width: 220px; margin-top: 16px; margin-bottom: 0;">
-            All Downloads
-          </a>
-        </div>
-
-        <div class="services-grid" id="toolsGrid"></div>
-
-        <!-- ─── The Work ─── -->
-        <div class="card-header" id="work" style="margin-top: 16px;">
-          <h2 class="card-title">The <em>Work:</em></h2>
-          <button id="viewServicesBtn" class="dl-btn" style="max-width: 220px; margin-top: 16px; margin-bottom: 0;">
-            Explore the Work
-          </button>
-        </div>
-
-        <!-- Cards render here from the ITEMS array below -->
-        <div class="services-grid" id="servicesGrid"></div>
-
-      </div><!-- /card -->
-    </main>
-
-    <footer>
-      <div class="socials">
+      <div class="footer-social">
         <a href="mailto:harrisontechdev@gmail.com" aria-label="Email">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
         </a>
         <a href="https://www.youtube.com/@NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2.25a9.75 9.75 0 1 0 0 19.5 9.75 9.75 0 0 0 0-19.5ZM10.05 8.7l5.7 3.3-5.7 3.3V8.7Z" /></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.1 24.1 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.1 24.1 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
         </a>
-        <a href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
-          </svg>
+        <a href="https://github.com/nickpharrison" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
         </a>
       </div>
-      <p class="dim">© 2026 Nicholas Harrison · Right to Repair. Built to be opened, fixed, and reused.</p>
-    </footer>
+      <p class="footer-legal">&copy; 2026 Nick Harrison. Open Technical License. <span>Right to Repair &mdash; built to be opened, fixed, and reused.</span></p>
+      <a class="to-top" href="#main">Top &uarr;</a>
+    </div>
+  </footer>
 
-  </div><!-- /page -->
-
-  <script>
-    /* ────────────────────────────────────────────────────────────
-       CONTENT — edit your projects/campaigns here.
-       Add, remove, or reorder items in this list and the cards
-       rebuild themselves. Each item:
-         icon:     one of the keys in ICONS below
-         hue:      base hue for the gradient placeholder tile (0–360)
-         title:    the button label (say the action the reader takes)
-         href:     where the card links to
-         featured: true adds the glowing highlight treatment
-         desc:     the short description under the card
-       Replace a tile with a real image later by giving the item
-       `img: 'path/to/image.jpg'` — see renderItems() below.
-       ──────────────────────────────────────────────────────────── */
-    const ITEMS = [
-      {
-        icon: 'heart', hue: 222, featured: true,
-        title: 'Get Involved',
-        href: 'get-involved.html',
-        desc: 'Join the campaign for repairable products. Sign the petition, contact your representative, and help keep the pressure on manufacturers.'
-      },
-      {
-        icon: 'book', hue: 200, featured: true,
-        title: 'Browse Repair Guides',
-        href: 'repair-guides.html',
-        desc: 'Free, step-by-step guides for fixing phones, laptops, and household electronics yourself — no proprietary tools, no gatekeeping.'
-      },
-      {
-        icon: 'gavel', hue: 258, featured: true,
-        title: 'Track the Legislation',
-        href: 'legislation.html',
-        desc: 'Where right-to-repair bills stand across states and countries, what they cover, and how you can back the ones near you.'
-      },
-      {
-        icon: 'users', hue: 190, featured: true,
-        title: 'Find a Repair Café',
-        href: 'repair-cafes.html',
-        desc: 'Community repair events where volunteers help you fix what you already own, together — and pass the skills along.'
-      },
-      {
-        icon: 'mic', hue: 275, featured: true,
-        title: 'Book a Talk',
-        href: 'talks.html',
-        desc: 'Talks, panels, and press on repairability, e-waste, and consumer rights. Available for schools, conferences, and newsrooms.'
-      },
-      {
-        icon: 'pen', hue: 214, featured: true,
-        title: 'Read the Essays',
-        href: 'writing.html',
-        desc: 'Writing and a newsletter on the economics and ethics of repair — why we throw so much away, and what a fixable future looks like.'
-      },
-      {
-        icon: 'download', hue: 205, featured: true,
-        title: 'Tools & Downloads',
-        href: 'downloads.html',
-        desc: 'Software I build and host myself — starting with RootForgeKit, a cross-platform diagnostics and device toolkit. Live server status is shown on the page.'
-      }
-    ];
-
-    /* Inline icon paths (Heroicons-style, 24x24 stroke) */
-    const ICONS = {
-      heart: '<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />',
-      book: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />',
-      gavel: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0 0 12 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 0 1-2.031.352 5.988 5.988 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971Zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 0 1-2.031.352 5.989 5.989 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971Z" />',
-      users: '<path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />',
-      mic: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />',
-      pen: '<path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />',
-      download: '<path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />'
-    };
-
-    /* ────────────────────────────────────────────────────────────
-       TOOLS — mirrors the DOWNLOADS catalog in downloads.html.
-       Keep names/versions/links in sync with that file. Add
-       `featured: true` only when you want the spinning glow.
-       ──────────────────────────────────────────────────────────── */
-    const TOOLS = [
-      {
-        name: 'RootForgeKit',
-        version: 'v0.5 · pre-alpha',
-        hue: 205,
-        img: 'assets/dl-rootforgekit.png',
-        href: 'https://github.com/NickHarrison96/RootForgeKit/releases/download/v0.5.0/RootForgeKit-v0.5.0-win64.zip',
-        desc: 'Cross-platform system diagnostics and hardware health for Windows, Linux, and macOS — plus an iOS and Android device toolkit.'
-      },
-      {
-        name: 'Pymobile3-GUI',
-        version: 'v0.1 · pre-release',
-        hue: 265,
-        img: 'assets/dl-pymobile3.png',
-        href: 'https://github.com/NickHarrison96/Pymobile3-GUI/archive/refs/heads/feature/sshrd-ramdisk.zip',
-        desc: 'A PySide6 desktop app for iOS and Android device work — live syslog, forensic acquisition, and file browsing. Runs from source.'
-      },
-      {
-        name: 'BipPoyAI',
-        version: 'v0.1 · pre-alpha',
-        hue: 32,
-        img: 'assets/dl-bippoyai.png',
-        href: 'https://github.com/NickHarrison96/BipPoyAI/archive/refs/heads/main.zip',
-        desc: 'A local-only desktop assistant that runs entirely on your own hardware — PySide6 Pip-Boy GUI routing through LiteLLM into Ollama, so it works with no internet connection.'
-      }
-    ];
-
-    const ARROW = '<svg class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>';
-
-    /* Build a gradient placeholder tile from a base hue */
-    const tileBg = (h) =>
-      `linear-gradient(135deg, hsl(${h} 68% 42%) 0%, hsl(${(h + 46) % 360} 62% 30%) 100%)`;
-
-    const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-
-    function renderItems() {
-      const grid = document.getElementById('servicesGrid');
-      grid.innerHTML = ITEMS.map((item) => {
-        const media = item.img
-          ? `<img src="${item.img}" alt="" class="service-image">`
-          : `<div class="service-image" style="background:${tileBg(item.hue)}"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">${ICONS[item.icon] || ''}</svg></div>`;
-        const btnClass = item.featured ? 'dl-btn aio-special-btn' : 'dl-btn';
-        return `
-          <div class="service-item">
-            ${media}
-            <a href="${item.href}" class="${btnClass}">
-              ${item.title}
-              ${ARROW}
-            </a>
-            <div class="desc-card">
-              <p class="card-desc">${item.desc}</p>
-            </div>
-          </div>`;
-      }).join('');
-    }
-
-    function renderTools() {
-      const grid = document.getElementById('toolsGrid');
-      if (!grid) return;
-      grid.innerHTML = TOOLS.map((t) => {
-        const media = t.img
-          ? `<img src="${t.img}" alt="" class="service-image">`
-          : `<div class="service-image" style="background:${tileBg(t.hue)}"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">${ICONS.download}</svg></div>`;
-        return `
-          <div class="service-item">
-            ${media}
-            <a href="${t.href}" class="dl-btn" download>
-              Download ${esc(t.name)}
-              ${ARROW}
-            </a>
-            <div class="desc-card">
-              <p class="card-desc">${esc(t.desc)}</p>
-              <p class="card-desc dim" style="font-size:13px; margin-top:8px;">${esc(t.version)}</p>
-            </div>
-          </div>`;
-      }).join('');
-    }
-
-    // Render the cards immediately so the rest of the script can wire them up.
-    renderItems();
-    renderTools();
-
-    // Dismiss loader after fonts + DOM ready (~1s total)
-    window.addEventListener('load', () => {
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      setTimeout(() => {
-        document.getElementById('loader').classList.add('hidden');
-      }, 1100);
-
-      // Sticky Header Blur Effect
-      const header = document.querySelector('header');
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > 20) {
-          header.classList.add('scrolled');
-        } else {
-          header.classList.remove('scrolled');
-        }
-      });
-
-      // Image Carousel Interactivity
-      const carouselTrack = document.querySelector('.carousel-track');
-      const carouselSlides = Array.from(carouselTrack.children);
-      const carouselPrevBtn = document.querySelector('.prev-btn');
-      const carouselNextBtn = document.querySelector('.next-btn');
-      const carouselIndicatorsContainer = document.querySelector('.carousel-indicators');
-      const carouselContainer = document.querySelector('.carousel-container');
-
-      // Dynamic Indicator Generation based on actual slide count
-      carouselIndicatorsContainer.innerHTML = '';
-      carouselSlides.forEach((_, idx) => {
-        const indicatorBtn = document.createElement('button');
-        indicatorBtn.className = 'indicator';
-        if (idx === 0) indicatorBtn.classList.add('active');
-        indicatorBtn.setAttribute('data-slide', idx);
-        indicatorBtn.setAttribute('aria-label', `Go to slide ${idx + 1}`);
-        carouselIndicatorsContainer.appendChild(indicatorBtn);
-      });
-
-      const carouselIndicators = Array.from(carouselIndicatorsContainer.children);
-
-      let carouselCurrentIndex = 0;
-      let carouselInterval;
-      let autoPlayDisabled = false;
-      let hoverDisableTimeout;
-
-      // Disable default browser image drag ghosting for a sleek swipe feel
-      carouselSlides.forEach(slide => {
-        const img = slide.querySelector('img');
-        if (img) {
-          img.addEventListener('dragstart', (e) => e.preventDefault());
-        }
-      });
-
-      const updateCarousel = (index) => {
-        if (index < 0) index = carouselSlides.length - 1;
-        if (index >= carouselSlides.length) index = 0;
-
-        carouselCurrentIndex = index;
-        carouselTrack.style.transform = `translateX(-${carouselCurrentIndex * 100}%)`;
-
-        carouselIndicators.forEach((indicator, i) => {
-          indicator.classList.toggle('active', i === carouselCurrentIndex);
-        });
-
-        carouselSlides.forEach((slide, i) => {
-          slide.classList.toggle('active', i === carouselCurrentIndex);
-        });
-      };
-
-      const nextSlide = () => updateCarousel(carouselCurrentIndex + 1);
-      const prevSlide = () => updateCarousel(carouselCurrentIndex - 1);
-
-      const disableAutoplayPermanently = () => {
-        autoPlayDisabled = true;
-        clearInterval(carouselInterval);
-        clearTimeout(hoverDisableTimeout);
-      };
-
-      carouselNextBtn.addEventListener('click', () => {
-        nextSlide();
-        resetCarouselTimer();
-      });
-
-      carouselPrevBtn.addEventListener('click', () => {
-        prevSlide();
-        resetCarouselTimer();
-      });
-
-      carouselIndicators.forEach((indicator, i) => {
-        indicator.addEventListener('click', () => {
-          updateCarousel(i);
-          resetCarouselTimer();
-        });
-      });
-
-      // 8-Second slide display duration
-      const startCarouselTimer = () => {
-        if (autoPlayDisabled || reduceMotion) return;
-        carouselInterval = setInterval(nextSlide, 8000);
-      };
-
-      const resetCarouselTimer = () => {
-        clearInterval(carouselInterval);
-        startCarouselTimer();
-      };
-
-      // PC & Mobile Swiping/Dragging Logic
-      let isDragging = false;
-      let startX = 0;
-      let startY = 0;
-      let dragOffset = 0;
-      let carouselIsSwiping = false;
-
-      const getPositionX = (event) => event.type.includes('mouse') ? event.clientX : event.touches[0].clientX;
-      const getPositionY = (event) => event.type.includes('mouse') ? event.clientY : event.touches[0].clientY;
-
-      const dragStart = (event) => {
-        disableAutoplayPermanently();
-        isDragging = true;
-        startX = getPositionX(event);
-        startY = getPositionY(event);
-        dragOffset = 0;
-        carouselIsSwiping = false;
-        carouselTrack.style.transition = 'none';
-        if (event.type.includes('mouse')) {
-          carouselContainer.style.cursor = 'grabbing';
-        }
-      };
-
-      const dragMove = (event) => {
-        if (!isDragging) return;
-        const currentX = getPositionX(event);
-        const currentY = getPositionY(event);
-        const diffX = currentX - startX;
-        const diffY = currentY - startY;
-
-        if (Math.abs(diffX) > Math.abs(diffY)) {
-          dragOffset = diffX;
-          const slideWidth = carouselContainer.offsetWidth;
-          const baseTranslation = -carouselCurrentIndex * slideWidth;
-          carouselTrack.style.transform = `translateX(${baseTranslation + dragOffset}px)`;
-          if (Math.abs(dragOffset) > 15) carouselIsSwiping = true;
-        }
-      };
-
-      const dragEnd = () => {
-        if (!isDragging) return;
-        isDragging = false;
-        carouselContainer.style.cursor = '';
-        carouselTrack.style.transition = 'transform 0.7s cubic-bezier(0.25, 1, 0.5, 1)';
-
-        const slideWidth = carouselContainer.offsetWidth;
-        const movedRatio = dragOffset / slideWidth;
-
-        if (movedRatio < -0.2 && carouselCurrentIndex < carouselSlides.length - 1) {
-          updateCarousel(carouselCurrentIndex + 1);
-        } else if (movedRatio > 0.2 && carouselCurrentIndex > 0) {
-          updateCarousel(carouselCurrentIndex - 1);
-        } else {
-          updateCarousel(carouselCurrentIndex);
-        }
-
-        dragOffset = 0;
-        if (carouselIsSwiping) {
-          setTimeout(() => { carouselIsSwiping = false; }, 50);
-        }
-      };
-
-      carouselTrack.addEventListener('mousedown', dragStart);
-      carouselTrack.addEventListener('mousemove', dragMove);
-      window.addEventListener('mouseup', dragEnd);
-      carouselTrack.addEventListener('touchstart', dragStart, { passive: true });
-      carouselTrack.addEventListener('touchmove', dragMove, { passive: true });
-      carouselTrack.addEventListener('touchend', dragEnd, { passive: true });
-
-      // Prevent an accidental navigation when a drag was really a swipe
-      const carouselLinks = carouselContainer.querySelectorAll('.carousel-slide-link');
-      carouselLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-          if (carouselIsSwiping) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        });
-      });
-
-      // Pause on hover; permanently stop autoplay if the mouse lingers > 6s
-      carouselContainer.addEventListener('mouseenter', () => {
-        clearInterval(carouselInterval);
-        hoverDisableTimeout = setTimeout(disableAutoplayPermanently, 6000);
-      });
-
-      carouselContainer.addEventListener('mouseleave', () => {
-        clearTimeout(hoverDisableTimeout);
-        if (!autoPlayDisabled) startCarouselTimer();
-      });
-
-      // Initialize
-      updateCarousel(0);
-      startCarouselTimer();
-
-      // Reveal the work grid
-      const viewServicesBtn = document.getElementById('viewServicesBtn');
-      const servicesGrid = document.getElementById('servicesGrid');
-
-      const showServices = () => {
-        if (!servicesGrid.classList.contains('visible')) {
-          servicesGrid.classList.add('visible');
-          if (viewServicesBtn) viewServicesBtn.style.display = 'none';
-
-          const items = servicesGrid.querySelectorAll('.service-item');
-          items.forEach((item, index) => {
-            item.style.animationDelay = `${index * 0.04}s`;
-            item.classList.add('service-item-anim');
-          });
-        }
-      };
-
-      if (viewServicesBtn) {
-        viewServicesBtn.addEventListener('click', showServices);
-      }
-
-      // Falling Stars (skip under reduced motion)
-      const ambient = document.querySelector('.ambient');
-      if (!reduceMotion) {
-        for (let i = 0; i < 30; i++) {
-          const star = document.createElement('div');
-          star.className = 'falling-star';
-          star.style.left = `${Math.random() * 120}vw`;
-          star.style.animationDuration = `${Math.random() * 2 + 1.5}s`;
-          star.style.animationDelay = `${Math.random() * 4}s`;
-          ambient.appendChild(star);
-        }
-      }
-
-      // Mouse trail + grid spotlight (skip trail under reduced motion)
-      let lastSpawn = 0;
-      document.addEventListener('mousemove', (e) => {
-        const grid = document.getElementById('servicesGrid');
-        if (grid) {
-          const rect = grid.getBoundingClientRect();
-          grid.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-          grid.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-        }
-
-        if (reduceMotion) return;
-
-        const now = Date.now();
-        if (now - lastSpawn < 40) return;
-        lastSpawn = now;
-
-        const star = document.createElement('div');
-        star.className = 'mouse-star';
-        star.innerHTML = '✦';
-        star.style.left = `${e.clientX}px`;
-        star.style.top = `${e.clientY}px`;
-        star.style.setProperty('--dx', `${(Math.random() - 0.5) * 60}px`);
-        star.style.setProperty('--dy', `${Math.random() * 60 + 20}px`);
-        star.style.setProperty('--rot', `${(Math.random() - 0.5) * 180}deg`);
-
-        document.body.appendChild(star);
-        setTimeout(() => star.remove(), 800);
-      });
-    });
-  </script>
-
+  <script type="module" src="assets/js/site.js"></script>
 </body>
 
 </html>
