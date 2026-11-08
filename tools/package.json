@@ -1,0 +1,14 @@
+{
+  "name": "nickharrison96-site-tools",
+  "private": true,
+  "description": "Dev-only checks for the static site. Never loaded by any page.",
+  "type": "module",
+  "scripts": {
+    "check": "node check-catalog.mjs && node check-site.mjs",
+    "smoke": "node smoke.mjs",
+    "perf": "node smoke.mjs --perf"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}
