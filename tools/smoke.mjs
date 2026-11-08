@@ -79,7 +79,7 @@ const check = (name, ok, detail = '') => {
 };
 
 /** Open a page, collecting uncaught errors and console errors. */
-async function open(context, path, { skipBoot = true } = {}) {
+async function open(context, path, { skipBoot = true, ready = true } = {}) {
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
@@ -94,6 +94,8 @@ async function open(context, path, { skipBoot = true } = {}) {
   });
   if (skipBoot) await page.addInitScript(() => { try { sessionStorage.setItem('nh-booted', '1'); } catch {} });
   await page.goto(BASE + '/' + path, { waitUntil: 'load' });
+  // site.js sets data-ready once the palette and Konami listeners are wired.
+  if (ready) await page.waitForFunction(() => document.documentElement.dataset.ready === '1', null, { timeout: 5000 }).catch(() => {});
   await page.waitForTimeout(400);
   return { page, errors };
 }
@@ -165,7 +167,7 @@ try {
     const nojs = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1440, height: 900 } });
     await stub(nojs);
     for (const f of pages) {
-      const { page } = await open(nojs, f, { skipBoot: false });
+      const { page } = await open(nojs, f, { skipBoot: false, ready: false });
       check(`${f}: no-JS main heading visible`, await visible(page, 'main h1'));
       await page.close();
     }
@@ -176,7 +178,7 @@ try {
   if (at(3)) {
     const nojs = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 900 } });
     await stub(nojs);
-    const { page } = await open(nojs, 'index.html', { skipBoot: false });
+    const { page } = await open(nojs, 'index.html', { skipBoot: false, ready: false });
     for (const sel of ['#terminal pre', '#projects .project', '#case-study h2', '#repair .layer-panel', '#log .log-entry', '#philosophy h2']) {
       check(`index no-JS: ${sel} visible`, await visible(page, sel));
     }

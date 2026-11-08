@@ -9,11 +9,6 @@ const header = document.querySelector('.site-header');
 
 /* Effect tier first, so CSS can react before anything animates. */
 setTier(detectTier());
-if (root.dataset.fx !== 'static') {
-  import('./fx-gravity.js').then((m) => m.startGravity(document.getElementById('fx-bg')));
-  import('./fx-physics.js').then((m) => m.startPhysics());
-  if (!isForced()) startWatchdog();
-}
 
 /* aria-current: the header is byte-identical on every page (checked by
    tools/check-site.mjs), so the current page is marked at runtime. */
@@ -67,7 +62,19 @@ document.addEventListener('click', async (e) => {
 });
 
 /* Page features, loaded only where their markup exists. */
+// Palette + Konami load first; data-ready marks them wired (used by tools/smoke.mjs).
+Promise.all([import('./palette.js'), import('./konami.js')]).then(() => { root.dataset.ready = '1'; });
+if (root.classList.contains('booting')) import('./boot.js');
+if (document.getElementById('term-input')) import('./terminal.js');
+if (document.querySelector('[data-scramble]')) import('./scramble.js').then((m) => m.startScramble());
 if (document.querySelector('main.home')) import('./home.js');
 if (document.querySelector('main.case')) import('./case.js');
+
+/* Effects last: the shader compile must not delay the UI modules above. */
+if (root.dataset.fx !== 'static') {
+  import('./fx-physics.js').then((m) => m.startPhysics());
+  import('./fx-gravity.js').then((m) => m.startGravity(document.getElementById('fx-bg')));
+  if (!isForced()) startWatchdog();
+}
 
 export { root };
