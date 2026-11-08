@@ -7,3 +7,49 @@
 /* Keep long headings and enlarged text within narrow reading columns. */
 h1,h2,h3{overflow-wrap:anywhere}.hero>*,.intro-grid>*,.team-grid>*,.header-inner>*,.footer-inner>*{min-width:0}.hero{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)}
 @media(max-width:850px){.hero{grid-template-columns:minmax(0,1fr)}}
+
+/* A deliberately quiet homepage: introduction and one contact action. */
+.home-simple .header-inner{min-height:80px}.home-simple .brand{font-size:1rem}
+.home-simple main{padding-block:72px 96px}.home-intro{max-width:680px}
+.home-intro h1{font-size:clamp(2rem,3.3vw,3rem);max-width:23ch;margin-bottom:24px}
+.home-intro .lede{font-size:1.125rem;margin-bottom:16px}.home-intro>p{max-width:60ch}
+.home-email{display:inline-flex;align-items:center;min-height:44px;margin-top:24px;font-size:1.125rem}
+.home-intro .contact-note{font-size:1rem;margin-top:12px}.home-simple .site-footer{margin-top:0}
+.home-footer{padding-block:24px;color:var(--muted);font-size:.875rem}
+@media(max-width:540px){.home-simple .header-inner{gap:8px;padding-block:20px}.home-simple main{padding-block:40px 56px}.home-email{font-size:1rem}}
+/* Shared foundation: precision lines, open surfaces, steady reading layers. */
+:root{--surface:#0e151e;--rule:#334155;--content-width:74ch;--radius:4px;--focus:var(--light)}
+body{position:relative;isolation:isolate}body>header,body>main,body>footer{position:relative;z-index:1}
+.site-header{background:var(--bg);border-bottom:1px solid var(--rule)}
+.header-inner{min-height:100px}.brand img{display:block;width:208px;height:52px}.brand{flex:none}
+.site-header nav{gap:32px}.site-header nav a{font-size:.875rem;position:relative;min-height:44px;color:#b5c2d2}
+.site-header nav a[aria-current]{text-decoration:none;color:var(--text)}
+.site-header nav a[aria-current]::after{content:"";position:absolute;left:0;right:0;bottom:4px;height:2px;background:var(--light)}
+.site-header nav a:hover{color:var(--text)}
+a:focus-visible,pre:focus-visible{outline:2px solid var(--focus);outline-offset:5px;border-radius:2px}
+.page-home main{padding-block:76px 88px;min-height:calc(100svh - 210px)}
+.home-intro{max-width:660px}.home-kicker{margin-bottom:24px;font-size:.75rem}
+.home-intro h1{font-size:clamp(2.5rem,4.1vw,3.5rem);max-width:22ch;line-height:1.12;margin-bottom:32px}
+.home-intro .lede{font-size:1.125rem;margin-bottom:20px;color:var(--text);max-width:57ch}
+.home-intro>p{max-width:60ch}.home-intro>p+p{margin-top:20px}
+.home-email{display:inline-flex;align-items:flex-start;flex-direction:column;min-height:44px;margin-top:32px;padding:12px 0;text-decoration:none;border-top:1px solid var(--rule);font-size:.875rem;gap:6px;color:var(--muted)}
+.email-address{font-size:1rem;color:var(--light);text-decoration:underline;text-underline-offset:5px}.home-email:hover .email-address{color:var(--text);text-decoration-thickness:2px}
+.site-footer{background:var(--bg);margin-top:48px}.page-home .site-footer{margin-top:0}.footer-inner{padding-block:28px;font-size:.75rem;color:var(--muted);align-items:center}.site-footer nav{gap:24px}.site-footer a{font-size:.875rem}
+.etch-region{position:absolute;z-index:0;pointer-events:none;right:0;top:150px;width:min(32vw,480px);height:640px;overflow:hidden;contain:layout paint;opacity:.85;mask-image:linear-gradient(transparent,#000 12%,#000 80%,transparent);--reflection:0}
+.etch-plane{position:absolute;inset:0}.etch-base,.etch-reflection,.etch-joints{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:left;max-width:none}
+.etch-base{opacity:.7}.etch-reflection{opacity:var(--reflection);clip-path:polygon(5% 17%,100% 0,100% 63%,38% 100%);filter:brightness(1.7)}
+.etch-joints{opacity:.75}.etch-light{position:absolute;top:24%;left:12%;width:200px;height:240px;opacity:0;background:radial-gradient(ellipse,#7dd3fc 0%,#075985 34%,transparent 70%);mix-blend-mode:screen}
+.page-index .etch-region,.page-article .etch-region{width:min(8vw,112px);opacity:.4}
+.page-article .prose{background:var(--bg)}.page-article .toc{background:var(--bg)}
+.page-head{position:relative}.page-head::before{content:"";position:absolute;top:28px;width:32px;height:1px;background:var(--accent)}
+.writeup-card{background:var(--surface);position:relative;border-radius:var(--radius);overflow:hidden}.writeup-card::before{content:"";position:absolute;left:0;top:0;width:48px;height:2px;background:var(--light)}
+.card-copy h2 a:hover{color:var(--light)}.video-slot{background:var(--bg)}
+.empty-state{display:flex;align-items:flex-start;gap:24px;max-width:740px;padding:32px 0 72px;border-top:1px solid var(--rule)}
+.empty-mark{color:var(--light);font-family:ui-monospace,monospace;font-size:1.5rem;line-height:1.2;white-space:nowrap}.empty-state h2{font-size:1.5rem;margin-bottom:16px}.empty-state .actions{margin-top:24px}
+.stats{border-color:var(--rule)}.stats dt{color:var(--muted)}.prose .notice{border-radius:0 var(--radius) var(--radius) 0}.team-member{border-top-color:var(--rule)}
+@media(min-width:1600px){.page-home .etch-region{right:calc((100vw - 1440px)/2)}}
+@media(max-width:1000px){.page-home .etch-region{width:20vw;opacity:.4}.home-intro{max-width:620px}}
+@media(max-width:850px){.etch-region{width:40px!important;opacity:.25!important}.page-home main{padding-block:48px 64px}.home-intro{max-width:660px}}
+@media(max-width:540px){.header-inner{padding-block:16px;gap:16px}.brand img{width:192px;height:48px}.site-header nav{gap:28px}.site-header nav a{font-size:.875rem}.page-home main{padding-block:40px 56px}.home-kicker{font-size:.6875rem;letter-spacing:.08em}.home-intro h1{font-size:2.5rem;margin-bottom:24px}.home-intro .lede{font-size:1.0625rem}.home-email{width:100%}.email-address{font-size:1rem}.footer-inner{gap:8px;align-items:flex-start}.site-footer nav{gap:20px}.empty-state{gap:16px;padding-bottom:48px}.empty-mark{font-size:1.25rem}.page-head::before{top:20px}.etch-region{width:18px!important}}
+@media(prefers-reduced-motion:reduce),(hover:none),(pointer:coarse){.etch-light,.etch-reflection{display:none}.etch-plane,.etch-joints{transform:none!important}}
+@media(forced-colors:active){.etch-region,.page-head::before,.writeup-card::before{display:none}.site-header nav a[aria-current]::after{background:LinkText}.home-email{border-color:CanvasText}.home-email .email-address{color:LinkText}.home-intro .lede{color:CanvasText}.site-header nav a{color:LinkText}}

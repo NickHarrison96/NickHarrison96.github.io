@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+"""Generate static pages. Python standard library only; no runtime build required."""
+from pathlib import Path
+from html import escape
+import json
+ROOT=Path(__file__).resolve().parent
+NAV=[('main','index.html','Main'),('writeups','writeups.html','Write-ups'),('tutorials','tutorials.html','Tutorials')]
+def render(p):
+ nav=''.join(f'<a href="{file}"'+(' aria-current="page"' if section==p['section'] else '')+f'>{label}</a>' for section,file,label in NAV)
+ body=(ROOT/'content'/p['file']).read_text()
+ title=escape(p['title']); desc=escape(p['description'],quote=True)
+ draft='<meta name="robots" content="noindex, nofollow">' if p.get('draft') else ''
+ return f'''<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0B0F14"><title>{title} | Harrison Technology Solutions</title><meta name="description" content="{desc}"><meta property="og:title" content="{title}"><meta property="og:type" content="website"><meta property="og:image" content="assets/social-share.png">{draft}<link rel="icon" href="assets/logo.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css"><script type="module" src="assets/motion.js"></script></head>
+<body class="page-{p['variant']}"><a class="skip" href="#main">Skip to content</a>
+<header class="site-header"><div class="wrap header-inner"><a class="brand" href="index.html"><img src="assets/logo.svg" alt="Harrison Technology Solutions" width="208" height="52"></a><nav aria-label="Main navigation">{nav}</nav></div></header>
+<div class="etch-region" aria-hidden="true"><div class="etch-plane"><img class="etch-base" src="assets/etch.svg" alt="" width="480" height="640"><img class="etch-reflection" src="assets/etch.svg" alt="" width="480" height="640"><svg class="etch-joints" viewBox="0 0 480 640" fill="none"><g stroke="#7dd3fc" stroke-width="1"><path d="M288 188h28l14 14v26"/><circle cx="330" cy="234" r="5"/><path d="M285 448h28l17-17v-30"/><circle cx="330" cy="394" r="5"/></g></svg></div><div class="etch-light"></div></div>
+<main id="main" class="wrap" tabindex="-1">{body}</main>
+<footer class="site-footer"><div class="wrap footer-inner"><span>Harrison Technology Solutions</span><nav aria-label="Footer"><a href="about.html">About Nick &amp; the team</a><a href="mailto:harrisontechdev@gmail.com">Email</a></nav></div></footer></body></html>'''
+def build():
+ pages=json.loads((ROOT/'pages.json').read_text())
+ for page in pages:(ROOT/page['file']).write_text(render(page))
+ print(f'Built {len(pages)} static pages.')
+if __name__=='__main__':build()

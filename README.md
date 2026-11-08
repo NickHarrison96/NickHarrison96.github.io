@@ -1,67 +1,30 @@
-# NickHarrison96.github.io
+# Harrison Technology Solutions — static foundation
 
-Static, dependency-free site for **Nick Harrison** — systems & AI engineering write-ups and projects, the Right to Repair campaign, and the free repair/diagnostics software he builds (Harrison Technology Solutions).
+This directory is standalone and not a checkout. No git, publishing or deployment is performed here. All rendered pages work with HTML/CSS alone; the decorative module is optional. There is no framework, package build or external runtime dependency.
 
-No build step and no runtime dependencies: plain HTML, one stylesheet, and native ES modules. Deploy the folder as-is to any static host.
+## Edit and build
 
-**Live:** https://nickharrison96.github.io/
+- `content/*.html`: body fragments only; preserve meaningful headings and accessible links. These are trusted authored content, not a place to paste unknown uploaded scripts.
+- `pages.json`: page filename, title, description, primary section (`main`, `writeups`, `tutorials`), visual variant (`home`, `index`, `article`) and draft status.
+- `build.py`: one shared document shell, header/navigation/footer and decorative-layer source. Run `python3 build.py` from any directory. Generated root HTML can be served directly by any static host, including GitHub Pages; no deployment is configured.
+- `styles.css`: shared tokens, components, responsive rules and intentional static/accessibility fallbacks.
+- `assets/motion.js`: optional event-driven decorative springs, isolated from all content and link behavior. No external library, telemetry, sign-in or perpetual animation.
 
-## Pages
+To add a page: create a fragment in `content/`, add one manifest entry with a relative root filename, use exactly one h1, choose the active primary section, then run the generator and tests. A new primary navigation destination must be changed once in `build.py` and in the navigation test contract. Use `writeup-template.html` or `tutorial-template.html` content as a starting structure; replace all draft placeholders before publishing and remove draft status only after review. Templates are noindex and deliberately absent from indexes.
 
-| File | Purpose |
-|---|---|
-| `index.html` | Overview: live terminal, featured work, latest writing, Right to Repair teardown, free tools (from the catalog). |
-| `work.html` | **Work** hub: the projects (from `assets/js/projects.js`). |
-| `writing.html` | **Writing** hub: featured APFS case study, essays, field log, manifesto. |
-| `apfs-recovery.html` | Full case study: surgical recovery of a corrupted macOS installation (under Writing). |
-| `repair.html` | **Right to Repair** hub: mission, legislation, get involved, repair guides, repair cafés, talks. |
-| `downloads.html` | **Tools** hub: download catalog (from the shared catalog) plus the live Host Folder listing. |
-| `about.html` | **About** hub: company, team, socials. |
-| `mission.html`, `legislation.html`, `get-involved.html`, `repair-guides.html`, `repair-cafes.html`, `talks.html`, `team.html`, `socials.html` | Redirect stubs to the sections those pages moved into, so old links keep working. |
+To add a write-up/tutorial: create its fragment and manifest entry, then add a real source-backed entry to the respective index fragment. Do not invent dates, steps, videos or results. Media placeholders are intentionally noninteractive; only replace them when real media and accessible alternatives exist. Keep Main brief and free of article cards.
 
-Every real page shares `styles.css` and the same header/footer shell (checked byte-for-byte by `tools/check-site.mjs`).
+## Local preview and tests
 
-## How it's built
+Run `python3 -m http.server 8000 --directory /workspace/site-fresh` for an optional local preview. No preview server is required by the automated tests.
 
-- **Dark-glass design**: near-black grid, sky-blue glow, glass panels; Inter + JetBrains Mono.
-- **GPU background**: a hand-written WebGL shader (`assets/js/fx-gravity.js`) — neon grid, drifting particles, a gravity lens around the cursor and click shockwaves. No three.js, no GSAP, no CDN scripts.
-- **UI physics**: magnetic buttons and tilting cards on springs (`assets/js/fx-physics.js`).
-- **Extras**: interactive terminal (try `help`), ⌘K / Ctrl+K search, a boot splash on first visit, and a Konami-code "jailbreak mode".
-- **Degrades gracefully**: FULL → LITE → STATIC tiers on `<html data-fx>`; reduced motion or no WebGL gives a static page, and every section reads fine without JavaScript.
-- All effect constants live in `assets/js/fx-config.js`.
+Static check (standard library): `python3 tools/test_static.py`.
+Full headless checks in the prepared box environment: `/workspace/site-test-venv/bin/python tools/test_browser.py`. This requires Playwright, BeautifulSoup, Chromium and axe-core; the latter is read locally at `/workspace/site-test-tools/node_modules/axe-core/axe.min.js`, overridable with `AXE_PATH`. Python executable overrides are not needed if those packages are installed in another environment. Tests create and shut down their own loopback server. Outputs go to `/workspace/site-fresh-shots/` by default, overridable with `SHOTS_DIR`.
 
-## Downloads
+The browser suite covers all routes, active nav, local assets/fragments, generated output determinism, axe, keyboard skip links, image loads, no JS, pointer interaction and idle stop, hidden/offscreen gates, preference fallbacks, stationary content, narrow reflow and enlarged text. It reports callback timings as observations, not a device-independent frame-rate guarantee. Screen-reader/manual keyboard journeys, non-Chromium browsers, real touch hardware and real zoom remain separate manual checks.
 
-- **GitHub-hosted** — release assets or branch archives in public repos. Always available.
-- **Host Folder** — large files served from a home server behind a Cloudflare Worker. The section renders from a live JSON listing; a status dot shows whether the server is reachable.
+## Content provenance / review
 
-The Worker is **public by design** and the access token never touches this repository: `downloads.html` only contains the Worker's public `*.workers.dev` address, and the Worker injects the token server-side. The server lives in the private repo `NickHarrison96/selfhost`.
+Established APFS content comes from `/workspace/content/apfs-article.md`, checked against `/workspace/apfs-recovery-source.html`; team biographies come from `/workspace/about-source.html`. Main scope and consumer-freedom language reflect Nick's direct instructions. APFS source assertions are retained, not independently validated: review disk1/disk3 identifiers, symptoms, trust warning, ownership rationale and final migration/cleanup before publication. The safety note is general caution, not a promise of recovery.
 
-**Adding a tool:** add one entry to `TOOLS` in `assets/js/catalog.js`. The homepage, field log, search palette, terminal and downloads page all read from it. Projects work the same way through `PROJECTS` in `assets/js/projects.js` (see `AGENTS.md`).
-
-## Checks
-
-```sh
-node tools/check-catalog.mjs
-node tools/check-site.mjs        # includes the five-hub IA checks (tools/check-ia.mjs)
-cd tools && npm ci && npx playwright install chromium && node smoke.mjs
-node smoke.mjs --perf --headed   # frame-time report on your own GPU
-```
-
-`tools/` is dev-only (Playwright is pinned in `tools/package.json`); nothing there is served or loaded by the site.
-
-## Security
-
-Nothing secret belongs in a tracked file. A local override for the self-host origin goes in `selfhost.local.js`, which is gitignored. Before committing anything that touches download config, run the token sweeps in `AGENTS.md` (Secrets).
-
-## Preview
-
-```sh
-python -m http.server 8123
-```
-
-Then open http://localhost:8123/. ES modules don't run from `file://`. Add `?fx=static` for still screenshots. Layout notes and known traps are in `AGENTS.md`.
-
-## Deploy
-
-Push to `main`. GitHub Pages serves the repo root at https://nickharrison96.github.io/ (legacy build — no Actions workflow). Pages caches aggressively: hard-refresh or use a private window; changes can take ~45s to appear.
+New uploaded HTML/TXT materials are **deferred by Nick until the foundation is laid**. None are imported, executed, linked as published tutorials or used to replace established content. Tutorials currently has an honest empty state. Preserve those originals outside this directory; review them separately before any future use.

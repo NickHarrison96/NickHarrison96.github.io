@@ -1,0 +1,58 @@
+[
+  {
+    "file": "about.html",
+    "title": "About",
+    "description": "Meet the team behind Harrison Technology Solutions and its repair-first approach.",
+    "section": "main",
+    "variant": "article",
+    "draft": false
+  },
+  {
+    "file": "apfs-recovery.html",
+    "title": "APFS recovery: 401.5 GB preserved",
+    "description": "A non-destructive APFS recovery case study on a MacPro7,1 OpenCore build, preserving 401.5 GB of user data.",
+    "section": "writeups",
+    "variant": "article",
+    "draft": false
+  },
+  {
+    "file": "index.html",
+    "title": "Your electronics. Your choices.",
+    "description": "Bootloader and data recovery research across iOS, Android, Windows and macOS, open-source projects and electronics repair. Knowledge shared freely.",
+    "section": "main",
+    "variant": "home",
+    "draft": false
+  },
+  {
+    "file": "writeup-template.html",
+    "title": "Write-up template",
+    "description": "Reusable draft structure for a repair write-up. Not a published case study.",
+    "section": "writeups",
+    "variant": "article",
+    "draft": true
+  },
+  {
+    "file": "writeups.html",
+    "title": "Write-ups",
+    "description": "Repair and recovery case studies, including a non-destructive APFS macOS recovery.",
+    "section": "writeups",
+    "variant": "index",
+    "draft": false
+  },
+  {
+    "file": "tutorials.html",
+    "title": "Tutorials",
+    "description": "Tutorials from Harrison Technology Solutions. No tutorials are published yet.",
+    "section": "tutorials",
+    "variant": "index",
+    "draft": false
+  },
+  {
+    "file": "tutorial-template.html",
+    "title": "Tutorial template",
+    "description": "Reusable unpublished tutorial structure.",
+    "section": "tutorials",
+    "variant": "article",
+    "draft": true
+  }
+]
