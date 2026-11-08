@@ -27,8 +27,13 @@ def check():
    if frag:
     other=Parse(); other.feed(target.read_text()); assert frag in other.ids,f'{file}: missing #{frag}'
   assert 'assets/motion.js' in text,file
+  for excluded in ['repair','teardown','disassembly']:
+   assert excluded not in text.lower(),f'Excluded positioning returned: {file} / {excluded}'
  home=(ROOT/'index.html').read_text()
- for discipline in ['bootloader interactions','data recovery','ios, android, windows and macos','open-source projects','repair electronics']:assert discipline in home.lower(),discipline
+ for discipline in ['behind the scenes','protect and recover data','share what i learn','share it freely']:assert discipline in home.lower(),discipline
+ assert 'I’m Nick, a security researcher and tech enthusiast.' in home
+ assert 'Repair grew out' not in home
+ assert 'repair services' not in home.lower()
  assert 'writeup-card' not in home and 'hero-art' not in home
  assert 'No tutorials published yet.' in (ROOT/'tutorials.html').read_text()
  print('PASS static foundation routes, navigation, links, IDs, content scope')

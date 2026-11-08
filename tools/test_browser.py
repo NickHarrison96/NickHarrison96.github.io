@@ -28,8 +28,11 @@ report['static']['landmarks_notes_images_no_remote_runtime']='passed'
 original=Path('/workspace/about-source.html')
 if original.exists():
  source=BeautifulSoup(original.read_text(),'html.parser');target=BeautifulSoup((ROOT/'about.html').read_text(),'html.parser')
- for bio in source.select('.team-bio'):assert bio.get_text() in target.get_text()
- report['static']['exact_team_bios']='passed'
+ for cls in ['.team-name','.team-role']:
+  for fact in source.select(cls):assert fact.get_text() in target.get_text()
+ for fact in ['technical direction','security strategy','background in the arts','day-to-day operations','client relations','QA and beta testing']:assert fact in target.get_text()
+ assert 'For consumer electronics repair' not in target.get_text()
+ report['static']['sourced_team_identities_roles_responsibilities']='passed'
 for cmd in ['diskutil apfs addVolume disk3 APFS "Untitled"','sudo chown -R $(whoami) "/Volumes/Big Mac - Data/Users/nick"']:
  assert cmd in BeautifulSoup((ROOT/'apfs-recovery.html').read_text(),'html.parser').get_text()
 report['static']['apfs_commands']='passed'

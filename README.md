@@ -25,6 +25,12 @@ The browser suite covers all routes, active nav, local assets/fragments, generat
 
 ## Content provenance / review
 
-Established APFS content comes from `/workspace/content/apfs-article.md`, checked against `/workspace/apfs-recovery-source.html`; team biographies come from `/workspace/about-source.html`. Main scope and consumer-freedom language reflect Nick's direct instructions. APFS source assertions are retained, not independently validated: review disk1/disk3 identifiers, symptoms, trust warning, ownership rationale and final migration/cleanup before publication. The safety note is general caution, not a promise of recovery.
+Established APFS content comes from `/workspace/content/apfs-article.md`, checked against `/workspace/apfs-recovery-source.html`; team identities and biographical facts come from `/workspace/about-source.html`; current bios are shortened to preserve names, roles and sourced research/operational responsibilities without services marketing. Main scope and consumer-freedom language reflect Nick's direct instructions. APFS source assertions are retained, not independently validated: review disk1/disk3 identifiers, symptoms, trust warning, ownership rationale and final migration/cleanup before publication. The safety note is general caution, not a promise of recovery.
 
 New uploaded HTML/TXT materials are **deferred by Nick until the foundation is laid**. None are imported, executed, linked as published tutorials or used to replace established content. Tutorials currently has an honest empty state. Preserve those originals outside this directory; review them separately before any future use.
+
+## Research-only scope
+
+This is a self-contained security-research / notes / articles / tutorials website. Main and About describe research, open-source projects and shared learning. The APFS article is a technical data-recovery case study. There is no services offering, second-business section, future crossover plan or speculative external destination. Original exported source files remain unchanged outside this directory.
+
+Scope boundary: no teardown, disassembly, hardware-service content or imagery. Software bootloader and data-recovery research remain in scope. Supplied branding uses a plain data node, not a screw or tool motif.
