@@ -7,7 +7,7 @@ const R2R = 'right to repair';
 const ITEMS = [
   { label: 'Home', kind: 'page', href: 'index.html' },
   { label: 'Work', kind: 'hub', href: 'work.html', keys: 'projects repositories github' },
-  { label: 'Writing', kind: 'hub', href: 'writing.html', keys: 'essays write-ups newsletter' },
+  { label: 'Writing', kind: 'hub', href: 'writing.html', keys: 'write-ups case study' },
   { label: 'Right to Repair', kind: 'hub', href: 'repair.html', keys: 'campaign' },
   { label: 'Tools', kind: 'hub', href: 'downloads.html', keys: 'downloads free software host folder' },
   { label: 'About', kind: 'hub', href: 'about.html', keys: 'company harrison technology solutions' },
@@ -95,11 +95,21 @@ function go(item) {
   else location.href = item.href;
 }
 
+// Make everything behind the dialog inert so screen readers and Tab stay inside it.
+function setInert(on) {
+  for (const el of document.body.children) {
+    if (el.contains(backdrop)) continue;
+    if (on) { if (!el.inert) { el.inert = true; el.dataset.paletteInert = ''; } }
+    else if ('paletteInert' in el.dataset) { el.inert = false; delete el.dataset.paletteInert; }
+  }
+}
+
 export function open() {
   if (isOpen()) return;
   returnFocus = document.activeElement;
   backdrop.hidden = false;
   document.documentElement.classList.add('palette-open');
+  setInert(true);
   input.value = '';
   active = 0;
   render();
@@ -111,6 +121,7 @@ export function close(restore = true) {
   input.blur(); // a hidden element can keep focus in Chrome; release it explicitly
   backdrop.hidden = true;
   document.documentElement.classList.remove('palette-open');
+  setInert(false);
   if (restore && returnFocus && document.contains(returnFocus)) returnFocus.focus({ preventScroll: true });
 }
 

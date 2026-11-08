@@ -13,7 +13,7 @@ export const FX = Object.freeze({
   watchdog: { slowMs: 24, windowMs: 2000, windows: 2, warmupMs: 1000 }, // → STATIC
   lite: { dprCap: 1, particleLayers: 1, shockwave: false },
   full: { particleLayers: 2 },
-  boot: { maxMs: 1200 },
+  boot: { maxMs: 700 },
   scramble: { ms: 600 },
   mouseEase: 0.12,                                  // shader cursor smoothing per frame
 });

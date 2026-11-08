@@ -3319,13 +3319,6 @@ html[data-theme="jailbreak"] body::after {
   mix-blend-mode: multiply;
 }
 
-html[data-theme="jailbreak"][data-fx="full"] body::after {
-  animation: crt-flicker 4s steps(2) infinite;
-}
-
-@keyframes crt-flicker {
-  50% { opacity: 0.85; }
-}
 
 /* ─── Hub pages (work, writing, repair, about) ───────────────────────────── */
 /* Hub intro without a card: same badge / title / lede as sub-page heroes. */
@@ -3460,3 +3453,11 @@ html[data-theme="jailbreak"][data-fx="full"] body::after {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* Visible exit for jailbreak mode */
+.jb-exit { display: none; position: fixed; right: 16px; bottom: 16px; z-index: 250; padding: 8px 12px; min-height: 36px; border: 1px solid var(--brand); border-radius: 8px; background: rgba(5,7,13,.92); color: var(--brand); font: 500 13px var(--font-mono); cursor: pointer; }
+html[data-theme="jailbreak"] .jb-exit { display: block; }
+.jb-exit:focus-visible, .mq-pause:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.marquee { position: relative; }
+.marquee.is-paused .marquee-track { animation-play-state: paused; }
+.mq-pause { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); z-index: 2; min-width: 28px; min-height: 24px; padding: 2px 8px; border: 1px solid currentColor; border-radius: 4px; background: rgba(5,7,13,.9); color: inherit; font: 500 11px var(--font-mono); cursor: pointer; }

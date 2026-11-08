@@ -82,6 +82,7 @@ export function runtimeHosts(html) {
   const out = [];
   for (const t of tags(html, ['link', 'script', 'img', 'iframe', 'source', 'video', 'audio'])) {
     const v = attr(t.attrs, t.name === 'link' ? 'href' : 'src');
+    if (t.name === 'link' && /\bcanonical\b/i.test(attr(t.attrs, 'rel') || '')) continue; // not loaded at runtime
     if (v && /^(https?:)?\/\//i.test(v)) out.push(new URL(v, 'https://x.invalid').hostname);
   }
   return out;
@@ -262,7 +263,7 @@ async function run() {
           'warp.radius': 0.25, 'warp.force': 0.08, 'grid.cells': 20,
           'shockwave.speed': 1.2, 'shockwave.width': 0.04, 'shockwave.life': 1.6,
           'magnet.maxDist': 150, 'magnet.pull': 20, 'spring.stiffness': 0.18, 'spring.damping': 0.72,
-          'tilt.maxDeg': 9, 'canvas.dprCap': 1.5, 'boot.maxMs': 1200, 'scramble.ms': 600,
+          'tilt.maxDeg': 9, 'canvas.dprCap': 1.5, 'boot.maxMs': 700, 'scramble.ms': 600,
           'tier.liteCores': 4, 'tier.liteMemoryGB': 4,
           'watchdog.slowMs': 24, 'watchdog.windowMs': 2000, 'watchdog.windows': 2, 'watchdog.warmupMs': 1000,
           'lite.dprCap': 1, 'lite.particleLayers': 1, 'lite.shockwave': false,

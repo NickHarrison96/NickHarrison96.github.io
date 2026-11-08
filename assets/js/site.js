@@ -89,3 +89,20 @@ if (root.dataset.fx !== 'static') {
 }
 
 export { root };
+
+// Pause control for the highlights ticker (hover alone is not enough).
+for (const mq of document.querySelectorAll('.marquee')) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'mq-pause';
+  b.setAttribute('aria-pressed', 'false');
+  b.setAttribute('aria-label', 'Pause highlights');
+  b.textContent = '❚❚';
+  b.addEventListener('click', () => {
+    const p = mq.classList.toggle('is-paused');
+    b.setAttribute('aria-pressed', String(p));
+    b.setAttribute('aria-label', p ? 'Play highlights' : 'Pause highlights');
+    b.textContent = p ? '▶' : '❚❚';
+  });
+  mq.append(b);
+}
