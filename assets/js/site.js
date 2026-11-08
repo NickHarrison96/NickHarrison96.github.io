@@ -2,8 +2,18 @@
 // Shell behaviour lives here; effects and page features are separate modules it imports.
 // Removing this one script tag leaves a fully working static site (plan: rollback).
 
+import { detectTier, setTier, startWatchdog, isForced } from './fx-tier.js';
+
 const root = document.documentElement;
 const header = document.querySelector('.site-header');
+
+/* Effect tier first, so CSS can react before anything animates. */
+setTier(detectTier());
+if (root.dataset.fx !== 'static') {
+  import('./fx-gravity.js').then((m) => m.startGravity(document.getElementById('fx-bg')));
+  import('./fx-physics.js').then((m) => m.startPhysics());
+  if (!isForced()) startWatchdog();
+}
 
 /* aria-current: the header is byte-identical on every page (checked by
    tools/check-site.mjs), so the current page is marked at runtime. */

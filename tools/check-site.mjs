@@ -115,7 +115,7 @@ function selftest() {
 
 /* ── checks against the repo ─────────────────────────────────────────────── */
 
-function run() {
+async function run() {
   const r = reporter(`check-site${Number.isFinite(PHASE) ? ` (phase ≤ ${PHASE})` : ''}`);
   const at = (p) => p <= PHASE;
   const pages = PAGES.filter(([, p]) => at(p)).map(([f]) => f);
@@ -228,6 +228,27 @@ function run() {
       r.check('fx-gravity: u_mouse/u_resolution/u_time', ['u_mouse', 'u_resolution', 'u_time'].every((u) => g.includes(u)));
       r.check('fx-gravity: reads constants from fx-config', /from '\.\/fx-config\.js'/.test(g));
     }
+    if (exists('assets/js/fx-config.js')) {
+      const src = read('assets/js/fx-config.js');
+      let FX = null;
+      try { FX = (await import('data:text/javascript;base64,' + Buffer.from(src).toString('base64'))).FX; } catch (e) { r.check('fx-config evaluates', false, e.message); }
+      if (FX) {
+        // The plan's policy table, value for value.
+        const want = {
+          'warp.radius': 0.25, 'warp.force': 0.08, 'grid.cells': 20,
+          'shockwave.speed': 1.2, 'shockwave.width': 0.04, 'shockwave.life': 1.6,
+          'magnet.maxDist': 150, 'magnet.pull': 20, 'spring.stiffness': 0.18, 'spring.damping': 0.72,
+          'tilt.maxDeg': 9, 'canvas.dprCap': 1.5, 'boot.maxMs': 1200, 'scramble.ms': 600,
+          'tier.liteCores': 4, 'tier.liteMemoryGB': 4,
+          'watchdog.slowMs': 24, 'watchdog.windowMs': 2000, 'watchdog.windows': 2, 'watchdog.warmupMs': 1000,
+          'lite.dprCap': 1, 'lite.particleLayers': 1, 'lite.shockwave': false,
+        };
+        for (const [k, v] of Object.entries(want)) {
+          const got = k.split('.').reduce((o, x) => (o == null ? o : o[x]), FX);
+          r.check(`fx-config ${k} = ${v}`, got === v, `got ${got}`);
+        }
+      }
+    }
     if (exists('assets/js/fx-physics.js')) {
       const p = read('assets/js/fx-physics.js');
       r.check('fx-physics: no layout reads in pointermove', !/pointermove[\s\S]{0,200}getBoundingClientRect/.test(p));
@@ -293,4 +314,4 @@ const VERBATIM_CASE = [
   "Computers are meant to be tools of empowerment, creative expression, and personal agency. When an operating system fails, users shouldn't feel helpless, nor should they be forced to accept data loss as an inevitability.",
 ];
 
-process.exit(process.argv.includes('--selftest') ? (selftest() ? 0 : 1) : (run() ? 0 : 1));
+process.exit(process.argv.includes('--selftest') ? (selftest() ? 0 : 1) : ((await run()) ? 0 : 1));

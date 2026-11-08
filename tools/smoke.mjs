@@ -185,6 +185,21 @@ try {
 
   /* Phase 5 — tiers */
   if (at(5)) {
+    // Forced FULL proves the shader compiles and renders here (software GL is fine for that).
+    const gctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    await stub(gctx);
+    const g = await open(gctx, 'index.html?fx=full');
+    await g.page.mouse.move(700, 400);
+    await g.page.mouse.down();
+    await g.page.mouse.up();
+    await g.page.waitForTimeout(500);
+    check('index?fx=full: data-fx="full"', (await g.page.evaluate(() => document.documentElement.dataset.fx)) === 'full');
+    check('index?fx=full: WebGL canvas live', await visible(g.page, '#fx-bg.live'));
+    const px = await g.page.evaluate(() => { const c = document.getElementById('fx-bg'); return c.width * c.height > 0 && c.width <= innerWidth * 1.5 + 1; });
+    check('index?fx=full: canvas sized within DPR cap', px);
+    check('index?fx=full: no errors', g.errors.length === 0, g.errors.join(' | '));
+    await gctx.close();
+
     const noGl = await launch(['--disable-webgl', '--disable-3d-apis']);
     const ctx = await noGl.newContext({ viewport: { width: 1440, height: 900 } });
     await stub(ctx);
