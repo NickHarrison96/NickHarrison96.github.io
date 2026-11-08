@@ -1,108 +1,36 @@
-// Entry module loaded by every page: <script type="module" src="assets/js/site.js">.
-// Shell behaviour lives here; effects and page features are separate modules it imports.
-// Removing this one script tag leaves a fully working static site (plan: rollback).
-
-import { detectTier, setTier, startWatchdog, isForced } from './fx-tier.js';
-
+import { CONTACT_URL } from './config.js';
 const root = document.documentElement;
-const header = document.querySelector('.site-header');
-
-/* Effect tier first, so CSS can react before anything animates. */
-setTier(detectTier());
-
-/* aria-current: the header is byte-identical on every page (checked by
-   tools/check-site.mjs), so the current hub is marked at runtime. A sub-page marks
-   the hub it lives under (aria-current="true"); the hub page itself gets "page". */
-const fileOf = (url) => url.pathname.split('/').pop() || 'index.html';
-const here = fileOf(location);
-const HUB_OF = { 'apfs-recovery.html': 'writing.html' };
-for (const a of document.querySelectorAll('.site-nav a, .footer-nav a')) {
-  const u = new URL(a.href, location.href);
-  if (u.origin !== location.origin || u.hash) continue;
-  if (fileOf(u) === here) a.setAttribute('aria-current', 'page');
-  else if (fileOf(u) === HUB_OF[here]) a.setAttribute('aria-current', 'true');
-}
-
-/* Real header height (it wraps on narrow screens) for sticky offsets and anchor scrolling. */
-if (header && 'ResizeObserver' in window) {
-  new ResizeObserver(() => root.style.setProperty('--header-real', `${header.offsetHeight}px`)).observe(header);
-}
-
-/* Shortcut hint: ⌘K on Apple platforms, Ctrl K elsewhere. */
-const isApple = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent);
-if (!isApple) for (const k of document.querySelectorAll('.search-btn kbd')) k.textContent = 'Ctrl K';
-
-/* Header: solid backdrop once the page scrolls. Passive listener, class toggle only. */
-let scrolled = null;
-const onScroll = () => {
-  const s = window.scrollY > 8;
-  if (s !== scrolled && header) header.classList.toggle('scrolled', (scrolled = s));
-};
-addEventListener('scroll', onScroll, { passive: true });
-onScroll();
-
-/* Mobile menu. Without JS the nav simply wraps under the brand (no hidden state). */
-const menuBtn = document.querySelector('.menu-btn');
-const nav = document.getElementById('site-nav');
-if (menuBtn && nav) {
-  const set = (open) => {
-    menuBtn.setAttribute('aria-expanded', String(open));
-    menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-    header.classList.toggle('menu-open', open);
-  };
-  menuBtn.addEventListener('click', () => set(menuBtn.getAttribute('aria-expanded') !== 'true'));
-  nav.addEventListener('click', (e) => { if (e.target.closest('a')) set(false); });
-  addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && menuBtn.getAttribute('aria-expanded') === 'true') { set(false); menuBtn.focus(); }
-  });
-}
-
-/* Copy buttons: <button data-copy="text" data-copy-idle="copy">. */
-document.addEventListener('click', async (e) => {
-  const btn = e.target.closest('[data-copy]');
-  if (!btn) return;
-  let ok = true;
-  try { await navigator.clipboard.writeText(btn.dataset.copy); } catch { ok = false; }
-  const idle = btn.dataset.copyIdle || 'copy';
-  btn.textContent = ok ? 'copied ✓' : 'press Ctrl+C';
-  btn.classList.toggle('copied', ok);
-  clearTimeout(btn._t);
-  btn._t = setTimeout(() => { btn.textContent = idle; btn.classList.remove('copied'); }, 1600);
+const theme = document.getElementById('theme');
+theme.closest('label').hidden=false;
+try { theme.value = localStorage.getItem('hts-theme') || 'system'; } catch {}
+if (!['system','light','dark'].includes(theme.value)) theme.value = 'system';
+theme.addEventListener('change', () => {
+  if (theme.value === 'system') delete root.dataset.theme;
+  else root.dataset.theme = theme.value;
+  try { localStorage.setItem('hts-theme', theme.value); } catch {}
 });
-
-/* Page features, loaded only where their markup exists. */
-// Palette + Konami load first; data-ready marks them wired (used by tools/smoke.mjs).
-Promise.all([import('./palette.js'), import('./konami.js')]).then(() => { root.dataset.ready = '1'; });
-if (root.classList.contains('booting')) import('./boot.js');
-if (document.getElementById('term-input')) import('./terminal.js');
-if (document.querySelector('[data-scramble]')) import('./scramble.js').then((m) => m.startScramble());
-if (document.querySelector('main.home')) import('./home.js');
-if (document.getElementById('log-list')) import('./log.js');
-if (document.querySelector('.section-nav')) import('./sections.js');
-if (document.querySelector('main.case')) import('./case.js');
-
-/* Effects last: the shader compile must not delay the UI modules above. */
-if (root.dataset.fx !== 'static') {
-  import('./fx-physics.js').then((m) => m.startPhysics());
-  import('./fx-gravity.js').then((m) => m.startGravity(document.getElementById('fx-bg')));
-  if (!isForced()) startWatchdog();
-}
-
-export { root };
-
-// Pause control for the highlights ticker (hover alone is not enough).
-for (const mq of document.querySelectorAll('.marquee')) {
-  const b = document.createElement('button');
-  b.type = 'button';
-  b.className = 'mq-pause';
-  b.setAttribute('aria-pressed', 'false');
-  b.setAttribute('aria-label', 'Pause highlights');
-  b.textContent = '❚❚';
-  b.addEventListener('click', () => {
-    const p = mq.classList.toggle('is-paused');
-    b.setAttribute('aria-pressed', String(p));
-    b.setAttribute('aria-label', p ? 'Play highlights' : 'Pause highlights');
-    b.textContent = p ? '▶' : '❚❚';
+for (const a of document.querySelectorAll('[data-contact]')) a.href = CONTACT_URL;
+const menu = document.querySelector('.menu-btn');
+const header = document.querySelector('.site-header');
+menu.hidden = false;
+root.classList.add('js-menu');
+const setMenu = (on) => {menu.setAttribute('aria-expanded',String(on));header.classList.toggle('menu-open',on);menu.textContent=on?'Close menu':'Menu';};
+menu.addEventListener('click',()=>setMenu(menu.getAttribute('aria-expanded')!=='true'));
+addEventListener('keydown',e=>{if(e.key==='Escape' && menu.getAttribute('aria-expanded')==='true'){setMenu(false);menu.focus();}});
+const small = matchMedia('(max-width:700px)');
+small.addEventListener('change',()=>setMenu(false));
+// The search controls are only shown once the optional module is working.
+import('./palette.js').then(()=>{for(const b of document.querySelectorAll('[data-palette-open]'))b.hidden=false;root.dataset.ready='1';}).catch(()=>{});
+const demo = document.querySelector('#terminal');
+let demoLoaded=false;
+if(demo) demo.addEventListener('toggle',()=>{if(demo.open&&!demoLoaded){demoLoaded=true;import('./terminal.js');import('./konami.js');import('./boot.js');}});
+if(document.getElementById('log-list')) import('./log.js');
+if(location.pathname.endsWith('/')||location.pathname.endsWith('index.html')) import('./home.js');
+for(const b of document.querySelectorAll('[data-copy]')) {
+  b.hidden=false;
+  b.addEventListener('click',async()=>{
+    const s=document.getElementById('copy-status');
+    try{await navigator.clipboard.writeText(b.dataset.copy);s.textContent='Email address copied.';}
+    catch{s.textContent='Could not copy. Select harrisontechdev@gmail.com above and copy it manually.';}
   });
-  mq.append(b);
 }

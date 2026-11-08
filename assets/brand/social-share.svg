@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#12202C" stroke-width="1"/></pattern></defs>
+<rect width="1200" height="630" fill="#0B0F14"/><rect width="1200" height="630" fill="url(#g)"/>
+<rect x="0" y="0" width="12" height="630" fill="#075985"/>
+<g transform="translate(90,90)">
+<rect x="2" y="2" width="108" height="108" rx="14" fill="none" stroke="#7DD3FC" stroke-width="4"/>
+<path d="M30 28v56M82 28v56M30 56h52" stroke="#7DD3FC" stroke-width="10" stroke-linecap="square"/>
+<circle cx="56" cy="56" r="7" fill="#0B0F14" stroke="#075985" stroke-width="4"/>
+</g>
+<text x="230" y="150" font-family="DejaVu Sans, Arial, sans-serif" font-weight="700" font-size="40" fill="#F1F5F9">HARRISON</text>
+<text x="232" y="186" font-family="DejaVu Sans Mono, monospace" font-size="16" letter-spacing="4" fill="#7DD3FC">TECHNOLOGY SOLUTIONS</text>
+<text x="90" y="350" font-family="DejaVu Sans, Arial, sans-serif" font-weight="700" font-size="78" fill="#F1F5F9">You own it.</text>
+<text x="90" y="440" font-family="DejaVu Sans, Arial, sans-serif" font-weight="700" font-size="78" fill="#F1F5F9">We help you <tspan fill="#7DD3FC">fix it.</tspan></text>
+<text x="90" y="530" font-family="DejaVu Sans Mono, monospace" font-size="24" fill="#94A3B8">Phone &amp; device repair · diagnostics · data recovery</text>
+<text x="1110" y="580" text-anchor="end" font-family="DejaVu Sans Mono, monospace" font-size="20" fill="#075985">nickharrison96.github.io</text>
+</svg>

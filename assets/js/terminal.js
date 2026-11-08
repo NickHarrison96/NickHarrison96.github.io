@@ -1,32 +1,20 @@
-// Homepage live terminal: typed commands, ↑/↓ history, Tab completion, and a spring
-// shake on unknown commands. Output is written with textContent only.
+// Optional, local navigation demo: typed commands and arrow-key history.
+// No system commands, live status or involuntary motion. Output uses textContent.
 import { TOOLS } from './catalog.js';
+import { PAGES as ROUTES } from './registry.js';
 
 const term = document.querySelector('.term');
 const input = document.getElementById('term-input');
 const out = document.getElementById('term-out');
 const body = document.getElementById('term-body');
 
-const PROMPT = 'nick@nicks-iMac:~$ ';
-const SPECS = ['{', '  "host": "nick@nicks-iMac.local",', '  "smbios": "MacPro7,1",', '  "bootloader": "OpenCore 1.0.8",', '  "motherboard": "MSI MPG X570 Gaming Edge WiFi",', '  "cpu": "AMD Ryzen 5 3600",', '  "gpu": "AMD Radeon RX 580 8GB (Metal: 48,799)",', '  "ram": "16GB DDR4 (9490MiB / 16384MiB active)"', '}'];
-const PAGES = {
-  home: 'index.html', work: 'work.html', projects: 'work.html', writing: 'writing.html', 'case-study': 'apfs-recovery.html',
-  essays: 'writing.html#essays', log: 'writing.html#log', manifesto: 'writing.html#philosophy',
-  repair: 'repair.html', mission: 'repair.html#mission', legislation: 'repair.html#legislation',
-  'get-involved': 'repair.html#get-involved', guides: 'repair.html#guides', 'repair-guides': 'repair.html#guides',
-  cafes: 'repair.html#cafes', 'repair-cafes': 'repair.html#cafes', talks: 'repair.html#talks',
-  tools: 'downloads.html', downloads: 'downloads.html', about: 'about.html', team: 'about.html#team', socials: 'about.html#socials',
-};
-
+const PROMPT = 'demo > ';
+const PAGES = Object.fromEntries(ROUTES.map(p=>[p.key,p.href]));
 const COMMANDS = {
-  help: () => [['info', 'Available commands: cat specs.json, recovery --status, ls ./tools, cat manifesto, whoami, open <page>, clear'],
-    ['info', `pages: ${Object.keys(PAGES).join(' ')}`]],
-  'cat specs.json': () => SPECS.map((t) => ['', t]),
-  'recovery --status': () => ['[OK] MacPro7,1 Target SMBIOS Operational.', "[OK] Target Volume 'Untitled' active on disk3s7.", '[OK] Kernel 25.6.0 running live.'].map((t) => ['ok', t]),
-  'ls ./tools': () => TOOLS.filter((t) => t.status === 'live').map((t) => ['ok', `${t.name.padEnd(16)}${t.version}`]),
-  'cat manifesto': () => ['Repair Is a Right, Not a Privilege.', 'Parts. Tools. Manuals. For Everyone.', 'The Greenest Device Is the One You Already Own.'].map((t) => ['hl', t]),
-  whoami: () => [['hl', 'Nick Harrison: systems & AI engineer, hardware troubleshooter, right to repair campaigner.']],
-  clear: () => null,
+ help: () => [['info','Local demo only. Commands: ls ./tools, whoami, open <page>, clear'],['info','pages: '+Object.keys(PAGES).join(' ')]],
+ 'ls ./tools': () => TOOLS.map(t=>['info',t.name+' · '+t.version]),
+ whoami: () => [['info','Harrison Technology Solutions. Repair, diagnostics and repair software.']],
+ clear: () => null,
 };
 const COMPLETIONS = [...Object.keys(COMMANDS), ...Object.keys(PAGES).map((p) => `open ${p}`)];
 
@@ -47,11 +35,7 @@ function line(cls, text, pre = '') {
   out.append(div);
 }
 
-function shake() {
-  term.classList.remove('shake');
-  void term.offsetWidth; // restart the animation
-  term.classList.add('shake');
-}
+function shake() {} // No involuntary motion on errors.
 
 function run(raw) {
   const cmd = raw.trim().replace(/\s+/g, ' ');
@@ -101,13 +85,12 @@ if (term && input && out && body) {
       e.preventDefault();
       hIndex += 1;
       input.value = hIndex === history.length ? draft : history[hIndex];
-    } else if (e.key === 'Tab' && !e.shiftKey && input.value.trim()) {
-      // Only capture Tab when there is something to complete, so keyboard users can still tab past.
-      if (complete()) e.preventDefault();
     }
   });
   for (const b of term.querySelectorAll('[data-cmd]')) b.addEventListener('click', () => { run(b.dataset.cmd); });
   body.addEventListener('click', () => { if (!getSelection().toString()) input.focus({ preventScroll: true }); });
   term.addEventListener('animationend', () => term.classList.remove('shake'));
+  input.disabled=false;
+  input.form.querySelector('button[type=submit]').disabled=false;
   term.classList.add('ready');
 }

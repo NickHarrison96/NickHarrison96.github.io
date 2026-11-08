@@ -11,11 +11,7 @@ export const exists = (rel) => existsSync(join(ROOT, rel));
 
 /** Every real page the site ships (full shell), and the phase that introduced it. */
 export const PAGES = [
-  ['index.html', 0], ['about.html', 0], ['downloads.html', 0], ['writing.html', 0],
-  ['apfs-recovery.html', 4],
-  ['work.html', 8], ['repair.html', 8],
-  ['guide-kali-wsl2.html', 9], ['guide-ollama-claude-code-windows.html', 9],
-  ['guide-ollama-claude-code-macos.html', 9], ['guide-llama-cpp.html', 9],
+ ['index.html',0],['services.html',0],['work.html',0],['downloads.html',0],['writing.html',0],['about.html',0],['repair.html',0],['apfs-recovery.html',0],['article-template.html',0],
 ];
 
 /**
@@ -70,15 +66,9 @@ export const STUBS = [
 
 /** Header nav: the five hubs, in order (phase 8). Sub-pages map to the hub they live under. */
 export const HUBS = [
-  ['Work', 'work.html'], ['Writing', 'writing.html'], ['Right to Repair', 'repair.html'],
-  ['Tools', 'downloads.html'], ['About', 'about.html'],
+ ['Repair Services','services.html'],['Work','work.html'],['Tools','downloads.html'],['Blog','writing.html'],['About','about.html'],
 ];
-export const HUB_OF = {
-  'index.html': null, 'work.html': 'work.html', 'writing.html': 'writing.html', 'apfs-recovery.html': 'writing.html',
-  'repair.html': 'repair.html', 'downloads.html': 'downloads.html', 'about.html': 'about.html',
-  'guide-kali-wsl2.html': 'writing.html', 'guide-ollama-claude-code-windows.html': 'writing.html',
-  'guide-ollama-claude-code-macos.html': 'writing.html', 'guide-llama-cpp.html': 'writing.html',
-};
+export const HUB_OF = {'apfs-recovery.html':'writing.html','article-template.html':'writing.html'};
 
 /** Parse `--phase=N`; no flag means every assertion (the completion run). */
 export function phaseFromArgs(argv = process.argv.slice(2)) {

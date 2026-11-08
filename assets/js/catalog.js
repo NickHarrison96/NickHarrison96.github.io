@@ -5,7 +5,7 @@
 //
 // Fields
 //   name         display name (unique)
-//   host         "github" — always available; `url` is a release asset or repo/release page
+//   host         "github" — availability depends on GitHub; `url` is a release asset or repo/release page
 //                "self"   — streamed from the home server via the Worker; needs `filename`
 //   status       "live" | "soon" ("soon" renders a disabled Coming Soon button)
 //   url          download link for host:"github"
@@ -54,7 +54,7 @@ export const TOOLS = [
     category: 'assistant',
     hue: 32,
     image: 'assets/dl-bippoyai.png',
-    summary: 'A local-only desktop assistant that runs entirely on your own hardware — PySide6 Pip-Boy GUI routing through LiteLLM into Ollama, so it works with no internet connection.',
+    summary: 'A local desktop assistant built with PySide6 and Ollama. Development source archive; requires local setup and model weights.',
     description: 'Qwythos AI — a local-only desktop assistant for Windows that runs entirely on your own hardware. PySide6 Pip-Boy GUI with CRT scanlines and hardware dials, routing through LiteLLM into Ollama so the Claude CLI works offline with no internet. Detects CPU threads, RAM, and GPU VRAM, then recommends context size and layer offloading. Source archive — needs Python 3.11+, Ollama running, and model weights.',
   },
   // iWin-Doh: hidden until there's something to download.

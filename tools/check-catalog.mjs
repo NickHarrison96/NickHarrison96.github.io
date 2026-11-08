@@ -98,7 +98,9 @@ async function run() {
     const inline = inlineArrays(html);
     r.check(`${f}: no inline TOOLS/DOWNLOADS array`, inline.length === 0, inline.join(', '));
     const g = moduleGraph(f);
-    r.check(`${f}: reaches ${CATALOG} through its module graph`, g.modules.has(CATALOG), [...g.modules].join(', ') || 'no modules');
+    r.check(`${f}: search reaches ${CATALOG} through its module graph`, g.modules.has(CATALOG), [...g.modules].join(', ') || 'no modules');
+    if(f==='downloads.html')for(const t of tools)r.check(`static download ${t.name} retains source URL`,html.includes(t.url)&&html.includes(t.version)&&(!t.sha256||html.includes(t.sha256)));
+    if(f==='index.html')for(const t of tools.slice(0,2))r.check(`static preview ${t.name}`,html.includes(t.name)&&html.includes(t.summary));
   }
   // No other module may re-declare a catalog array.
   for (const m of new Set(CONSUMERS.flatMap((f) => [...moduleGraph(f).modules]))) {
