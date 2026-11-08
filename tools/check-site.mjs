@@ -216,7 +216,7 @@ function run() {
     const text = pageText(html['apfs-recovery.html']);
     for (const phrase of VERBATIM_CASE) r.check(`apfs verbatim: "${phrase.slice(0, 48)}…"`, text.includes(phrase));
     for (const f of ['index.html', 'writing.html']) r.check(`${f} links apfs-recovery.html`, /href="apfs-recovery\.html/.test(html[f] || ''));
-    r.check('apfs: 4 timeline phases', (html['apfs-recovery.html'].match(/class="phase\b/g) || []).length === 4);
+    r.check('apfs: 4 timeline phases', (html['apfs-recovery.html'].match(/<li class="phase(?: [^"]*)?"/g) || []).length === 4);
   }
 
   /* Phase 5 — FX core */

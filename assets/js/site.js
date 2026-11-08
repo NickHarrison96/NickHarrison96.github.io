@@ -58,5 +58,6 @@ document.addEventListener('click', async (e) => {
 
 /* Page features, loaded only where their markup exists. */
 if (document.querySelector('main.home')) import('./home.js');
+if (document.querySelector('main.case')) import('./case.js');
 
 export { root };
