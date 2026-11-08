@@ -10,6 +10,7 @@ import {
   moduleGraph, reporter,
 } from './lib.mjs';
 import { runIA, selftestIA } from './check-ia.mjs';
+import { runGuides, selftestGuides, BIO } from './check-guides.mjs';
 
 const PHASE = phaseFromArgs();
 
@@ -18,7 +19,10 @@ const ALLOWED_RUNTIME_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com', 'git
 // Referenced on purpose but never committed (gitignored local override; see AGENTS.md "Secrets").
 const ALLOWED_MISSING = new Set(['selfhost.local.js']);
 // Link targets that only exist from a later phase on (skipped by --phase runs before then).
-const FUTURE_TARGETS = { 'apfs-recovery.html': 4, 'work.html': 8, 'repair.html': 8 };
+const FUTURE_TARGETS = {
+  'apfs-recovery.html': 4, 'work.html': 8, 'repair.html': 8, 'guide-kali-wsl2.html': 9, 'guide-ollama-claude-code-windows.html': 9,
+  'guide-ollama-claude-code-macos.html': 9, 'guide-llama-cpp.html': 9,
+};
 const FUTURE_INDEX_IDS = { terminal: 3, projects: 3, 'case-study': 3, repair: 3, writing: 8, tools: 3 };
 // Links the homepage must keep. Phase 8 replaced the old ITEMS grid targets (mission.html, get-involved.html,
 // repair-guides.html, legislation.html, repair-cafes.html, talks.html — now redirect stubs) with the
@@ -114,6 +118,7 @@ function selftest() {
   r.check('shellBlock extracts header', shellBlock('<header class="site-header"><a>x</a></header>', 'header') !== null);
   r.check('shellBlock misses unclassed header', shellBlock('<header><a>x</a></header>', 'header') === null);
   selftestIA(r);
+  selftestGuides(r);
   return r.done();
 }
 
@@ -206,17 +211,22 @@ async function run() {
     const text = pageText(h);
     const own = ids(h);
     // #log and #philosophy moved to writing.html in phase 8 (asserted there below and in check-ia).
-    for (const id of ['terminal', 'projects', 'case-study', 'repair', 'writing', 'tools']) {
+    // Phase 9 (Nick, 2026-11-08): the featured-work grid (#projects) and the case-study teaser (#case-study)
+    // left the homepage; check-guides.mjs asserts they are gone and what replaced them.
+    const homeIds = at(9) ? ['terminal', 'repair', 'writing', 'tools'] : ['terminal', 'projects', 'case-study', 'repair', 'writing', 'tools'];
+    for (const id of homeIds) {
       if ((FUTURE_INDEX_IDS[id] ?? 0) <= PHASE) r.check(`index: section #${id}`, own.has(id));
     }
     if (at(8)) for (const id of ['log', 'philosophy']) r.check(`writing: section #${id}`, ids(html['writing.html'] || '').has(id));
     if (at(8)) for (const href of ITEMS_LINKS) r.check(`index: keeps link ${href}`, h.includes(`href="${href}"`));
     r.check('index: marquee', /class="marquee"/.test(h));
-    r.check('index: EFI repo link', h.includes('https://github.com/NickHarrison96/MSI-MPG-x570-EFI'));
+    // Phase 9: the EFI card left the homepage with the featured-work grid; work.html carries the link.
+    if (!at(9)) r.check('index: EFI repo link', h.includes('https://github.com/NickHarrison96/MSI-MPG-x570-EFI'));
     if (at(8)) r.check('work: EFI repo link', (html['work.html'] || '').includes('https://github.com/NickHarrison96/MSI-MPG-x570-EFI'));
     const texts = {};
     const textOf = (f) => (texts[f] ??= pageText(html[f] || ''));
-    for (const [phrase, where] of VERBATIM_HOME) {
+    for (const [phrase, where, from = 0] of VERBATIM_HOME) {
+      if (!at(from)) continue;
       const f = at(8) ? where : 'index.html';
       r.check(`${f.replace('.html', '')} verbatim: "${phrase.slice(0, 48)}…"`, (f === 'index.html' ? text : textOf(f)).includes(phrase));
     }
@@ -284,18 +294,22 @@ async function run() {
   /* Phase 8 — five-hub information architecture (tools/check-ia.mjs) */
   if (at(8)) await runIA(r);
 
+  /* Phase 9 — guides, writing library, banner, build sheet, PII (tools/check-guides.mjs) */
+  if (at(9)) await runGuides(r);
+
   return r.done();
 }
 
 // Copy that must survive verbatim (Nick's own writing).
-// [phrase, page]: from phase 8 the projects live on work.html and the manifesto on writing.html.
+// [phrase, page, from phase]: from phase 8 the projects live on work.html and the manifesto on writing.html.
+// Phase 9 (Nick, 2026-11-08): the hero bio's second sentence is his rewrite (BIO in check-guides.mjs); the two
+// project descriptions that were not his work are gone (check-guides.mjs asserts their absence); the
+// case-study lede left the homepage with the teaser and is asserted on writing.html (featured card).
 const VERBATIM_HOME = [
-  ['Systems developer, AI pipeline creator, and hardware troubleshooter. I specialize in building proxy proxies, generative machine learning workflows, kernel/OpenCore configurations, and deep-dive technical write-ups.', 'index.html'],
+  [BIO, 'index.html', 9],
   ['Open source projects, AI integrations, and system-level tools maintained on GitHub.', 'work.html'],
-  ['Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware.', 'work.html'],
-  ['Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions.', 'work.html'],
   ['Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning.', 'work.html'],
-  ['How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.', 'index.html'],
+  ['How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.', 'writing.html'],
   ['APFS Directory Services desync bypass completed. 401.5 GB user payload mounted at /Volumes/Big Mac - Data without data loss.', 'index.html'],
   ['Hackintosh (SMBIOS: MacPro7,1)', 'index.html'],
   ['Computers are meant to be tools of empowerment, creative expression, and personal agency.', 'writing.html'],

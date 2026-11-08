@@ -1,6 +1,7 @@
 // Shared helpers for the dev-only checks in tools/. No dependencies.
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, resolve, join } from 'node:path';
+import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -13,7 +14,44 @@ export const PAGES = [
   ['index.html', 0], ['about.html', 0], ['downloads.html', 0], ['writing.html', 0],
   ['apfs-recovery.html', 4],
   ['work.html', 8], ['repair.html', 8],
+  ['guide-kali-wsl2.html', 9], ['guide-ollama-claude-code-windows.html', 9],
+  ['guide-ollama-claude-code-macos.html', 9], ['guide-llama-cpp.html', 9],
 ];
+
+/**
+ * Guides (phase 9): pages under Writing whose copy is taken verbatim from Nick's own documents.
+ * `sources` are file names inside the source-docs folder (see sourceDir()); `open` is the terminal
+ * shortcut (`open kali`); `ids` are the page's section ids, in nav order.
+ */
+export const GUIDES = [
+  {
+    file: 'guide-kali-wsl2.html', title: 'Kali Linux Desktop on WSL2', open: 'kali',
+    sources: ['kali_wsl2_windows10_guide.html', 'kali_wsl2_windows11_guide.html'], ids: ['windows-10', 'windows-11'],
+  },
+  {
+    file: 'guide-ollama-claude-code-windows.html', title: 'Local AI Coding on Windows 10 & 11', open: 'ollama',
+    sources: ['ollama_claude_code_guide.html'], ids: ['parity', 'step-1', 'step-2', 'step-3', 'step-4'],
+  },
+  {
+    file: 'guide-ollama-claude-code-macos.html', title: 'Local AI Coding on macOS Tahoe (x86)', open: 'ollama-mac',
+    sources: ['macos_tahoe_x86_ollama_claude_code_guide.html'], ids: ['farewell', 'step-1', 'step-2', 'step-3', 'step-4'],
+  },
+  {
+    file: 'guide-llama-cpp.html', title: 'llama.cpp — Complete Reference', open: 'llama',
+    sources: ['llama.html', 'deepseek_html_20261029_487c63.html'],
+    ids: ['quick-reference', 'build', 'direct', 'sampling', 'perf', 'advanced', 'backend-runtime', 'troubleshooting', 'workflow', 'comparison'],
+  },
+];
+
+/**
+ * Folder holding Nick's source documents (guides, the long APFS write-up, the HWiNFO report). It lives
+ * outside the repo, so checks that read it skip with a warning when it is missing. Override with
+ * NH_SOURCE_DOCS=/path/to/folder.
+ */
+export function sourceDir() {
+  const tries = [process.env.NH_SOURCE_DOCS, join(ROOT, '..', 'Win10-11 Kali'), join(homedir(), 'Desktop', 'Win10-11 Kali')];
+  return tries.find((d) => d && existsSync(d)) || null;
+}
 
 /**
  * Pre-redesign URLs that became redirect stubs in phase 8 (five-hub IA): [stub, target page, target id].
@@ -38,6 +76,8 @@ export const HUBS = [
 export const HUB_OF = {
   'index.html': null, 'work.html': 'work.html', 'writing.html': 'writing.html', 'apfs-recovery.html': 'writing.html',
   'repair.html': 'repair.html', 'downloads.html': 'downloads.html', 'about.html': 'about.html',
+  'guide-kali-wsl2.html': 'writing.html', 'guide-ollama-claude-code-windows.html': 'writing.html',
+  'guide-ollama-claude-code-macos.html': 'writing.html', 'guide-llama-cpp.html': 'writing.html',
 };
 
 /** Parse `--phase=N`; no flag means every assertion (the completion run). */

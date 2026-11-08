@@ -15,7 +15,7 @@ import { createServer } from 'node:http';
 import { createRequire } from 'node:module';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
-import { ROOT, PAGES, STUBS, HUBS, HUB_OF, phaseFromArgs } from './lib.mjs';
+import { ROOT, PAGES, STUBS, HUBS, HUB_OF, GUIDES, phaseFromArgs } from './lib.mjs';
 
 const require = createRequire(import.meta.url);
 let chromium;
@@ -180,7 +180,8 @@ try {
     await stub(nojs);
     const { page } = await open(nojs, 'index.html', { skipBoot: false, ready: false });
     // Phase 8 moved the field log and the manifesto to writing.html (checked there).
-    const homeSel = ['#terminal pre', '#projects .project', '#case-study h2', '#repair .layer-panel', '#tools h2'];
+    // Phase 9 (Nick): the featured-work grid and the case-study teaser gave way to the latest-writing grid.
+    const homeSel = at(9) ? ['#terminal pre', '#writing .w-card', '#repair .layer-panel', '#tools h2'] : ['#terminal pre', '#projects .project', '#case-study h2', '#repair .layer-panel', '#tools h2'];
     if (!at(8)) homeSel.push('#log .log-entry', '#philosophy h2');
     for (const sel of homeSel) {
       check(`index no-JS: ${sel} visible`, await visible(page, sel));
@@ -192,6 +193,14 @@ try {
         'repair.html': ['#mission h2', '#legislation h2', '#get-involved h2', '#guides h2', '#cafes h2', '#talks h2', '#mission .note', '.section-nav'],
         'about.html': ['#about h1', '#team .team-card', '#socials .social-tile'],
       };
+      if (at(9)) {
+        noJs['writing.html'].push('#library .guide-card', '#log .log-entry[data-type="guide"]');
+        noJs['work.html'].push('#build dl', '#built-tools .section-cta a');
+        noJs['guide-kali-wsl2.html'] = ['#windows-10 h2', '#windows-11 h2', '#windows-10 pre', '#windows-11 pre'];
+        noJs['guide-llama-cpp.html'] = ['#quick-reference h2', '#build pre', '#comparison table'];
+        noJs['guide-ollama-claude-code-windows.html'] = ['#step-1 pre', '.section-nav'];
+        noJs['guide-ollama-claude-code-macos.html'] = ['#step-1 pre', '.section-nav'];
+      }
       for (const [f, sels] of Object.entries(noJs)) {
         const p = await open(nojs, f, { skipBoot: false, ready: false });
         for (const sel of sels) check(`${f} no-JS: ${sel} visible`, await visible(p.page, sel));
@@ -427,6 +436,171 @@ try {
       await page.close();
     }
     await phone.close();
+  }
+
+  /* Phase 9 — guides, writing library, banner, header layout */
+  if (at(9)) {
+    const here = (page) => page.evaluate(() => location.pathname.split('/').pop() + location.hash);
+    const mq = (page) => page.evaluate(() => {
+      const t = document.querySelector('.site-header .marquee-track');
+      if (!t) return null;
+      const cs = getComputedStyle(t);
+      return { name: cs.animationName, state: cs.animationPlayState, top: document.querySelector('.site-header .marquee').getBoundingClientRect().top };
+    });
+
+    // Banner: at the very top of every real page and scrolling, even on the STATIC tier.
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    await stub(ctx);
+    for (const f of pages) {
+      const { page } = await open(ctx, `${f}?fx=static`);
+      const m = await mq(page);
+      check(`${f}?fx=static: banner at the top`, !!m && Math.abs(m.top) <= 1, JSON.stringify(m));
+      check(`${f}?fx=static: banner scrolls (animation-name not none)`, !!m && m.name !== 'none' && m.state === 'running', JSON.stringify(m));
+      check(`${f}?fx=static: data-fx="static"`, (await page.evaluate(() => document.documentElement.dataset.fx)) === 'static');
+      await page.close();
+    }
+    const rm = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
+    await stub(rm);
+    for (const f of ['index.html', 'writing.html', 'guide-kali-wsl2.html']) {
+      const { page } = await open(rm, f);
+      const m = await mq(page);
+      check(`${f}: reduced motion stops the banner`, !!m && (m.name === 'none' || m.state === 'paused'), JSON.stringify(m));
+      // Still: the duplicate group goes away and the items stay reachable (the strip scrolls sideways by hand).
+      const st = await page.evaluate(() => {
+        const m = document.querySelector('.site-header .marquee');
+        const dup = m.querySelector('.marquee-group[aria-hidden="true"]');
+        const fits = m.scrollWidth <= m.clientWidth + 1;
+        return { dup: getComputedStyle(dup).display, reachable: fits || ['auto', 'scroll'].includes(getComputedStyle(m).overflowX), items: m.querySelectorAll('.marquee-group:not([aria-hidden]) > span:not(.mq-sep)').length };
+      });
+      check(`${f}: reduced motion keeps every banner item reachable`, st.dup === 'none' && st.reachable && st.items === 8, JSON.stringify(st));
+      await page.close();
+    }
+    await rm.close();
+
+    // Header: brand, nav and actions never overlap; at 390 nothing overflows (phase-2 loop covers every page).
+    for (const width of [1024, 1280, 1440, 1920]) {
+      const wctx = await browser.newContext({ viewport: { width, height: 900 } });
+      await stub(wctx);
+      for (const f of pages) {
+        const { page } = await open(wctx, `${f}?fx=static`);
+        const g = await page.evaluate(() => {
+          const box = (s) => { const el = document.querySelector(s); if (!el) return null; const r = el.getBoundingClientRect(); return r.width && r.height ? { l: r.left, r: r.right, t: r.top, b: r.bottom } : null; };
+          return { brand: box('.site-header .brand'), nav: box('.site-header .site-nav'), actions: box('.site-header .site-actions'), menu: box('.site-header .menu-btn') };
+        });
+        const hit = (a, b) => !!a && !!b && a.l < b.r - 0.5 && b.l < a.r - 0.5 && a.t < b.b - 0.5 && b.t < a.b - 0.5;
+        check(`${f} @${width}: brand box does not intersect the nav`, !!g.brand && !hit(g.brand, g.nav), JSON.stringify(g));
+        check(`${f} @${width}: nav does not intersect the actions`, !hit(g.nav, g.actions), JSON.stringify(g));
+        check(`${f} @${width}: nav shown or collapsed into the menu`, !!g.nav || !!g.menu, JSON.stringify(g));
+        await page.close();
+      }
+      await wctx.close();
+    }
+
+    // Kali guide: real tab buttons, keyboard, deep link; both sections exist.
+    {
+      const { page, errors } = await open(ctx, 'guide-kali-wsl2.html');
+      const vis = () => page.evaluate(() => ['windows-10', 'windows-11'].map((id) => { const el = document.getElementById(id); return !!el && !el.hidden && el.getBoundingClientRect().height > 0; }));
+      check('kali: Windows 10 shown first', JSON.stringify(await vis()) === '[true,false]', JSON.stringify(await vis()));
+      await page.click('#tab-windows-11');
+      check('kali: Windows 11 tab shows its section', JSON.stringify(await vis()) === '[false,true]', JSON.stringify(await vis()));
+      check('kali: aria-selected follows', (await page.getAttribute('#tab-windows-11', 'aria-selected')) === 'true' && (await page.getAttribute('#tab-windows-10', 'aria-selected')) === 'false');
+      await page.focus('#tab-windows-11');
+      await page.keyboard.press('ArrowLeft');
+      check('kali: ArrowLeft → Windows 10', JSON.stringify(await vis()) === '[true,false]' && (await page.evaluate(() => document.activeElement.id)) === 'tab-windows-10');
+      await page.keyboard.press('End');
+      check('kali: End → Windows 11', JSON.stringify(await vis()) === '[false,true]');
+      check('kali: no errors', errors.length === 0, errors.join(' | '));
+      await page.close();
+      const deep = await open(ctx, 'guide-kali-wsl2.html#windows-11');
+      check('kali: #windows-11 deep link selects Windows 11', JSON.stringify(await deep.page.evaluate(() => ['windows-10', 'windows-11'].map((id) => !document.getElementById(id).hidden))) === '[false,true]');
+      await deep.page.close();
+    }
+
+    // Copy buttons copy the exact command.
+    {
+      const cctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, permissions: ['clipboard-read', 'clipboard-write'] });
+      await stub(cctx);
+      for (const g of GUIDES) {
+        const { page } = await open(cctx, g.file);
+        const btn = page.locator('main .code-block .copy-btn').first();
+        const want = await page.evaluate(() => document.querySelector('main .code-block pre').textContent.trim());
+        await btn.click();
+        await page.waitForTimeout(150);
+        const got = await page.evaluate(() => navigator.clipboard.readText()).catch(() => null);
+        check(`${g.file}: copy button copies the command`, got !== null && got.trim() === want, `${String(got).slice(0, 40)} vs ${want.slice(0, 40)}`);
+        check(`${g.file}: copy button confirms`, /copied/.test(await btn.innerText()));
+        await page.close();
+      }
+      await cctx.close();
+    }
+
+    // Writing library: chips + search.
+    {
+      const { page, errors } = await open(ctx, 'writing.html');
+      const shown = () => page.evaluate(() => {
+        const v = (el) => !!el && !el.hidden && !el.closest('[hidden]') && el.getBoundingClientRect().height > 0;
+        return { guides: [...document.querySelectorAll('#library .guide-card')].filter(v).length, featured: v(document.getElementById('featured')), essays: [...document.querySelectorAll('#essays .lib-essay')].filter(v).length, log: v(document.getElementById('log')) };
+      });
+      const all = await shown();
+      check('library: All shows everything', all.guides === 4 && all.featured && all.essays === 3 && all.log, JSON.stringify(all));
+      await page.click('#library .lib-chip[data-lib="guide"]');
+      let s = await shown();
+      check('library: Guides → 4 guides only', s.guides === 4 && !s.featured && s.essays === 0 && !s.log, JSON.stringify(s));
+      await page.click('#library .lib-chip[data-lib="case"]');
+      s = await shown();
+      check('library: Case Studies → the featured case study only', s.guides === 0 && s.featured && s.essays === 0 && !s.log, JSON.stringify(s));
+      await page.click('#library .lib-chip[data-lib="essay"]');
+      s = await shown();
+      check('library: Essays → 3 essays only', s.guides === 0 && !s.featured && s.essays === 3 && !s.log, JSON.stringify(s));
+      await page.click('#library .lib-chip[data-lib="log"]');
+      s = await shown();
+      check('library: Log → the field log only', s.guides === 0 && !s.featured && s.essays === 0 && s.log, JSON.stringify(s));
+      await page.click('#library .lib-chip[data-lib="all"]');
+      await page.fill('#lib-q', 'kali');
+      s = await shown();
+      check('library: search "kali" → the Kali guide', s.guides === 1 && !s.featured && s.essays === 0, JSON.stringify(s));
+      await page.fill('#lib-q', 'zzzz-nothing');
+      check('library: empty state', await visible(page, '#library .lib-empty'));
+      check('library: no errors', errors.length === 0, errors.join(' | '));
+      await page.close();
+    }
+
+    // Terminal + palette reach every guide; old homepage anchors follow their content.
+    for (const g of GUIDES) {
+      const { page } = await open(ctx, 'index.html');
+      await page.locator('#term-input').fill(`open ${g.open}`);
+      await page.locator('#term-input').press('Enter');
+      await page.waitForURL((u) => u.pathname.endsWith('/' + g.file), { timeout: 5000 }).catch(() => {});
+      check(`terminal: open ${g.open} → ${g.file}`, (await here(page)) === g.file, await here(page));
+      await page.close();
+    }
+    for (const [from, q, to] of [['index.html', 'kali', 'guide-kali-wsl2.html'], ['guide-kali-wsl2.html', 'llama.cpp', 'guide-llama-cpp.html'], ['about.html', 'ollama windows', 'guide-ollama-claude-code-windows.html'], ['writing.html', 'tahoe', 'guide-ollama-claude-code-macos.html']]) {
+      const { page } = await open(ctx, from);
+      await page.keyboard.press('Control+k');
+      await page.keyboard.type(q);
+      await page.keyboard.press('Enter');
+      await page.waitForURL((u) => u.pathname.endsWith('/' + to), { timeout: 5000 }).catch(() => {});
+      check(`palette (${from}): "${q}" → ${to}`, (await here(page)) === to, await here(page));
+      await page.close();
+    }
+    for (const [from, to] of [['index.html#case-study', 'apfs-recovery.html'], ['index.html#projects', 'work.html#projects']]) {
+      const page = await ctx.newPage();
+      await page.goto(`${BASE}/${from}`, { waitUntil: 'load' });
+      await page.waitForURL((u) => u.pathname.endsWith('/' + to.split('#')[0]), { timeout: 5000 }).catch(() => {});
+      check(`${from} → ${to}`, (await here(page)) === to, await here(page));
+      await page.close();
+    }
+
+    // Work: the tool cards render from the catalog and link the downloads page.
+    {
+      const { page, errors } = await open(ctx, 'work.html');
+      const n = await page.evaluate(() => ({ cards: document.querySelectorAll('#built-tools .tool-card').length, links: [...document.querySelectorAll('#built-tools .tool-card a')].filter((a) => a.getAttribute('href') === 'downloads.html').length }));
+      check('work: tool cards rendered from the catalog', n.cards === 3, JSON.stringify(n));
+      check('work: each tool card links downloads.html', n.links === 3, JSON.stringify(n));
+      check('work: no errors', errors.length === 0, errors.join(' | '));
+      await page.close();
+    }
+    await ctx.close();
   }
 
   await browser.close();

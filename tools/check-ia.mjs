@@ -33,6 +33,23 @@ export const SECTION_IDS = {
  */
 export const RENAMED = { 'All Downloads →': 'All tools →' };
 /**
+ * BASELINE homepage blocks Nick removed on purpose (2026-11-08, phase 9): the two projects that were not
+ * his work, the bio sentence and hero badges/CTA that named them or repeated the case study. These are
+ * the ONLY blocks allowed to be missing from index/work/writing; check-guides.mjs asserts the retired
+ * project names appear in no tracked site file.
+ */
+export const RETIRED = [
+  'LiteLLM Proxy & SDK',
+  'Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware.',
+  'Stable Diffusion WebUI',
+  'Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions.',
+  'Systems developer, AI pipeline creator, and hardware troubleshooter. I specialize in building proxy proxies, generative machine learning workflows, kernel/OpenCore configurations, and deep-dive technical write-ups.',
+  'LiteLLM Gateway',
+  'APFS Recovery',
+  'Stable Diffusion',
+  'Read APFS Recovery Case Study',
+];
+/**
  * Where "Nicholas" may still appear in tracked site files: only inside URLs, email addresses and @handles.
  * Site files = every tracked text file outside docs/ and tools/ (the checker and the plan quote the old name).
  */
@@ -174,7 +191,8 @@ export async function runIA(r) {
     const own = ids(w);
     for (const id of ['featured', 'essays', 'log', 'philosophy', 'log-list', 'log-q']) r.check(`ia writing.html: #${id}`, own.has(id));
     r.check('ia writing.html: featured card → apfs-recovery.html', /id="featured"[\s\S]*?href="apfs-recovery\.html"/.test(w));
-    r.check('ia writing.html: log filter chips', (w.match(/class="chip" data-filter=/g) || []).length === 6);
+    // Phase 9 added the Guides chip (all, case, project, guide, tool, writeup, campaign).
+    r.check('ia writing.html: log filter chips', (w.match(/class="chip" data-filter=/g) || []).length === 7);
     r.check('ia writing.html: manifesto is the last section', w.lastIndexOf('<section') === w.indexOf('<section class="section" id="philosophy"'));
     r.check('ia writing.html: manifesto title', pageText(w).includes('Why We Publish & Share These Write-Ups'));
   }
@@ -182,15 +200,17 @@ export async function runIA(r) {
   // Homepage overview order + targets.
   if (html['index.html']) {
     const h = html['index.html'];
-    const order = ['terminal', 'projects', 'writing', 'repair', 'tools'].map((id) => h.indexOf(`id="${id}"`));
-    r.check('ia index: hero/terminal → work → writing → repair → tools', order.every((v, i) => v >= 0 && (i === 0 || v > order[i - 1])), JSON.stringify(order));
+    // Phase 9 (Nick): the featured-work section was replaced by the expanded latest-writing grid.
+    const order = ['terminal', 'writing', 'repair', 'tools'].map((id) => h.indexOf(`id="${id}"`));
+    r.check('ia index: hero/terminal → writing → repair → tools', order.every((v, i) => v >= 0 && (i === 0 || v > order[i - 1])), JSON.stringify(order));
     for (const id of ['log', 'philosophy']) r.check(`ia index: #${id} moved off the homepage`, !ids(h).has(id));
     r.check('ia index: marquee kept', /class="marquee"/.test(h));
     r.check('ia index: teardown stack kept', /class="stack-stage"/.test(h) && (h.match(/class="layer-panel"/g) || []).length === 5);
     for (const href of ['work.html', 'writing.html', 'downloads.html', 'apfs-recovery.html', ...SECTION_IDS['repair.html'].map((id) => `repair.html#${id}`)]) {
       r.check(`ia index: links ${href}`, h.includes(`href="${href}"`));
     }
-    r.check('ia index: "All work →"', /href="work\.html"[^>]*>All work <span aria-hidden="true">→<\/span>/.test(h));
+    // "All work →" left with the featured-work section (phase 9); the hero's "View Repositories" links work.html.
+    r.check('ia index: hero links work.html', /<a href="work\.html" class="btn-ghost[^"]*">View Repositories<\/a>/.test(h));
     r.check('ia index: "All writing →"', /href="writing\.html"[^>]*>All writing <span aria-hidden="true">→<\/span>/.test(h));
     r.check('ia index: "All tools →"', /href="downloads\.html"[^>]*>All tools <span aria-hidden="true">→<\/span>/.test(h));
     r.check('ia index: essays teaser cards', (h.match(/class="essay-card/g) || []).length === 3);
@@ -202,10 +222,11 @@ export async function runIA(r) {
     try { mod = await loadProjects(); } catch (e) { r.check(`${PROJECTS_MODULE} evaluates`, false, e.message); }
     if (mod) {
       const P = mod.PROJECTS || [];
-      r.check('ia projects: PROJECTS non-empty', Array.isArray(P) && P.length >= 3);
+      // Phase 9 (Nick): only the EFI project is his; the other two were removed.
+      r.check('ia projects: PROJECTS = the EFI project only', Array.isArray(P) && P.length === 1 && P[0].url === 'https://github.com/NickHarrison96/MSI-MPG-x570-EFI', JSON.stringify(P.map((p) => p.plain)));
       r.check('ia projects: projectCard() exported', typeof mod.projectCard === 'function');
       const want = typeof mod.projectCard === 'function' ? squash(P.map(mod.projectCard).join('\n')) : '';
-      for (const f of ['work.html', 'index.html']) {
+      for (const f of ['work.html']) { // index.html lost its project grid in phase 9
         if (!html[f]) continue;
         const grid = projectGrid(html[f]);
         r.check(`ia ${f}: project cards = PROJECTS (run --print-projects to regenerate)`, grid !== null && squash(grid) === want);
@@ -280,13 +301,13 @@ export async function runIA(r) {
     const pairs = [['field log', sect('log'), 'writing.html'], ['manifesto', sect('philosophy'), 'writing.html'], ['project cards', sect('projects'), 'work.html']];
     for (const [label, part, newF] of pairs) {
       const n = blocks(part).length;
-      const miss = html[newF] ? missingBlocks(part, [mainOf(html[newF])]) : ['(target missing)'];
+      const miss = html[newF] ? missingBlocks(part, [mainOf(html[newF])]).filter((b) => !RETIRED.includes(b)) : ['(target missing)'];
       if (r.check(`ia preserve BASELINE homepage ${label} → ${newF} (${n} blocks)`, n > 0 && miss.length === 0, `${miss.length} missing: ${showMissing(miss)}`)) preserved += n;
     }
     // Nothing else on the old homepage disappears either: each block lives on index, work or writing.
     const hubs = ['index.html', 'work.html', 'writing.html'].filter((f) => html[f]).map((f) => mainOf(html[f]));
     const n = blocks(mainOf(base)).length;
-    const miss = missingBlocks(mainOf(base), hubs, RENAMED);
+    const miss = missingBlocks(mainOf(base), hubs, RENAMED).filter((b) => !RETIRED.includes(b));
     if (r.check(`ia preserve BASELINE homepage <main> → index/work/writing (${n} blocks)`, miss.length === 0, `${miss.length} missing: ${showMissing(miss)}`)) preserved += n;
   }
   r.check(`ia preserve: total blocks verified = ${preserved}`, preserved > 0);
