@@ -159,14 +159,14 @@ export async function runIA(r) {
     r.check(`ia ${f}: mobile menu toggles #site-nav`, /<button class="menu-btn"[^>]*aria-controls="site-nav"/.test(html[f]) && /<nav class="site-nav" id="site-nav"/.test(html[f]));
     r.check(`ia ${f}: ⌘K search button kept`, /<button class="search-btn"[^>]*data-palette-open/.test(html[f]));
     r.check(`ia ${f}: avatar hotlink kept`, html[f].includes('<img src="https://github.com/NickHarrison96.png?size=96"'));
-    r.check(`ia ${f}: GitHub link → github.com/nickpharrison`, /<a class="gh-link[^"]*" href="https:\/\/github\.com\/nickpharrison"/.test(html[f]));
+    r.check(`ia ${f}: GitHub link → github.com/NickHarrison96`, /<a class="gh-link[^"]*" href="https:\/\/github\.com\/NickHarrison96"/.test(html[f]));
     r.check(`ia ${f}: hub mapping known`, f in HUB_OF);
     // Footer: five hubs + contact + legal + top.
     const ft = /<footer class="site-footer">([\s\S]*?)<\/footer>/.exec(html[f])?.[1] || '';
     const fnav = /<nav class="footer-nav"[^>]*>([\s\S]*?)<\/nav>/.exec(ft)?.[1] || '';
     const flinks = elements(fnav, 'a').map((a) => [pageText(a.inner), attr(a.attrs, 'href')]);
     r.check(`ia ${f}: footer nav is the five hubs`, JSON.stringify(flinks) === JSON.stringify(HUBS), JSON.stringify(flinks));
-    r.check(`ia ${f}: footer contact (email, YouTube, GitHub)`, ft.includes('href="mailto:harrisontechdev@gmail.com"') && ft.includes('href="https://www.youtube.com/@NickHarrison96"') && ft.includes('href="https://github.com/nickpharrison"'));
+    r.check(`ia ${f}: footer contact (email, YouTube, GitHub)`, ft.includes('href="mailto:harrisontechdev@gmail.com"') && ft.includes('href="https://www.youtube.com/@NickHarrison96"') && ft.includes('href="https://github.com/NickHarrison96"'));
     r.check(`ia ${f}: footer legal line`, /&copy;[^<]*Nick Harrison\. Open Technical License\./.test(ft));
     r.check(`ia ${f}: footer Top ↑`, /<a class="to-top" href="#main">Top &uarr;<\/a>/.test(ft));
     r.check(`ia ${f}: title names Nick Harrison`, /<title>[^<]*Nick Harrison[^<]*<\/title>/.test(html[f]));

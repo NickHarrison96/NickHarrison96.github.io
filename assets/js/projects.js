@@ -7,28 +7,6 @@
 
 export const PROJECTS = [
   {
-    title: 'LiteLLM Proxy &amp; SDK',
-    plain: 'LiteLLM Proxy & SDK',
-    mark: 'AI',
-    tag: 'Python / AI',
-    accent: [56, 189, 248],
-    description: 'Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware.',
-    area: 'AI Infrastructure',
-    url: 'https://github.com/nickpharrison',
-    keys: 'ai llm gateway python',
-  },
-  {
-    title: 'Stable Diffusion WebUI',
-    plain: 'Stable Diffusion WebUI',
-    mark: 'SD',
-    tag: 'PyTorch / ML',
-    accent: [129, 140, 248],
-    description: 'Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions.',
-    area: 'Generative Pipelines',
-    url: 'https://github.com/nickpharrison',
-    keys: 'ml pytorch generative',
-  },
-  {
     title: 'MacPro7,1 X570 EFI Architecture',
     plain: 'MacPro7,1 X570 EFI Architecture',
     mark: 'OC',

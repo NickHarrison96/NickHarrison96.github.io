@@ -31,3 +31,11 @@ addEventListener('keydown', (e) => {
   pos = k === SEQ[pos] ? pos + 1 : k === 'ArrowUp' ? (pos === 2 ? 2 : 1) : 0;
   if (pos === SEQ.length) { pos = 0; toggle(); }
 });
+
+// Visible, keyboard-reachable way out of jailbreak mode (shown only while it is on).
+const exitBtn = document.createElement('button');
+exitBtn.type = 'button';
+exitBtn.className = 'jb-exit';
+exitBtn.textContent = 'Exit jailbreak mode';
+exitBtn.addEventListener('click', () => { if (root.dataset.theme === 'jailbreak') toggle(); });
+document.body.append(exitBtn);
