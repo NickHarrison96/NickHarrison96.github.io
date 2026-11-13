@@ -39,6 +39,7 @@ export const RENAMED = { 'All Downloads →': 'All tools →' };
  * project names appear in no tracked site file.
  */
 export const RETIRED = [
+  'The tool cards need JavaScript. Everything is listed on the downloads page.', 'the downloads page',
   'LiteLLM Proxy & SDK',
   'Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware.',
   'Stable Diffusion WebUI',
@@ -290,8 +291,8 @@ export async function runIA(r) {
   if (html['index.html']) {
     const h = html['index.html'];
     // Phase 9 (Nick): the featured-work section was replaced by the expanded latest-writing grid.
-    const order = ['terminal', 'repair', 'tools'].map((id) => h.indexOf(`id="${id}"`));
-    r.check('ia index: hero/terminal → repair → tools (writing moved to Blog)', order.every((v, i) => v >= 0 && (i === 0 || v > order[i - 1])), JSON.stringify(order));
+    const order = ['terminal', 'repair'].map((id) => h.indexOf(`id="${id}"`));
+    r.check('ia index: hero/terminal → repair (writing on Blog, tools on tools.html)', order.every((v, i) => v >= 0 && (i === 0 || v > order[i - 1])), JSON.stringify(order));
     for (const id of ['log', 'philosophy']) r.check(`ia index: #${id} moved off the homepage`, !ids(h).has(id));
     r.check('ia index: marquee kept', /class="marquee"/.test(h));
     r.check('ia index: teardown stack kept', /class="stack-stage"/.test(h) && (h.match(/class="layer-panel"/g) || []).length === 5);
@@ -304,7 +305,8 @@ export async function runIA(r) {
     r.check('ia index: no apfs-recovery.html link (case study is on Blog)', !h.includes('href="apfs-recovery.html"'));
     // "All work →" left with the featured-work section (phase 9); the hero's "View Repositories" links work.html.
     r.check('ia index: hero links work.html', /<a href="work\.html" class="btn-ghost[^"]*">View Repositories<\/a>/.test(h));
-    r.check('ia index: "All tools and write-ups →"', /href="tools\.html"[^>]*>All tools and write-ups <span aria-hidden="true">→<\/span>/.test(h));
+    // Nick (2026-11-13): the tools grid left the homepage; the hero links tools.html instead.
+    r.check('ia index: no #tools section, hero links tools.html', !ids(h).has('tools') && /href="tools\.html" class="btn-outline-ok[^"]*">Explore the Tools/.test(h));
   }
 
   // Projects: one data source, static markup generated from it on index + work.

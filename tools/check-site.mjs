@@ -214,7 +214,7 @@ async function run() {
     // #log and #philosophy moved to writing.html in phase 8 (asserted there below and in check-ia).
     // Phase 9 (Nick, 2026-11-08): the featured-work grid (#projects) and the case-study teaser (#case-study)
     // left the homepage; check-guides.mjs asserts they are gone and what replaced them.
-    const homeIds = at(9) ? ['terminal', 'repair', 'writing', 'tools'] : ['terminal', 'projects', 'case-study', 'repair', 'writing', 'tools'];
+    const homeIds = at(9) ? ['terminal', 'repair', 'writing'] : ['terminal', 'projects', 'case-study', 'repair', 'writing', 'tools'];
     for (const id of homeIds) {
       if ((FUTURE_INDEX_IDS[id] ?? 0) <= PHASE) r.check(`index: section #${id}`, own.has(id));
     }

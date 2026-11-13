@@ -23,7 +23,6 @@ const ITEMS = [
   { label: 'Kali Linux Graphical Desktop on Windows 11 with WSL2', kind: 'tutorial', href: 'kali-wsl2-desktop-windows-11.html', keys: 'kali linux wsl2 wslg win-kex windows 11 desktop' },
   { label: 'Kali Linux Desktop on Windows 10 with WSL2 and Win-KeX', kind: 'tutorial', href: 'kali-wsl2-desktop-windows-10.html', keys: 'kali linux wsl2 win-kex windows 10 desktop' },
   { label: 'Philosophy · The Core Manifesto', kind: 'section', href: 'writing.html#philosophy' },
-  { label: 'Free tools', kind: 'section', href: 'index.html#tools' },
   { label: 'Mission Statement', kind: R2R, href: 'repair.html#mission' },
   { label: 'Legislation', kind: R2R, href: 'repair.html#legislation', keys: 'bills law policy tracker' },
   { label: 'Get Involved', kind: R2R, href: 'repair.html#get-involved', keys: 'petition volunteer representative' },

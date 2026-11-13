@@ -285,7 +285,7 @@ export async function runGuides(r) {
   r.check('index #writing: case study card', /<a class="w-card[^"]*" href="apfs-recovery\.html"/.test(wr));
   r.check('index #writing: "All writing →"', /href="writing\.html"[^>]*>All writing <span aria-hidden="true">→<\/span>/.test(wr));
   r.check('index: terminal incident block kept', ht.includes('APFS Directory Services desync bypass completed.'));
-  r.check('index: Right to Repair teardown + free tools kept', ids(h).has('repair') && ids(h).has('tools'));
+  r.check('index: Right to Repair teardown kept, tools grid moved to tools.html', ids(h).has('repair') && !ids(h).has('tools'));
 
   // 4. Guide pages: shell, nav, sections, copy buttons, no heading emoji, verbatim source copy.
   for (const g of GUIDES) {
