@@ -60,7 +60,7 @@
         <div class="page-hero">
           <div class="badge">Write-ups &amp; Kits</div>
           <h1 class="card-title"><em>Tools</em>.</h1>
-          <p class="page-lede">Write-ups on tools and home-made engineering kits. Files live on the <a href="downloads.html">Downloads</a> page.</p>
+          <p class="page-lede">The tools behind the research, and the kits on the bench. Each one gets a write-up on what it does and why it exists. Read the code, run it yourself, and make it yours. Files live on the <a href="downloads.html">Downloads</a> page.</p>
         </div>
       </div>
 
@@ -72,23 +72,26 @@
           <a class="lp-card blog-card tilt" href="downloads.html">
             <span class="blog-card-tag">Write-up coming</span>
             <b>RootForgeKit</b>
-            <span>Cross-platform system diagnostics and hardware health for Windows, Linux, and macOS — plus an iOS and Android device toolkit.</span>
+            <!-- TODO(Nick): 16. RootForgeKit, Pymobile3-GUI and BipPoyAI: anything beyond what catalog.js already says? -->
+            <span>Cross-platform system diagnostics and hardware health for Windows, Linux, and macOS — plus an iOS and Android device toolkit. Version v0.5 · pre-alpha.</span>
           </a>
           <!-- TODO(Nick): add a write-up for Pymobile3-GUI and point this card at it. -->
           <a class="lp-card blog-card tilt" href="downloads.html">
             <span class="blog-card-tag">Write-up coming</span>
             <b>Pymobile3-GUI</b>
-            <span>A PySide6 desktop app for iOS and Android device work — live syslog, forensic acquisition, and file browsing. Runs from source.</span>
+            <span>A PySide6 desktop app for iOS and Android device work — live syslog, forensic acquisition, and file browsing. Runs from source. Acquisition modes: Logical, Logical+, or PRFS. v0.1 · pre-release.</span>
           </a>
           <!-- TODO(Nick): add a write-up for BipPoyAI and point this card at it. -->
           <a class="lp-card blog-card tilt" href="downloads.html">
             <span class="blog-card-tag">Write-up coming</span>
             <b>BipPoyAI</b>
-            <span>A local-only desktop assistant that runs entirely on your own hardware — PySide6 Pip-Boy GUI routing through LiteLLM into Ollama, so it works with no internet connection.</span>
+            <!-- TODO(Nick): 17. BipPoyAI: the catalog calls it "Qwythos AI" in its description. Which name is public? -->
+            <span>A local-only desktop assistant that runs entirely on your own hardware — PySide6 Pip-Boy GUI routing through LiteLLM into Ollama, so it works with no internet connection. Detects CPU threads, RAM and GPU VRAM, then recommends context size and layer offloading. v0.1 · pre-alpha.</span>
           </a>
         </div>
       </section>
 
+      <!-- TODO(Nick): 18. Engineering Kits: the names, blurbs and links for the two placeholder kit write-ups. -->
       <section class="blog-row" id="engineering-kits" aria-labelledby="engineering-kits-title">
         <h2 id="engineering-kits-title" class="blog-row-heading"><a class="magnetic" href="#engineering-kits">Engineering Kits <span class="grad" aria-hidden="true">›</span></a></h2>
         <div class="blog-row-cards">
@@ -96,13 +99,13 @@
           <article class="lp-card blog-card tilt">
             <span class="blog-card-tag">Write-up coming</span>
             <b>Write-up coming</b>
-            <span>A kit write-up will land here.</span>
+            <span>Home-made kit write-up in progress.</span>
           </article>
           <!-- TODO(Nick): add a home-made engineering kit write-up (name, blurb, and link). -->
           <article class="lp-card blog-card tilt">
             <span class="blog-card-tag">Write-up coming</span>
             <b>Write-up coming</b>
-            <span>A kit write-up will land here.</span>
+            <span>Home-made kit write-up in progress.</span>
           </article>
         </div>
       </section>
@@ -118,6 +121,16 @@
         </div>
       </section>
     </div>
+
+      <section class="section" id="why-open" aria-labelledby="why-open-title">
+        <div class="section-head">
+          <div>
+            <h2 id="why-open-title" class="section-title">Why the Tools Are <span class="grad">Open</span></h2>
+          </div>
+          <p class="section-note">A tool you can't read is a tool you have to trust blindly. Ours are open source, so you can check every line, learn from it, and change it. If something breaks or doesn't make sense, open an issue on GitHub and ask.</p>
+        </div>
+        <div class="section-cta"><a href="https://github.com/NickHarrison96" class="btn-ghost magnetic" target="_blank" rel="noopener noreferrer">All repositories on GitHub <span aria-hidden="true">↗</span></a></div>
+      </section>
   </main>
 
   <footer class="site-footer">

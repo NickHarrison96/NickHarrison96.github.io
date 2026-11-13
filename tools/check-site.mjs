@@ -27,8 +27,9 @@ const FUTURE_INDEX_IDS = { terminal: 3, projects: 3, 'case-study': 3, repair: 3,
 // Links the homepage must keep. Phase 8 replaced the old ITEMS grid targets (mission.html, get-involved.html,
 // repair-guides.html, legislation.html, repair-cafes.html, talks.html — now redirect stubs) with the
 // repair.html sections they moved to; writing.html and downloads.html stay.
-const ITEMS_LINKS = ['repair.html#mission', 'repair.html#get-involved', 'repair.html#guides', 'repair.html#legislation',
-  'repair.html#cafes', 'repair.html#talks', 'writing.html', 'downloads.html'];
+// Depth pass (2026-11-13): the homepage no longer links every repair.html section
+// (café, guides and talks cards were repair/booking copy). Mission stays.
+const ITEMS_LINKS = ['repair.html#mission', 'writing.html', 'downloads.html'];
 
 /* ── detectors (pure functions, exercised by --selftest) ─────────────────── */
 
@@ -310,17 +311,17 @@ const VERBATIM_HOME = [
   [BIO, 'index.html', 9],
   ['Open source projects, AI integrations, and system-level tools maintained on GitHub.', 'work.html'],
   ['Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning.', 'work.html'],
-  ['How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.', 'writing.html'],
+  ['A Ryzen Hackintosh (OpenCore 1.0.8, MacPro7,1 SMBIOS) hit an account-access problem. This is how we worked around OpenDirectory locks and space limits with a parallel APFS volume, without erasing the reported 401.5 GB data volume. File-integrity verification is pending.', 'writing.html'],
   ['APFS Directory Services desync bypass completed. 401.5 GB user payload mounted at /Volumes/Big Mac - Data without data loss.', 'index.html'],
   ['Hackintosh (SMBIOS: MacPro7,1)', 'index.html'],
   ['Computers are meant to be tools of empowerment, creative expression, and personal agency.', 'writing.html'],
   ['Breaking down UNIX, APFS, and bootloader internals into transparent, actionable guides.', 'writing.html'],
-  ['Your data belongs to you. Every write-up emphasizes non-destructive, zero-loss recovery methodologies.', 'writing.html'],
+  ['Your data belongs to you. Every write-up tries non-destructive methods first and is honest about what can\'t be guaranteed.', 'writing.html'],
   ['Documenting solutions creates an indexable, open roadmap for developers faced with black screens.', 'writing.html'],
   ['Honoring the classical hacker ethos of learning how software and hardware work under the hood.', 'writing.html'],
-  ['Repair Is a Right, Not a Privilege.', 'index.html'],
-  ['Parts. Tools. Manuals. For Everyone.', 'index.html'],
-  ['The Greenest Device Is the One You Already Own.', 'index.html'],
+  ['We Specialize in All Things Apple', 'index.html'],
+  ['You Own It. You Should Understand It.', 'index.html'],
+  ['without erasing the reported 401.5 GB data volume; file-integrity verification is pending.', 'index.html'],
 ];
 
 const VERBATIM_CASE = [

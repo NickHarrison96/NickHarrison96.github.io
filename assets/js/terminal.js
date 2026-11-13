@@ -25,7 +25,7 @@ const COMMANDS = {
   'recovery --status': () => ['[OK] MacPro7,1 Target SMBIOS Operational.', "[OK] Target Volume 'Untitled' active on disk3s7.", '[OK] Kernel 25.6.0 running live.'].map((t) => ['ok', t]),
   'ls ./tools': () => TOOLS.filter((t) => t.status === 'live').map((t) => ['ok', `${t.name.padEnd(16)}${t.version}`]),
   'cat manifesto': () => ['Repair Is a Right, Not a Privilege.', 'Parts. Tools. Manuals. For Everyone.', 'The Greenest Device Is the One You Already Own.'].map((t) => ['hl', t]),
-  whoami: () => [['hl', 'Nick Harrison: systems & AI engineer, hardware troubleshooter, right to repair campaigner.']],
+  whoami: () => [['hl', "I'm Nick, a security researcher and tech enthusiast. I explore how devices work behind the scenes and how they protect your personal data every day. Through that research, I help companies and their teams make the devices you rely on safer and more secure."]],
   clear: () => null,
 };
 const COMPLETIONS = [...Object.keys(COMMANDS), ...Object.keys(PAGES).map((p) => `open ${p}`)];

@@ -63,7 +63,8 @@
       <header class="page-hero">
         <div class="badge">Lab Guide</div>
         <h1 class="card-title">Hardware Bench &amp; <em>Defensive Security</em> Lab Guide</h1>
-        <p class="page-lede">A technical breakdown and apprentice training reference covering the <strong>CH341A SPI/I2C Programmer Kit</strong>, <strong>ELEGOO Breadboard Prototyping Kit</strong>, <strong>RP2350A Microcontroller</strong>, <strong>Arduino Uno + USB Host Shield</strong>, and the <strong>Xilinx XC2C128 CPLD (Xbox 360 Ace V3)</strong> with its dedicated JTAG/SPI programmer.</p>
+        <!-- TODO(Nick): 20. Research-only intro draft applied below, pending your approval. -->
+        <p class="page-lede">Firmware is software you own too. This guide shows how to read it safely, watch it talk on the bus, and learn what your hardware is really doing. A technical breakdown and apprentice training reference covering the <strong>CH341A SPI/I2C Programmer Kit</strong>, <strong>ELEGOO Breadboard Prototyping Kit</strong>, <strong>RP2350A Microcontroller</strong>, <strong>Arduino Uno + USB Host Shield</strong>, and the <strong>Xilinx XC2C128 CPLD (Xbox 360 Ace V3)</strong> with its dedicated JTAG/SPI programmer.</p>
       </header>
 
       <!-- TODO(Nick): Omitted the source intro that framed this as bridging "standard board-level hardware repair (EEPROM/BIOS recovery and signal probing)" with defensive testing. Confirm a research-only intro if you want one here. -->
@@ -172,6 +173,7 @@
           </table>
         </div>
 
+        <!-- TODO(Nick): 19. The "Mandatory Bench Mod" (lifting Pin 28 or cutting a trace) and the "desolder onto the ZIF adapter" line are board modification, past dumps and sniffing. Keep them, soften them, or move them? Left untouched until you decide. Suggestion: retitle to "Check Your Programmer's Logic Level", keep the multimeter check, and turn the pin-lift and trace-cut into a reference note. For the checklist: "re-seat the clip and read again." -->
         <div class="lab-callout lab-callout-warn">
           <p><strong>Mandatory Bench Mod — The CH341A 3.3V Logic Fix:</strong><br>
           Measure <code>MISO</code> and <code>MOSI</code> against <code>GND</code> with a multimeter while plugged in. If they output 5V, lift Pin 28 of the CH341A IC (or cut the 5V trace feeding VCC) and bridge it to the 3.3V output pin of the onboard AMS1117 regulator. Use the ELEGOO breadboard power module and resistors to test clean 3.3V levels before touching live boards.</p>
@@ -225,6 +227,7 @@
         <h2 id="checklist-title"><span class="step-number">2</span> Apprentice Troubleshooting &amp; Safe Flashing Checklist</h2>
         <div class="lab-why">
           <p><strong>Why are we doing this?</strong><br>
+          <!-- TODO(Nick): 26. Is there a source for the "90% of corrupted BIOS flashes" figure? If not, it becomes "Most". Left as written until you confirm. -->
           90% of corrupted BIOS flashes and "dead" reads (<code>0x00</code> or <code>0xFF</code>) happen because of poor physical contact, back-powering the target board, or skipping backup verification. Use this checklist on the bench before every flash.</p>
         </div>
 
@@ -377,7 +380,7 @@ certutil -hashfile backup_2.bin SHA256</code></pre>
         <h2 id="deployments-title"><span class="step-number">4</span> Defensive Hardware Security Lab Deployments</h2>
         <div class="lab-why">
           <p><strong>Why are we doing this?</strong><br>
-          Combining all five bench tools lets you replicate commercial hardware-security testbeds (like fault-injection and protocol-fuzzing stations) to audit embedded firmware resilience, secure boot locks, and bus validation.</p>
+          Combining all five bench tools lets you replicate commercial hardware-security testbeds (like fault-injection and protocol-fuzzing stations) to audit embedded firmware resilience, secure boot locks, and bus validation. Use this only on hardware you own or are authorized to test.</p>
         </div>
 
         <figure class="lab-diagram" id="fig-deployments">
@@ -583,6 +586,12 @@ certutil -hashfile backup_2.bin SHA256</code></pre>
           <p><strong>Recommended First Lab Exercise:</strong><br>
           Start by seating a spare 25-series SPI flash chip on the SOIC8 breakout board in the ELEGOO breadboard. Wire the 3.3V-verified CH341A to read its JEDEC ID while tapping <code>CLK</code> and <code>MOSI</code> with the RP2350A—allowing apprentices to visually correlate software commands with real electrical waveforms on the bus.</p>
         </div>
+
+        <section class="lab-close" id="takeaway" aria-labelledby="takeaway-title">
+          <h2 id="takeaway-title">What You Take Away</h2>
+          <p>By the end, you've read a chip's ID, pulled and hashed a clean backup, and watched the commands move on the wire. That's the foundation for every firmware write-up on this site.</p>
+          <p><a href="tools.html">Back to Tools <span aria-hidden="true">→</span></a> · <a href="writing.html">Read the write-ups <span aria-hidden="true">→</span></a></p>
+        </section>
       </section>
     </article>
   </main>

@@ -66,7 +66,7 @@ if (repair && !isNarrowView()) {
   };
   const explode = (on) => {
     stage.classList.toggle('exploded', on);
-    if (hint) hint.textContent = on ? 'hover a layer' : 'hover to take it apart';
+    if (hint) hint.textContent = on ? 'hover a layer' : 'hover to explore the layers';
   };
 
   tabs.forEach((t, i) => {

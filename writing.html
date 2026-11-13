@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#05070d">
   <meta name="description"
-    content="Writing by Nick Harrison: the APFS recovery case study, essays on the economics and ethics of repair, projects and tools, and the manifesto." />
+    content="Blog by Nick Harrison: case studies from real recoveries, tutorials, notes on how devices work, and the manifesto." />
   <title>Blog &mdash; Nick Harrison</title>
   <script>/* shell: runs before first paint — see AGENTS.md "Shell" */(function(d){d.classList.add('js');try{if(localStorage.getItem('nh-jailbreak')==='1')d.dataset.theme='jailbreak'}catch(e){}if(d.hasAttribute('data-boot')&&!location.hash&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{if(!sessionStorage.getItem('nh-booted')){sessionStorage.setItem('nh-booted','1');d.classList.add('booting')}}catch(e){}}})(document.documentElement);</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,9 +58,9 @@
   <main id="main" class="hub">
       <div class="hub-hero">
         <div class="page-hero">
-          <div class="badge">Case Studies &amp; Essays</div>
+          <div class="badge">Case Studies · Tutorials · Notes</div>
           <h1 class="card-title"><em>Blog</em>.</h1>
-          <p class="page-lede">Essays and a newsletter on the economics and ethics of repair &mdash; why we throw so much away, who profits from it, and what a fixable future looks like.</p>
+          <p class="page-lede">Real problems, worked through in the open. Case studies from actual recoveries, tutorials you can follow on your own machine, and notes on how devices really work. Every command is the one we ran. Every gap is marked, not guessed.</p>
         </div>
       </div>
 
@@ -69,36 +69,26 @@
       <section class="blog-row" id="case-studies" aria-labelledby="case-studies-title">
         <h2 id="case-studies-title" class="blog-row-heading"><a class="magnetic" href="#case-studies">Case Studies <span class="grad" aria-hidden="true">›</span></a></h2>
         <div class="blog-row-cards">
+          <!-- TODO(Nick): 9. APFS: the diagnosis and file-integrity verification are still pending. "intact" and "zero-loss" claims have been removed from this page. -->
           <a class="lp-card blog-card tilt" href="apfs-recovery.html">
             <span class="blog-card-tag">Case study</span>
             <b>Surgical Recovery of a Corrupted macOS Installation</b>
-            <span>How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.</span>
+            <span>A Ryzen Hackintosh (OpenCore 1.0.8, MacPro7,1 SMBIOS) hit an account-access problem. This is how we worked around OpenDirectory locks and space limits with a parallel APFS volume, without erasing the reported 401.5 GB data volume. File-integrity verification is pending.</span>
           </a>
         </div>
       </section>
+
+      <!-- TODO(Nick): 8. The 4 tutorials still have open fact questions (Windows builds, Kali image, macOS test machine, Claude Code commands). They can't go live until those are answered. Planned titles (held, not shown): Kali Linux Graphical Desktop on Windows 11 with WSL2; Kali Linux Desktop on Windows 10 with WSL2 and Win-KeX; Local AI Coding on Windows 10 and 11: Ollama and Claude Code; Local AI Coding on an Intel Mac (macOS Tahoe): Ollama and Claude Code. 5. Which upcoming write-ups to tease? 6. Publish dates for each write-up and tutorial. -->
 
       <section class="blog-row" id="essays" aria-labelledby="essays-title">
         <h2 id="essays-title" class="blog-row-heading"><a class="magnetic" href="#essays">Essays <span class="grad" aria-hidden="true">›</span></a></h2>
-        <div class="blog-row-cards">
-          <a class="lp-card blog-card tilt" href="#essays">
-            <span class="blog-card-tag">Essay</span>
-            <b>Why &lsquo;Authorized&rsquo; Repair Is a Moat</b>
-            <span>How the approved-repair label quietly kills competition.</span>
-          </a>
-          <a class="lp-card blog-card tilt" href="#essays">
-            <span class="blog-card-tag">Essay</span>
-            <b>The True Cost of a Glued-In Battery</b>
-            <span>What a two-dollar design choice does over a decade.</span>
-          </a>
-          <a class="lp-card blog-card tilt" href="#essays">
-            <span class="blog-card-tag">Essay</span>
-            <b>Ownership After the Sale</b>
-            <span>When the thing you bought keeps answering to someone else.</span>
-          </a>
-        </div>
-        <p class="blog-row-note">New pieces land in the newsletter first. <a href="https://www.facebook.com/profile.php?id=100090229520700" target="_blank" rel="noopener noreferrer">Subscribe <span aria-hidden="true">↗</span></a></p>
+        <!-- TODO(Nick): 11. Do the three essays ("Authorized Repair Is a Moat", "Glued-In Battery", "Ownership After the Sale") exist? Their links only pointed to #essays, so the row is a placeholder until you confirm. -->
+        <p class="blog-row-note">Essays on ownership and open knowledge are on the way.</p>
+        <!-- TODO(Nick): 10. Newsletter: is there one? "Subscribe" previously linked to a Facebook profile. -->
+        <p class="blog-row-note">New pieces show up here and on GitHub first.</p>
       </section>
 
+      <!-- TODO(Nick): 7. LiteLLM and Stable Diffusion cards: keep them? Are they your own repos or contributions? Card text kept exactly. -->
       <section class="blog-row" id="projects" aria-labelledby="projects-title">
         <h2 id="projects-title" class="blog-row-heading"><a class="magnetic" href="#projects">Projects <span class="grad" aria-hidden="true">›</span></a></h2>
         <div class="blog-row-cards">
@@ -133,7 +123,8 @@
           <a class="lp-card blog-card tilt" href="repair.html#legislation">
             <span class="blog-card-tag">Campaign</span>
             <b>Track the Legislation</b>
-            <span>Where right-to-repair bills stand across states and countries, what they cover, and how you can back the ones near you.</span>
+            <!-- TODO(Nick): 13. Legislation: is there a real tracker? Which bills and regions should the page actually cover? This blurb no longer implies a live tracker. -->
+            <span>Why the law matters for owning what you buy, and how to back it where you live.</span>
           </a>
         </div>
       </section>
@@ -151,7 +142,7 @@
       <p>Why ‘Authorized’ Repair Is a MoatHow the approved-repair label quietly kills competition.</p>
       <p>The True Cost of a Glued-In BatteryWhat a two-dollar design choice does over a decade.</p>
       <p>Ownership After the SaleWhen the thing you bought keeps answering to someone else.</p>
-      <p>Case studyFeaturedSurgical Recovery of a Corrupted macOS Installation How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1. Open case study →</p>
+      <p>Case studyFeaturedSurgical Recovery of a Corrupted macOS Installation A Ryzen Hackintosh (OpenCore 1.0.8, MacPro7,1 SMBIOS) hit an account-access problem. This is how we worked around OpenDirectory locks and space limits with a parallel APFS volume, without erasing the reported 401.5 GB data volume. File-integrity verification is pending. Open case study →</p>
       <p>ProjectPython / AILiteLLM Proxy &amp; SDK Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware. View repo ↗</p>
       <p>ProjectPyTorch / MLStable Diffusion WebUI Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions. View repo ↗</p>
       <p>ProjectOpenCore / macOSMacPro7,1 X570 EFI Architecture Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning. View repo ↗</p>
@@ -159,7 +150,7 @@
       <p>Write-upEssayThe True Cost of a Glued-In Battery What a two-dollar design choice does over a decade. Open write-up →</p>
       <p>Write-upEssayOwnership After the Sale When the thing you bought keeps answering to someone else. Open write-up →</p>
       <p>CampaignMissionMission Statement If you bought it, you own it — and owning something means being allowed to understand it, open it, and fix it. Open campaign →</p>
-      <p>CampaignLegislationTrack the Legislation Where right-to-repair bills stand across states and countries, what they cover, and how you can back the ones near you. Open campaign →</p>
+      <p>CampaignLegislationTrack the Legislation Why the law matters for owning what you buy, and how to back it where you live. Open campaign →</p>
       <p>Recent Pieces</p>
       <p>Case Studies, Write-ups &amp; Releases</p>
       <p>SMBIOS TARGET</p>
@@ -167,7 +158,7 @@
       <p>DATA PRESERVATION</p>
       <p>MacPro7,1 (AMD Zen 2)</p>
       <p>APFS Container (disk1 / disk3)</p>
-      <p>401.5 GB Volume Untouched</p>
+      <p>Reported 401.5 GB · Not Erased</p>
       <p>Read the full case study</p>
       <p>Open case study →</p>
       <p>View repo ↗</p>
@@ -179,14 +170,24 @@
       <div class="manifesto">
         <p class="eyebrow" data-scramble>The Core Manifesto</p>
         <h2 id="philosophy-title" class="manifesto-title">Why We Publish &amp; Share These Write-Ups</h2>
-        <p class="manifesto-lede">Computers are meant to be tools of empowerment, creative expression, and personal agency. When an operating system fails, users shouldn't feel helpless, nor should they be forced to accept data loss as an inevitability.</p>
+        <p class="manifesto-lede">Computers are meant to be tools of empowerment, creative expression, and personal agency. When an operating system fails, users shouldn't feel helpless, nor should they be forced to accept data loss as an inevitability. That's why we write everything down. If it helped us, it should be able to help you.</p>
         <ul class="manifesto-grid">
           <li><span class="m-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span><div><b>Demystifying Systems</b><span>Breaking down UNIX, APFS, and bootloader internals into transparent, actionable guides.</span></div></li>
-          <li><span class="m-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span><div><b>Promoting Data Rights</b><span>Your data belongs to you. Every write-up emphasizes non-destructive, zero-loss recovery methodologies.</span></div></li>
+          <li><span class="m-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span><div><b>Promoting Data Rights</b><span>Your data belongs to you. Every write-up tries non-destructive methods first and is honest about what can't be guaranteed.</span></div></li>
           <li><span class="m-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><div><b>Community Knowledge Base</b><span>Documenting solutions creates an indexable, open roadmap for developers faced with black screens.</span></div></li>
           <li><span class="m-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></span><div><b>Open Engineering Spirit</b><span>Honoring the classical hacker ethos of learning how software and hardware work under the hood.</span></div></li>
         </ul>
       </div>
+    </section>
+
+    <section class="section" id="who-writes" aria-labelledby="who-writes-title">
+      <div class="section-head">
+        <div>
+          <h2 id="who-writes-title" class="section-title">Who's Behind the <span class="grad">Write-ups</span></h2>
+        </div>
+        <p class="section-note">Write-ups are by Nick Harrison, a security researcher working on bootloaders and data recovery. The team that tests and shares them is on the About page.</p>
+      </div>
+      <div class="section-cta"><a href="about.html#team" class="btn-ghost magnetic">Meet the team <span aria-hidden="true">→</span></a></div>
     </section>
   </main>
 
