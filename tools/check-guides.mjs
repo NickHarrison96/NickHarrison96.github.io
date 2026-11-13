@@ -112,8 +112,8 @@ export const APFS_SKIPPED = {
 };
 
 /**
- * Build sheet on work.html (#build): [label, shown values, HWiNFO fields that back them].
- * Values only — never serials, UUIDs, MAC/IP addresses, instance ids or the computer/account name.
+ * Nick (2026-11-13): Work tab removed. Kept as the HWiNFO field map for the PII sweep (values only —
+ * never serials, UUIDs, MAC/IP addresses, instance ids or the computer/account name).
  */
 export const BUILD_SPECS = [
   ['CPU', ['AMD Ryzen 5 3600', '6 cores / 12 threads', '3600.0 MHz'],
@@ -375,28 +375,10 @@ export async function runGuides(r) {
   }
   r.check('site.js: guides highlight Writing', GUIDES.every((g) => read('assets/js/site.js').includes(`'${g.file}': 'writing.html'`)));
 
-  // 8. Work: EFI project + build sheet from the HWiNFO report + tools from the catalog.
-  const wk = html['work.html'] || '';
-  const build = /<section[^>]*id="build"[\s\S]*?<\/section>/.exec(wk)?.[0] || '';
-  r.check('work: #build section', !!build);
-  const dl = [...build.matchAll(/<dt>([\s\S]*?)<\/dt>\s*<dd>([\s\S]*?)<\/dd>/g)].map((m) => [pageText(m[1]), pageText(m[2])]);
+  // Nick (2026-11-13): Work tab removed. Dropped the work.html build-sheet, EFI, and catalog-grid assertions.
+  // The HWiNFO report is still read for the PII sweep below.
   const rows = (() => { const rep = srcRead(HWINFO_REPORT); return rep ? hwinfoRows(rep) : null; })();
-  if (src && !rows) console.warn(`check-guides: WARNING ${HWINFO_REPORT} not in the source folder; build values not compared`);
-  for (const [label, values, fields] of BUILD_SPECS) {
-    const dd = dl.find(([k]) => k === label)?.[1];
-    r.check(`work build: ${label} listed`, dd !== undefined);
-    for (const v of values) r.check(`work build: ${label} shows "${v}"`, (dd || '').includes(v), dd);
-    if (rows) {
-      for (const [field, value, n = 1] of fields) {
-        const got = rows.filter(([k, v]) => k === field && v === value).length;
-        r.check(`work build: HWiNFO ${field} = ${value}${n > 1 ? ` (×${n})` : ''}`, got >= n, `found ${got}`);
-      }
-    }
-  }
-  r.check('work build: names its source', /HWiNFO64/.test(build));
-  r.check('work: "Tools I\'ve built" grid from the catalog', /data-tools-grid/.test(wk) && /Tools I(?:&rsquo;|'|’)ve built/.test(wk));
-  r.check('work: tools link downloads.html', /id="built-tools"[\s\S]*?href="downloads\.html"/.test(wk));
-  r.check('work: reaches assets/js/catalog.js', moduleGraph('work.html').modules.has('assets/js/catalog.js'));
+  if (src && !rows) console.warn(`check-guides: WARNING ${HWINFO_REPORT} not in the source folder; identifier values not compared`);
 
   // 9. PII: no serial / MAC / UUID / IP / product-key patterns, no identifier from the HWiNFO report.
   const all = trackedSiteFiles(/\.(html|js|css|md|json|txt)$/i) || [];

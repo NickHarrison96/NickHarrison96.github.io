@@ -29,7 +29,8 @@ export const SECTION_IDS = {
 };
 /**
  * Homepage labels that were renamed on purpose by the restructure (old text → new text). Everything else
- * in the BASELINE homepage <main> must still appear on index.html, work.html or writing.html.
+ * in the BASELINE homepage <main> must still appear on index.html or writing.html.
+ * Nick (2026-11-13): Work tab removed
  */
 export const RENAMED = { 'All Downloads →': 'All tools →' };
 /**
@@ -39,6 +40,10 @@ export const RENAMED = { 'All Downloads →': 'All tools →' };
  * project names appear in no tracked site file.
  */
 export const RETIRED = [
+  // Nick (2026-11-13): LiteLLM, Stable Diffusion and X570 project cards removed (not his work).
+  "ProjectPython / AILiteLLM Proxy & SDK Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware. View repo ↗",
+  "ProjectPyTorch / MLStable Diffusion WebUI Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions. View repo ↗",
+  "ProjectOpenCore / macOSMacPro7,1 X570 EFI Architecture Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning. View repo ↗",
   'The tool cards need JavaScript. Everything is listed on the downloads page.', 'the downloads page',
   'LiteLLM Proxy & SDK',
   'Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware.',
@@ -51,6 +56,14 @@ export const RETIRED = [
   'Read APFS Recovery Case Study',
   // Nick (2026-11-13): the home page is a welcome, not an Apple page; the Apple-specific hero badge is gone.
   'MacPro7,1 OpenCore',
+  // Nick (2026-11-13): Work tab removed. These BASELINE homepage project-card strings are gone
+  // because Nick said they are not his work; they are no longer preserved on a Work page.
+  'Open Source Ecosystem',
+  'Open source projects, AI integrations, and system-level tools maintained on GitHub.',
+  'Software & Hardware Engineering',
+  'MacPro7,1 X570 EFI Architecture',
+  'Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning.',
+  'View Repo ↗',
 ];
 
 /**
@@ -179,12 +192,14 @@ export function missingBlocks(oldMain, newMains, renamed = {}) {
 
 /** Parse a redirect stub: meta refresh, canonical, robots, location.replace parts, fallback link. */
 export function stubInfo(html) {
-  const refresh = /<meta http-equiv="refresh" content="0; url=([^"]+)">/i.exec(html)?.[1] ?? null;
-  const canonical = /<link rel="canonical" href="([^"]+)">/i.exec(html)?.[1] ?? null;
-  const robots = /<meta name="robots" content="noindex">/i.test(html);
+  // Nick (2026-11-13): Work tab removed — the work.html stub uses self-closing meta/link tags.
+  const refresh = /<meta http-equiv="refresh" content="0; url=([^"]+)"\s*\/?>/i.exec(html)?.[1] ?? null;
+  const canonical = /<link rel="canonical" href="([^"]+)"\s*\/?>/i.exec(html)?.[1] ?? null;
+  const robots = /<meta name="robots" content="noindex"\s*\/?>/i.test(html);
   const js = /var t='([^']+)',d='(#[^']+)',h=location\.hash;location\.replace\(t\+\(h&&h!=='#main'\?h:d\)\)/.exec(html);
   const replace = js ? js[1] + js[2] : null;
-  const fallback = /This page moved to <a href="([^"]+)">/.exec(html)?.[1] ?? null;
+  // Nick (2026-11-13): Work tab removed — also matches the simpler "This page moved." stub wording
+  const fallback = /This page moved(?: to)?\.? <a href="([^"]+)">/.exec(html)?.[1] ?? null;
   const bg = /background:\s*#05070d/i.test(html);
   const shell = /class="site-header"/.test(html);
   return { refresh, canonical, robots, replace, fallback, bg, shell };
@@ -266,7 +281,7 @@ export async function runIA(r) {
   if (html['writing.html']) {
     const w = html['writing.html'];
     const own = ids(w);
-    const rows = ['case-studies', 'essays', 'projects', 'right-to-repair'];
+    const rows = ['case-studies', 'essays', 'right-to-repair']; // Nick (2026-11-13): Projects row removed (not his work)
     for (const id of [...rows, 'philosophy', 'log']) r.check(`ia writing.html: #${id}`, own.has(id));
     r.check('ia writing.html: case study card → apfs-recovery.html', /id="case-studies"[\s\S]*?href="apfs-recovery\.html"/.test(w));
     r.check('ia writing.html: category row headings link to their anchors', rows.every((id) => w.includes(`href="#${id}"`)));
@@ -305,41 +320,18 @@ export async function runIA(r) {
     // The APFS case study lives on the Blog (writing.html); index must not link to it.
     // Depth pass (2026-11-13): café, guides and talks cards left the Apple module (repair/booking copy).
     // Principle strip keeps the mission link. Other repair sections live on repair.html.
-    for (const href of ['work.html', 'writing.html', 'downloads.html', 'repair.html#mission']) {
+    // Nick (2026-11-13): Work tab removed
+    for (const href of ['writing.html', 'downloads.html', 'repair.html#mission']) {
       r.check(`ia index: links ${href}`, h.includes(`href="${href}"`));
     }
     r.check('ia index: no apfs-recovery.html link (case study is on Blog)', !h.includes('href="apfs-recovery.html"'));
-    // "All work →" left with the featured-work section (phase 9); the hero's "View Repositories" links work.html.
-    r.check('ia index: hero links work.html', /<a href="work\.html" class="btn-ghost[^"]*">View Repositories<\/a>/.test(h));
+    // Nick (2026-11-13): Work tab removed. "View Repositories" points at Nick's source repos on GitHub.
+    r.check('ia index: hero View Repositories → GitHub source repos', /<a href="https:\/\/github\.com\/NickHarrison96\?tab=repositories&amp;type=source" class="btn-ghost[^"]*"[^>]*>View Repositories<\/a>/.test(h));
     // Nick (2026-11-13): the tools grid left the homepage; the hero links tools.html instead.
     r.check('ia index: no #tools section, hero links tools.html', !ids(h).has('tools') && /href="tools\.html" class="btn-outline-ok[^"]*">Explore the Tools/.test(h));
   }
 
-  // Projects: one data source, static markup generated from it on index + work.
-  if (exists(PROJECTS_MODULE)) {
-    let mod = null;
-    try { mod = await loadProjects(); } catch (e) { r.check(`${PROJECTS_MODULE} evaluates`, false, e.message); }
-    if (mod) {
-      const P = mod.PROJECTS || [];
-      // Phase 9 (Nick): only the EFI project is his; the other two were removed.
-      r.check('ia projects: PROJECTS = the EFI project only', Array.isArray(P) && P.length === 1 && P[0].url === 'https://github.com/NickHarrison96/MSI-MPG-x570-EFI', JSON.stringify(P.map((p) => p.plain)));
-      r.check('ia projects: projectCard() exported', typeof mod.projectCard === 'function');
-      const want = typeof mod.projectCard === 'function' ? squash(P.map(mod.projectCard).join('\n')) : '';
-      for (const f of ['work.html']) { // index.html lost its project grid in phase 9
-        if (!html[f]) continue;
-        const grid = projectGrid(html[f]);
-        r.check(`ia ${f}: project cards = PROJECTS (run --print-projects to regenerate)`, grid !== null && squash(grid) === want);
-        r.check(`ia ${f}: reaches ${PROJECTS_MODULE}`, moduleGraph(f).modules.has(PROJECTS_MODULE));
-      }
-      r.check('ia work.html: cards tilt', (html['work.html'] || '').includes('class="project tilt"'));
-      r.check('ia work.html: EFI repo link', (html['work.html'] || '').includes('https://github.com/NickHarrison96/MSI-MPG-x570-EFI'));
-      // Field-log project entries follow PROJECTS too.
-      const w = html['writing.html'] || '';
-      for (const p of P) {
-        r.check(`ia writing.html log: project ${p.title}`, w.includes(p.description) && w.includes(`href="${p.url}"`));
-      }
-    }
-  } else r.check(`ia: ${PROJECTS_MODULE} exists`, false);
+  // Nick (2026-11-13): Work tab removed. Dropped the work.html project-card, EFI, and projects.js assertions.
 
   // Old URLs: every .html ever shipped on main or at BASELINE still resolves.
   let oldUrls = [];
@@ -353,16 +345,21 @@ export async function runIA(r) {
     if (real.includes(f)) continue;
     const st = stubFiles.get(f);
     if (!r.check(`ia old URL ${f}: real page or listed stub`, !!st)) continue;
-    const target = `${st.page}#${st.id}`;
+    // Nick (2026-11-13): Work tab removed — a page-level stub has no section id and no replace script.
+    const target = st.id ? `${st.page}#${st.id}` : st.page;
     const info = stubInfo(read(f));
     r.check(`ia stub ${f}: meta refresh → ${target}`, info.refresh === target, String(info.refresh));
     r.check(`ia stub ${f}: canonical → ${target}`, info.canonical === target, String(info.canonical));
-    r.check(`ia stub ${f}: location.replace → ${target} (keeps an extra hash)`, info.replace === target, String(info.replace));
     r.check(`ia stub ${f}: noindex`, info.robots);
     r.check(`ia stub ${f}: visible fallback link → ${target}`, info.fallback === target, String(info.fallback));
-    r.check(`ia stub ${f}: site background (no white flash)`, info.bg);
     r.check(`ia stub ${f}: no site shell`, !info.shell);
-    r.check(`ia stub ${f}: target ${target} exists`, exists(st.page) && ids(read(st.page)).has(st.id));
+    if (st.id) {
+      r.check(`ia stub ${f}: location.replace → ${target} (keeps an extra hash)`, info.replace === target, String(info.replace));
+      r.check(`ia stub ${f}: site background (no white flash)`, info.bg);
+      r.check(`ia stub ${f}: target ${target} exists`, exists(st.page) && ids(read(st.page)).has(st.id));
+    } else {
+      r.check(`ia stub ${f}: target ${target} exists`, exists(st.page));
+    }
   }
   for (const [f] of STUBS) r.check(`ia stub ${f}: was a shipped URL`, oldUrls.includes(f));
 
@@ -399,17 +396,18 @@ export async function runIA(r) {
   try { base = git(['show', `${BASELINE}:index.html`]); } catch (e) { r.check('ia preserve: read BASELINE index.html', false, e.message); }
   if (base) {
     const sect = (id) => (new RegExp(`<section class="[^"]*" id="${id}"[\\s\\S]*?<\\/section>\\s*(?=<!--|<\\/main>)`).exec(base) || [''])[0];
-    const pairs = [['field log', sect('log'), 'writing.html'], ['manifesto', sect('philosophy'), 'writing.html'], ['project cards', sect('projects'), 'work.html']];
+    // Nick (2026-11-13): Work tab removed. The BASELINE homepage project-card pair is gone; those strings are in RETIRED.
+    const pairs = [['field log', sect('log'), 'writing.html'], ['manifesto', sect('philosophy'), 'writing.html']];
     for (const [label, part, newF] of pairs) {
       const n = blocks(part).length;
       const miss = html[newF] ? missingBlocks(part, [mainOf(html[newF])]).filter((b) => !RETIRED.includes(b) && !REWORDED.includes(b)) : ['(target missing)'];
       if (r.check(`ia preserve BASELINE homepage ${label} → ${newF} (${n} blocks)`, n > 0 && miss.length === 0, `${miss.length} missing: ${showMissing(miss)}`)) preserved += n;
     }
-    // Nothing else on the old homepage disappears either: each block lives on index, work or writing.
-    const hubs = ['index.html', 'work.html', 'writing.html'].filter((f) => html[f]).map((f) => mainOf(html[f]));
+    // Nothing else on the old homepage disappears either: each block lives on index or writing.
+    const hubs = ['index.html', 'writing.html'].filter((f) => html[f]).map((f) => mainOf(html[f]));
     const n = blocks(mainOf(base)).length;
     const miss = missingBlocks(mainOf(base), hubs, RENAMED).filter((b) => !RETIRED.includes(b) && !REWORDED.includes(b));
-    if (r.check(`ia preserve BASELINE homepage <main> → index/work/writing (${n} blocks)`, miss.length === 0, `${miss.length} missing: ${showMissing(miss)}`)) preserved += n;
+    if (r.check(`ia preserve BASELINE homepage <main> → index/writing (${n} blocks)`, miss.length === 0, `${miss.length} missing: ${showMissing(miss)}`)) preserved += n;
   }
   r.check(`ia preserve: total blocks verified = ${preserved}`, preserved > 0);
   console.log(`check-ia: content preservation verified ${preserved} text blocks (old pages from main, homepage from ${BASELINE.slice(0, 7)})`);

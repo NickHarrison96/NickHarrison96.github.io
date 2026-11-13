@@ -223,9 +223,8 @@ async function run() {
     if (at(8)) for (const id of ['log', 'philosophy']) r.check(`writing: section #${id}`, ids(html['writing.html'] || '').has(id));
     if (at(8)) for (const href of ITEMS_LINKS) r.check(`index: keeps link ${href}`, h.includes(`href="${href}"`));
     r.check('index: marquee', /class="marquee"/.test(h));
-    // Phase 9: the EFI card left the homepage with the featured-work grid; work.html carries the link.
+    // Nick (2026-11-13): Work tab removed. Dropped the work.html EFI repo-link assertion.
     if (!at(9)) r.check('index: EFI repo link', h.includes('https://github.com/NickHarrison96/MSI-MPG-x570-EFI'));
-    if (at(8)) r.check('work: EFI repo link', (html['work.html'] || '').includes('https://github.com/NickHarrison96/MSI-MPG-x570-EFI'));
     const texts = {};
     const textOf = (f) => (texts[f] ??= pageText(html[f] || ''));
     for (const [phrase, where, from = 0] of VERBATIM_HOME) {
@@ -233,7 +232,8 @@ async function run() {
       const f = at(8) ? where : 'index.html';
       r.check(`${f.replace('.html', '')} verbatim: "${phrase.slice(0, 48)}…"`, (f === 'index.html' ? text : textOf(f)).includes(phrase));
     }
-    for (const f of ['index.html', 'writing.html', 'work.html']) {
+    // Nick (2026-11-13): Work tab removed
+    for (const f of ['index.html', 'writing.html']) {
       if (html[f]) r.check(`${f}: no canvas stand-in entries`, !/Diagnostics Suite|water-damaged|key fact or stat/.test(html[f]));
     }
   }
@@ -305,16 +305,16 @@ async function run() {
 }
 
 // Copy that must survive verbatim (Nick's own writing).
-// [phrase, page, from phase]: from phase 8 the projects live on work.html and the manifesto on writing.html.
+// [phrase, page, from phase]: from phase 8 the manifesto lives on writing.html.
+// Nick (2026-11-13): Work tab removed
 // Phase 9 (Nick, 2026-11-08): the hero bio's second sentence is his rewrite (BIO in check-guides.mjs); the two
 // project descriptions that were not his work are gone (check-guides.mjs asserts their absence); the
 // case-study lede left the homepage with the teaser and is asserted on writing.html (featured card).
 const VERBATIM_HOME = [
   [BIO, 'index.html', 9],
-  ['Open source projects, AI integrations, and system-level tools maintained on GitHub.', 'work.html'],
-  ['Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning.', 'work.html'],
+  // Nick (2026-11-13): Work tab removed. Dropped the work.html project-card verbatim assertions.
   ['A Ryzen Hackintosh (OpenCore 1.0.8, MacPro7,1 SMBIOS) hit an account-access problem. This is how we worked around OpenDirectory locks and space limits with a parallel APFS volume, without erasing the reported 401.5 GB data volume. File-integrity verification is pending.', 'writing.html'],
-  ['Hackintosh (SMBIOS: MacPro7,1)', 'index.html'],
+  ['MSI MPG X570 Gaming Edge WiFi', 'index.html'], // Nick (2026-11-13): show his standard rig, not the SMBIOS
   ['Computers are meant to be tools of empowerment, creative expression, and personal agency.', 'writing.html'],
   ['Breaking down UNIX, APFS, and bootloader internals into transparent, actionable guides.', 'writing.html'],
   ['Your data belongs to you. Every write-up tries non-destructive methods first and is honest about what can\'t be guaranteed.', 'writing.html'],

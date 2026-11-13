@@ -188,15 +188,14 @@ try {
       check(`index no-JS: ${sel} visible`, await visible(page, sel));
     }
     if (at(8)) {
+      // Nick (2026-11-13): Work tab removed
       const noJs = {
         'writing.html': ['#featured a[href="apfs-recovery.html"]', '#essays li', '#log .log-entry', '#philosophy h2'],
-        'work.html': ['.project-grid .project', '.project-foot a'],
         'repair.html': ['#mission h2', '#legislation h2', '#get-involved h2', '#guides h2', '#cafes h2', '#talks h2', '#mission .note', '.section-nav'],
         'about.html': ['#about h1', '#team .team-card', '#socials .social-tile'],
       };
       if (at(9)) {
         noJs['writing.html'].push('#library .guide-card', '#log .log-entry[data-type="guide"]');
-        noJs['work.html'].push('#build dl', '#built-tools .section-cta a');
         noJs['guide-kali-wsl2.html'] = ['#windows-10 h2', '#windows-11 h2', '#windows-10 pre', '#windows-11 pre'];
         noJs['guide-llama-cpp.html'] = ['#quick-reference h2', '#build pre', '#comparison table'];
         noJs['guide-ollama-claude-code-windows.html'] = ['#step-1 pre', '.section-nav'];
@@ -330,13 +329,18 @@ try {
     }
 
     // Each stub lands on its new page + section; an extra hash is carried over.
+    // Nick (2026-11-13): Work tab removed — the work.html stub is a page-level redirect (no section id).
     for (const [f, target, id] of STUBS) {
       const page = await ctx.newPage();
       await page.goto(`${BASE}/${f}`, { waitUntil: 'load' });
       await page.waitForURL((u) => u.pathname.endsWith('/' + target), { timeout: 5000 }).catch(() => {});
       await page.waitForTimeout(200);
-      check(`stub ${f} → ${target}#${id}`, (await here(page)) === `${target}#${id}`, await here(page));
-      check(`stub ${f}: #${id} on the landing page`, await page.evaluate((x) => !!document.getElementById(x), id));
+      if (id) {
+        check(`stub ${f} → ${target}#${id}`, (await here(page)) === `${target}#${id}`, await here(page));
+        check(`stub ${f}: #${id} on the landing page`, await page.evaluate((x) => !!document.getElementById(x), id));
+      } else {
+        check(`stub ${f} → ${target}`, (await here(page)) === target, await here(page));
+      }
       await page.close();
     }
     {
@@ -367,7 +371,8 @@ try {
     }
 
     // Terminal: open repair / open legislation.
-    for (const [cmd, to] of [['open repair', 'repair.html'], ['open legislation', 'repair.html#legislation'], ['open work', 'work.html']]) {
+    // Nick (2026-11-13): Work tab removed
+    for (const [cmd, to] of [['open repair', 'repair.html'], ['open legislation', 'repair.html#legislation']]) {
       const { page } = await open(ctx, 'index.html');
       await page.locator('#term-input').fill(cmd);
       await page.locator('#term-input').press('Enter');
@@ -584,21 +589,12 @@ try {
       check(`palette (${from}): "${q}" → ${to}`, (await here(page)) === to, await here(page));
       await page.close();
     }
-    for (const [from, to] of [['index.html#case-study', 'apfs-recovery.html'], ['index.html#projects', 'work.html#projects']]) {
+    // Nick (2026-11-13): Work tab removed. Dropped the index.html#projects → work.html#projects and work.html catalog-card checks.
+    for (const [from, to] of [['index.html#case-study', 'apfs-recovery.html']]) {
       const page = await ctx.newPage();
       await page.goto(`${BASE}/${from}`, { waitUntil: 'load' });
       await page.waitForURL((u) => u.pathname.endsWith('/' + to.split('#')[0]), { timeout: 5000 }).catch(() => {});
       check(`${from} → ${to}`, (await here(page)) === to, await here(page));
-      await page.close();
-    }
-
-    // Work: the tool cards render from the catalog and link the downloads page.
-    {
-      const { page, errors } = await open(ctx, 'work.html');
-      const n = await page.evaluate(() => ({ cards: document.querySelectorAll('#built-tools .tool-card').length, links: [...document.querySelectorAll('#built-tools .tool-card a')].filter((a) => a.getAttribute('href') === 'downloads.html').length }));
-      check('work: tool cards rendered from the catalog', n.cards === 3, JSON.stringify(n));
-      check('work: each tool card links downloads.html', n.links === 3, JSON.stringify(n));
-      check('work: no errors', errors.length === 0, errors.join(' | '));
       await page.close();
     }
     await ctx.close();

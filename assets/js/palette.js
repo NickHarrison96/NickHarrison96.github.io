@@ -6,7 +6,6 @@ import { PROJECTS } from './projects.js';
 const R2R = 'right to repair';
 const ITEMS = [
   { label: 'Home', kind: 'page', href: 'index.html' },
-  { label: 'Work', kind: 'hub', href: 'work.html', keys: 'projects repositories github' },
   { label: 'Blog', kind: 'hub', href: 'writing.html', keys: 'blog case studies essays tutorials write-ups newsletter' },
   { label: 'Right to Repair', kind: 'hub', href: 'repair.html', keys: 'campaign' },
   { label: 'Tools', kind: 'hub', href: 'tools.html', keys: 'write-ups kits engineering' },
@@ -16,7 +15,6 @@ const ITEMS = [
   { label: 'About', kind: 'hub', href: 'about.html', keys: 'company harrison technology solutions' },
   { label: 'APFS Recovery Case Study', kind: 'case study', href: 'apfs-recovery.html', keys: 'macos recovery opencore disk' },
   { label: 'Live terminal', kind: 'section', href: 'index.html#terminal' },
-  { label: 'Projects', kind: 'section', href: 'work.html#projects' },
   { label: 'Essays', kind: 'section', href: 'writing.html#essays' },
   { label: 'Case Studies', kind: 'section', href: 'writing.html#case-studies' },
   { label: 'Tutorials', kind: 'section', href: 'writing.html#tutorials', keys: 'guides kali wsl2 local ai llama ollama' },
