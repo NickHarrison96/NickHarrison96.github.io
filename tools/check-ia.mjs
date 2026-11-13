@@ -300,7 +300,7 @@ export async function runIA(r) {
     for (const id of rows) r.check(`ia tools.html: #${id}`, own.has(id));
     r.check('ia tools.html: category row headings link to their anchors', rows.every((id) => t.includes(`href="#${id}"`)));
     r.check('ia tools.html: RootForgeKit card → downloads.html', /id="tool-writeups"[\s\S]*?RootForgeKit[\s\S]*?href="downloads\.html"/.test(t));
-    r.check('ia tools.html: Pymobile3-GUI and BipPoyAI cards present', t.includes('Pymobile3-GUI') && t.includes('BipPoyAI'));
+    r.check('ia tools.html: Pymobile3-GUI card present, BipPoyAI removed (Nick 2026-11-13)', t.includes('Pymobile3-GUI') && !t.includes('BipPoyAI'));
     r.check('ia tools.html: write-up coming labels', (t.match(/Write-up coming/g) || []).length >= 3);
   }
 

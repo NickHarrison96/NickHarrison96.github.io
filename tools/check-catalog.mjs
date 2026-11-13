@@ -23,10 +23,6 @@ const LEGACY = {
     url: 'https://github.com/NickHarrison96/Pymobile3-GUI/archive/refs/heads/feature/sshrd-ramdisk.zip',
     version: 'v0.1 · pre-release', image: 'assets/dl-pymobile3.png', hue: 265, host: 'github',
   },
-  BipPoyAI: {
-    url: 'https://github.com/NickHarrison96/BipPoyAI/archive/refs/heads/main.zip',
-    version: 'v0.1 · pre-alpha', image: 'assets/dl-bippoyai.png', hue: 32, host: 'github',
-  },
 };
 
 /** Inline catalog arrays that must never come back (TOOLS / DOWNLOADS only). */
