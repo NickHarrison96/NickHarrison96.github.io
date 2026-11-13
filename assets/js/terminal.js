@@ -15,7 +15,7 @@ const PAGES = {
   repair: 'repair.html', mission: 'repair.html#mission', legislation: 'repair.html#legislation',
   'get-involved': 'repair.html#get-involved', guides: 'repair.html#guides', 'repair-guides': 'repair.html#guides',
   cafes: 'repair.html#cafes', 'repair-cafes': 'repair.html#cafes', talks: 'repair.html#talks',
-  tools: 'downloads.html', downloads: 'downloads.html', about: 'about.html', team: 'about.html#team', socials: 'about.html#socials',
+  tools: 'tools.html', downloads: 'downloads.html', about: 'about.html', team: 'about.html#team', socials: 'about.html#socials',
 };
 
 const COMMANDS = {

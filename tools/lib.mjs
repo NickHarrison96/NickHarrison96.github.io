@@ -13,7 +13,7 @@ export const exists = (rel) => existsSync(join(ROOT, rel));
 export const PAGES = [
   ['index.html', 0], ['about.html', 0], ['downloads.html', 0], ['writing.html', 0],
   ['apfs-recovery.html', 4],
-  ['work.html', 8], ['repair.html', 8],
+  ['work.html', 8], ['repair.html', 8], ['tools.html', 10],
   ['guide-kali-wsl2.html', 9], ['guide-ollama-claude-code-windows.html', 9],
   ['guide-ollama-claude-code-macos.html', 9], ['guide-llama-cpp.html', 9],
 ];
@@ -68,14 +68,14 @@ export const STUBS = [
   ['socials.html', 'about.html', 'socials'],
 ];
 
-/** Header nav: the five hubs, in order (phase 8). Sub-pages map to the hub they live under. */
+/** Header nav: the hubs, in order. Sub-pages map to the hub they live under. */
 export const HUBS = [
   ['Work', 'work.html'], ['Blog', 'writing.html'], ['Right to Repair', 'repair.html'],
-  ['Tools', 'downloads.html'], ['About', 'about.html'],
+  ['Tools', 'tools.html'], ['Downloads', 'downloads.html'], ['About', 'about.html'],
 ];
 export const HUB_OF = {
   'index.html': null, 'work.html': 'work.html', 'writing.html': 'writing.html', 'apfs-recovery.html': 'writing.html',
-  'repair.html': 'repair.html', 'downloads.html': 'downloads.html', 'about.html': 'about.html',
+  'repair.html': 'repair.html', 'tools.html': 'tools.html', 'downloads.html': 'downloads.html', 'about.html': 'about.html',
   'guide-kali-wsl2.html': 'writing.html', 'guide-ollama-claude-code-windows.html': 'writing.html',
   'guide-ollama-claude-code-macos.html': 'writing.html', 'guide-llama-cpp.html': 'writing.html',
 };

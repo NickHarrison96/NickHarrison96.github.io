@@ -151,21 +151,21 @@ export async function runIA(r) {
   const stubFiles = new Map(STUBS.map(([f, page, id]) => [f, { page, id }]));
   const html = Object.fromEntries(real.filter(exists).map((f) => [f, read(f)]));
 
-  // Header nav = the five hubs, on every real page; the mobile menu toggles that same nav.
+  // Header nav = the hubs, on every real page; the mobile menu toggles that same nav.
   for (const f of real) {
     if (!html[f]) { r.check(`ia: ${f} exists`, false); continue; }
     const links = navLinks(html[f]);
-    r.check(`ia ${f}: header nav is exactly the five hubs`, JSON.stringify(links) === JSON.stringify(HUBS), JSON.stringify(links));
+    r.check(`ia ${f}: header nav is exactly the hubs`, JSON.stringify(links) === JSON.stringify(HUBS), JSON.stringify(links));
     r.check(`ia ${f}: mobile menu toggles #site-nav`, /<button class="menu-btn"[^>]*aria-controls="site-nav"/.test(html[f]) && /<nav class="site-nav" id="site-nav"/.test(html[f]));
     r.check(`ia ${f}: ⌘K search button kept`, /<button class="search-btn"[^>]*data-palette-open/.test(html[f]));
     r.check(`ia ${f}: avatar hotlink kept`, html[f].includes('<img src="https://github.com/NickHarrison96.png?size=96"'));
     r.check(`ia ${f}: GitHub link → github.com/NickHarrison96`, /<a class="gh-link[^"]*" href="https:\/\/github\.com\/NickHarrison96"/.test(html[f]));
     r.check(`ia ${f}: hub mapping known`, f in HUB_OF);
-    // Footer: five hubs + contact + legal + top.
+    // Footer: hubs + contact + legal + top.
     const ft = /<footer class="site-footer">([\s\S]*?)<\/footer>/.exec(html[f])?.[1] || '';
     const fnav = /<nav class="footer-nav"[^>]*>([\s\S]*?)<\/nav>/.exec(ft)?.[1] || '';
     const flinks = elements(fnav, 'a').map((a) => [pageText(a.inner), attr(a.attrs, 'href')]);
-    r.check(`ia ${f}: footer nav is the five hubs`, JSON.stringify(flinks) === JSON.stringify(HUBS), JSON.stringify(flinks));
+    r.check(`ia ${f}: footer nav is the hubs`, JSON.stringify(flinks) === JSON.stringify(HUBS), JSON.stringify(flinks));
     r.check(`ia ${f}: footer contact (email, YouTube, GitHub)`, ft.includes('href="mailto:harrisontechdev@gmail.com"') && ft.includes('href="https://www.youtube.com/@NickHarrison96"') && ft.includes('href="https://github.com/NickHarrison96"'));
     r.check(`ia ${f}: footer legal line`, /&copy;[^<]*Nick Harrison\. Open Technical License\./.test(ft));
     r.check(`ia ${f}: footer Top ↑`, /<a class="to-top" href="#main">Top &uarr;<\/a>/.test(ft));
@@ -189,14 +189,27 @@ export async function runIA(r) {
   if (html['writing.html']) {
     const w = html['writing.html'];
     const own = ids(w);
-    const rows = ['case-studies', 'essays', 'projects', 'tools', 'right-to-repair'];
+    const rows = ['case-studies', 'essays', 'projects', 'right-to-repair'];
     for (const id of [...rows, 'philosophy', 'log']) r.check(`ia writing.html: #${id}`, own.has(id));
     r.check('ia writing.html: case study card → apfs-recovery.html', /id="case-studies"[\s\S]*?href="apfs-recovery\.html"/.test(w));
     r.check('ia writing.html: category row headings link to their anchors', rows.every((id) => w.includes(`href="#${id}"`)));
     r.check('ia writing.html: title cards present', (w.match(/class="lp-card blog-card/g) || []).length >= 5);
     r.check('ia writing.html: no log filter chips', (w.match(/class="chip" data-filter=/g) || []).length === 0);
+    r.check('ia writing.html: points at tools.html write-ups', /href="tools\.html"/.test(w));
     r.check('ia writing.html: manifesto is the last section', w.lastIndexOf('<section') === w.indexOf('<section class="section" id="philosophy"'));
     r.check('ia writing.html: manifesto title', pageText(w).includes('Why We Publish & Share These Write-Ups'));
+  }
+
+  // Tools hub: write-up and kit rows (cards come from existing catalog entries; kits are placeholders).
+  if (html['tools.html']) {
+    const t = html['tools.html'];
+    const own = ids(t);
+    const rows = ['tool-writeups', 'engineering-kits'];
+    for (const id of rows) r.check(`ia tools.html: #${id}`, own.has(id));
+    r.check('ia tools.html: category row headings link to their anchors', rows.every((id) => t.includes(`href="#${id}"`)));
+    r.check('ia tools.html: RootForgeKit card → downloads.html', /id="tool-writeups"[\s\S]*?RootForgeKit[\s\S]*?href="downloads\.html"/.test(t));
+    r.check('ia tools.html: Pymobile3-GUI and BipPoyAI cards present', t.includes('Pymobile3-GUI') && t.includes('BipPoyAI'));
+    r.check('ia tools.html: write-up coming labels', (t.match(/Write-up coming/g) || []).length >= 3);
   }
 
   // Homepage overview order + targets.
