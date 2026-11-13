@@ -49,6 +49,8 @@ export const RETIRED = [
   'APFS Recovery',
   'Stable Diffusion',
   'Read APFS Recovery Case Study',
+  // Nick (2026-11-13): the home page is a welcome, not an Apple page; the Apple-specific hero badge is gone.
+  'MacPro7,1 OpenCore',
 ];
 
 /**
@@ -290,12 +292,16 @@ export async function runIA(r) {
   // Homepage overview order + targets.
   if (html['index.html']) {
     const h = html['index.html'];
-    // Phase 9 (Nick): the featured-work section was replaced by the expanded latest-writing grid.
-    const order = ['terminal', 'repair'].map((id) => h.indexOf(`id="${id}"`));
-    r.check('ia index: hero/terminal → repair (writing on Blog, tools on tools.html)', order.every((v, i) => v >= 0 && (i === 0 || v > order[i - 1])), JSON.stringify(order));
+    // Nick (2026-11-13): the home page is a welcome about knowledge and empowerment, not Apple or the case study:
+    // hero/terminal → what we do → values strip → closing invite. The Apple layer explainer moved to writing.html.
+    const order = ['terminal', 'what-we-do', 'principle', 'start'].map((id) => h.indexOf(`id="${id}"`));
+    r.check('ia index: hero/terminal → what-we-do → principle → start', order.every((v, i) => v >= 0 && (i === 0 || v > order[i - 1])), JSON.stringify(order));
     for (const id of ['log', 'philosophy']) r.check(`ia index: #${id} moved off the homepage`, !ids(h).has(id));
     r.check('ia index: marquee kept', /class="marquee"/.test(h));
-    r.check('ia index: teardown stack kept', /class="stack-stage"/.test(h) && (h.match(/class="layer-panel"/g) || []).length === 5);
+    r.check('ia index: Apple module gone (no #repair, stack or layer panels)', !ids(h).has('repair') && !/class="stack-stage"/.test(h) && !/class="layer-panel"/.test(h));
+    r.check('ia index: no Apple or case-study headline', !/All Things Apple|case study/i.test(pageText(h)));
+    const wl = html['writing.html'] || '';
+    r.check('ia writing.html: Apple layer explainer (5 layers) moved here', /id="inside-the-device"/.test(wl) && [1, 2, 3, 4, 5].every((n) => wl.includes(`id="layer-${n}"`)));
     // The APFS case study lives on the Blog (writing.html); index must not link to it.
     // Depth pass (2026-11-13): café, guides and talks cards left the Apple module (repair/booking copy).
     // Principle strip keeps the mission link. Other repair sections live on repair.html.

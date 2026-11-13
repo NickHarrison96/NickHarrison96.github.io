@@ -181,7 +181,8 @@ try {
     const { page } = await open(nojs, 'index.html', { skipBoot: false, ready: false });
     // Phase 8 moved the field log and the manifesto to writing.html (checked there).
     // Phase 9 (Nick): the featured-work grid and the case-study teaser gave way to the latest-writing grid.
-    const homeSel = at(9) ? ['#terminal pre', '#writing .w-card', '#repair .layer-panel'] : ['#terminal pre', '#projects .project', '#case-study h2', '#repair .layer-panel'];
+    // Nick (2026-11-13): the home page is a welcome; the writing grid and Apple layer panels left it.
+    const homeSel = at(9) ? ['#terminal pre', '#what-we-do .lp-card', '#principle h2', '#start .dl-btn'] : ['#terminal pre', '#projects .project', '#case-study h2', '#repair .layer-panel'];
     if (!at(8)) homeSel.push('#log .log-entry', '#philosophy h2');
     for (const sel of homeSel) {
       check(`index no-JS: ${sel} visible`, await visible(page, sel));

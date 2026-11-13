@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#05070d">
   <meta name="description"
-    content="Nick Harrison — security researcher and tech enthusiast. How devices work behind the scenes, bootloaders, data recovery, and open write-ups." />
+    content="Your local hub for truth and support with all things tech. Free, open security research, tools, tutorials and write-ups by Nick Harrison." />
   <title>Nick Harrison — Security Research &amp; Data Recovery</title>
   <script>/* shell: runs before first paint — see AGENTS.md "Shell" */(function(d){d.classList.add('js');try{if(localStorage.getItem('nh-jailbreak')==='1')d.dataset.theme='jailbreak'}catch(e){}if(d.hasAttribute('data-boot')&&!location.hash&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{if(!sessionStorage.getItem('nh-booted')){sessionStorage.setItem('nh-booted','1');d.classList.add('booting')}}catch(e){}}})(document.documentElement);</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,8 +34,8 @@
 
   <div class="marquee" role="region" aria-label="Highlights">
     <div class="marquee-track">
-      <div class="marquee-group"><span>LATEST WRITE-UP: macOS APFS Recovery</span><span class="mq-sep" aria-hidden="true">•</span><span>nickharrison96.github.io</span><span class="mq-sep" aria-hidden="true">•</span><span>OpenCore Bootloader Research</span><span class="mq-sep" aria-hidden="true">•</span><span>Non-Destructive Data Recovery</span><span class="mq-sep" aria-hidden="true">•</span><span>iOS · Android · Windows · macOS</span><span class="mq-sep" aria-hidden="true">•</span><span>New Tutorials: Kali on WSL2, Local AI Coding with Ollama</span><span class="mq-sep" aria-hidden="true">•</span><span>Right to Repair: you own it, you should understand it</span><span class="mq-sep" aria-hidden="true">•</span><span>Open source, always</span><span class="mq-sep" aria-hidden="true">•</span></div>
-      <div class="marquee-group" aria-hidden="true"><span>LATEST WRITE-UP: macOS APFS Recovery</span><span class="mq-sep" aria-hidden="true">•</span><span>nickharrison96.github.io</span><span class="mq-sep" aria-hidden="true">•</span><span>OpenCore Bootloader Research</span><span class="mq-sep" aria-hidden="true">•</span><span>Non-Destructive Data Recovery</span><span class="mq-sep" aria-hidden="true">•</span><span>iOS · Android · Windows · macOS</span><span class="mq-sep" aria-hidden="true">•</span><span>New Tutorials: Kali on WSL2, Local AI Coding with Ollama</span><span class="mq-sep" aria-hidden="true">•</span><span>Right to Repair: you own it, you should understand it</span><span class="mq-sep" aria-hidden="true">•</span><span>Open source, always</span><span class="mq-sep" aria-hidden="true">•</span></div>
+      <div class="marquee-group"><span>Free Tutorials &amp; Write-ups</span><span class="mq-sep" aria-hidden="true">•</span><span>nickharrison96.github.io</span><span class="mq-sep" aria-hidden="true">•</span><span>OpenCore Bootloader Research</span><span class="mq-sep" aria-hidden="true">•</span><span>Non-Destructive Data Recovery</span><span class="mq-sep" aria-hidden="true">•</span><span>iOS · Android · Windows · macOS</span><span class="mq-sep" aria-hidden="true">•</span><span>New Tutorials: Kali on WSL2, Local AI Coding with Ollama</span><span class="mq-sep" aria-hidden="true">•</span><span>Right to Repair: you own it, you should understand it</span><span class="mq-sep" aria-hidden="true">•</span><span>Open source, always</span><span class="mq-sep" aria-hidden="true">•</span></div>
+      <div class="marquee-group" aria-hidden="true"><span>Free Tutorials &amp; Write-ups</span><span class="mq-sep" aria-hidden="true">•</span><span>nickharrison96.github.io</span><span class="mq-sep" aria-hidden="true">•</span><span>OpenCore Bootloader Research</span><span class="mq-sep" aria-hidden="true">•</span><span>Non-Destructive Data Recovery</span><span class="mq-sep" aria-hidden="true">•</span><span>iOS · Android · Windows · macOS</span><span class="mq-sep" aria-hidden="true">•</span><span>New Tutorials: Kali on WSL2, Local AI Coding with Ollama</span><span class="mq-sep" aria-hidden="true">•</span><span>Right to Repair: you own it, you should understand it</span><span class="mq-sep" aria-hidden="true">•</span><span>Open source, always</span><span class="mq-sep" aria-hidden="true">•</span></div>
     </div>
     <button type="button" class="marquee-toggle" aria-pressed="false" aria-label="Pause highlights">Pause</button>
   </div>
@@ -76,26 +76,26 @@
 
   <main id="main" class="home">
 
-    <!-- ─── Hero + live terminal ─────────────────────────────── -->
+    <!-- Nick (2026-11-13): the home page is a welcome, not an Apple or case-study page. Knowledge, empowerment, what we do. -->
+    <!-- ─── Welcome hero + live terminal ─────────────────────── -->
     <section class="hero spot" aria-labelledby="hero-title">
       <div class="hero-glow" aria-hidden="true"></div>
       <div class="hero-grid">
         <div class="hero-copy">
-          <!-- TODO(Nick): 1. Pick a tagline (shortlist in site-copy.md, plus option 6: "Your open-source buddy for all things tech. You own it. You should understand it."). 2. "We" for the hub vs "I" when Nick speaks about his own research — this pass uses both that way. -->
-          <div class="status-pill-lg"><span class="dot" aria-hidden="true"></span>nickharrison96.github.io<span class="sep" aria-hidden="true">|</span><span class="hl">Security Research &amp; Data Recovery</span></div>
-          <h1 id="hero-title" class="hero-title">How Devices Work <br><span class="grad">Behind the Scenes.</span></h1>
-          <p class="hero-motto"><span class="t-ok">$</span> whoami → security researcher · bootloaders · data recovery</p>
-          <p class="hero-lede hero-lede-sm">I'm Nick, a security researcher and tech enthusiast. I explore how devices work behind the scenes and how they protect your personal data every day. Through that research, I help companies and their teams make the devices you rely on safer and more secure.</p>
-          <p class="hero-lede hero-lede-sm">My research covers iOS, Android, Windows and macOS, mostly low-level bootloader interactions and data recovery. Everything I learn gets published here and on GitHub, free and open. The device in your hand is yours, and so is the right to understand it.</p>
-          <ul class="badges" aria-label="Focus areas">
-            <li style="--c:#38bdf8">MacPro7,1 OpenCore</li>
-            <li style="--c:#818cf8">APFS Recovery</li>
-            <li style="--c:#fbbf24">Bootloaders</li>
-            <li style="--c:#34d399">iOS · Android · Windows · macOS</li>
+          <!-- TODO(Nick): 1. Pick a tagline (shortlist in site-copy.md, plus option 6: "Your open-source buddy for all things tech. You own it. You should understand it."). The hero headline below is a placeholder built from your own words. -->
+          <div class="status-pill-lg"><span class="dot" aria-hidden="true"></span>nickharrison96.github.io<span class="sep" aria-hidden="true">|</span><span class="hl">Your Open-Source Buddy</span></div>
+          <h1 id="hero-title" class="hero-title">Your Local Hub for <br><span class="grad">Truth &amp; Tech.</span></h1>
+          <p class="hero-motto"><span class="t-ok">$</span> whoami → knowledge · empowerment · open source</p>
+          <p class="hero-lede hero-lede-sm">Welcome in. We're your local hub for truth and support with all things tech: your open-source buddy. If you paid for it, you should be able to understand it, own it and keep it.</p>
+          <p class="hero-lede hero-lede-sm">Whether you're curious, stuck, or just want to know how the device in your hand really works, you're in the right place. Everything we learn gets published here and on GitHub, free and open, so nobody has to learn it alone.</p>
+          <ul class="badges" aria-label="What this place is about">
+            <li style="--c:#38bdf8">Knowledge</li>
+            <li style="--c:#818cf8">Empowerment</li>
+            <li style="--c:#34d399">Open Source</li>
             <li style="--c:#f9a8d4">Right to Repair</li>
           </ul>
           <div class="hero-cta">
-            <a href="writing.html" class="dl-btn magnetic">Read the Write-ups</a>
+            <a href="writing.html" class="dl-btn magnetic">Start with the Blog</a>
             <a href="work.html" class="btn-ghost magnetic">View Repositories</a>
             <a href="tools.html" class="btn-outline-ok magnetic">Explore the Tools <span aria-hidden="true">→</span></a>
           </div>
@@ -130,19 +130,19 @@
             <form class="term-input-row" autocomplete="off">
               <label for="term-input"><span class="t-user">nick@nicks-iMac</span>:<span class="t-path">~</span>$ </label>
               <input id="term-input" type="text" spellcheck="false" autocapitalize="off" placeholder="type help + Enter" aria-describedby="term-hint">
-              <span id="term-hint" class="visually-hidden">Commands: help, cat specs.json, recovery --status, ls ./tools, cat manifesto, whoami, open, clear. Up and down arrows recall history, Tab completes.</span>
+              <span id="term-hint" class="visually-hidden">Commands: help, cat specs.json, ls ./tools, cat manifesto, whoami, open, clear. Up and down arrows recall history, Tab completes.</span>
             </form>
           </div>
           <div class="term-cmds">
             <span class="term-cmds-label">Run Command:</span>
             <button type="button" data-cmd="help">help</button>
             <button type="button" data-cmd="cat specs.json">cat specs.json</button>
-            <button type="button" data-cmd="recovery --status">recovery --status</button>
             <button type="button" data-cmd="ls ./tools">ls ./tools</button>
             <button type="button" data-cmd="whoami">whoami</button>
             <button type="button" data-cmd="clear">clear</button>
           </div>
         </div>
+      </div>
       </div>
     </section>
 
@@ -151,111 +151,49 @@
     <section class="section" id="what-we-do" aria-labelledby="what-we-do-title">
       <div class="section-head">
         <div>
+          <p class="eyebrow" data-scramble>Here's What We Do</p>
           <h2 id="what-we-do-title" class="section-title">What We <span class="grad">Do</span></h2>
         </div>
         <p class="section-note">Two things, done in the open: we learn how systems work at the lowest level, and we write it down so you can too.</p>
       </div>
-      <div class="lp-body lp-cards">
-        <a class="lp-card tilt" href="writing.html#case-studies"><b>Hackintosh</b><span>Custom OpenCore builds that run macOS on non-Apple hardware, like our Ryzen Hackintosh on OpenCore 1.0.8 with the MacPro7,1 SMBIOS identity.</span></a>
-        <!-- TODO(Nick): 4. Platforms covered by Custom OS Tools and Support, and which repo to link from that card. Card links to Tools until then. "Support" here is open documentation, not a paid service. -->
-        <a class="lp-card tilt" href="tools.html"><b>Custom OS Tools and Support</b><span>We build tools for modifying operating systems and write custom OS bootloaders, then document the undocumented so others can use them.</span></a>
+      <div class="lp-body lp-cards home-cards">
+        <a class="lp-card tilt" href="work.html"><b>Security Research</b><span>How devices work behind the scenes and how they protect your personal data every day. Our research covers iOS, Android, Windows and macOS, mostly low-level bootloader interactions and data recovery.</span><em class="lp-card-go">See the work <span aria-hidden="true">→</span></em></a>
+        <!-- TODO(Nick): 4. Platforms covered by the OS tools, and which repo to link from this card. Card links to Tools until then. "Support" means open documentation, not a paid service. -->
+        <a class="lp-card tilt" href="tools.html"><b>Open-Source Tools</b><span>We build tools for modifying operating systems and write custom OS bootloaders, then document the undocumented so others can use them.</span><em class="lp-card-go">Tool write-ups <span aria-hidden="true">→</span></em></a>
+        <a class="lp-card tilt" href="writing.html"><b>Free Tutorials &amp; Write-ups</b><span>Step-by-step setups you can run yourself, and notes on how devices really work. Every command is the one we ran. Every gap is marked, not guessed.</span><em class="lp-card-go">Read the Blog <span aria-hidden="true">→</span></em></a>
+        <a class="lp-card tilt" href="downloads.html"><b>Free Downloads</b><span>The tools themselves, in one place, free and open.</span><em class="lp-card-go">Downloads <span aria-hidden="true">→</span></em></a>
       </div>
     </section>
 
-    <!-- ─── Right to Repair: teardown stack ──────────────────── -->
-    <section class="section" id="repair" aria-labelledby="repair-title">
-      <p class="eyebrow" data-scramble>Inside the Device</p>
-      <div class="repair-grid">
-        <div class="repair-copy">
-          <h2 id="repair-title" class="repair-title">We Specialize in All Things <span class="grad">Apple</span></h2>
-          <p class="repair-lede">From the silicon up to your files. <span class="repair-lede-wide">Hover to explore Apple's hardware and software security layers.</span><span class="repair-lede-narrow">Tap a layer to explore Apple's hardware and software security layers.</span></p>
-          <p class="repair-lede">Every layer is something you're allowed to understand. Conceptual research layers; internal layout is illustrative, not to scale.</p>
-          <ol class="layer-list" aria-label="Layers">
-            <li><a href="#layer-5" data-layer="4"><span class="ld" aria-hidden="true"></span><span>05</span><span>Data &amp; APFS</span></a></li>
-            <li><a href="#layer-4" data-layer="3"><span class="ld" aria-hidden="true"></span><span>04</span><span>Kernel &amp; OS</span></a></li>
-            <li><a href="#layer-3" data-layer="2"><span class="ld" aria-hidden="true"></span><span>03</span><span>Secure Enclave</span></a></li>
-            <li><a href="#layer-2" data-layer="1"><span class="ld" aria-hidden="true"></span><span>02</span><span>Boot ROM &amp; iBoot</span></a></li>
-            <li><a href="#layer-1" data-layer="0"><span class="ld" aria-hidden="true"></span><span>01</span><span>Hardware &amp; Silicon</span></a></li>
-          </ol>
-        </div>
-        <div class="stack-stage" aria-hidden="true">
-          <div class="stack">
-            <div class="plate" style="--i:0" data-layer="0"><span>01 Hardware &amp; Silicon</span></div>
-            <div class="plate" style="--i:1" data-layer="1"><span>02 Boot ROM &amp; iBoot</span></div>
-            <div class="plate" style="--i:2" data-layer="2"><span>03 Secure Enclave</span></div>
-            <div class="plate" style="--i:3" data-layer="3"><span>04 Kernel &amp; OS</span></div>
-            <div class="plate" style="--i:4" data-layer="4"><span>05 Data &amp; APFS</span></div>
-          </div>
-          <p class="stack-hint"><span class="repair-lede-wide">hover to explore the layers</span><span class="repair-lede-narrow">tap a layer</span></p>
-        </div>
-      </div>
-
-      <div class="layer-panels">
-        <section class="layer-panel" id="layer-1" aria-labelledby="layer-1-t">
-          <div class="lp-head">
-            <p class="lp-label">Layer 01 · Hardware &amp; Silicon</p>
-            <h3 id="layer-1-t" class="lp-title">What the Software <span class="grad">Runs On.</span></h3>
-            <a class="lp-cta" href="writing.html">Write-ups <span aria-hidden="true">→</span></a>
-          </div>
-          <div class="lp-body">
-            <p>The chip and board every layer above depends on. We explore Apple's hardware and software security layers from the software side; nothing here is taken apart.</p>
-          </div>
-        </section>
-        <section class="layer-panel" id="layer-2" aria-labelledby="layer-2-t">
-          <div class="lp-head">
-            <p class="lp-label">Layer 02 · Boot ROM &amp; iBoot</p>
-            <h3 id="layer-2-t" class="lp-title">Where Trust <span class="grad">Starts.</span></h3>
-            <a class="lp-cta" href="writing.html">Write-ups <span aria-hidden="true">→</span></a>
-          </div>
-          <div class="lp-body">
-            <p>On iPhone, Boot ROM verifies iBoot, which verifies and starts the iOS kernel. Our wider bootloader work also spans other platforms, including OpenCore on a Ryzen Hackintosh.</p>
-          </div>
-        </section>
-        <section class="layer-panel" id="layer-3" aria-labelledby="layer-3-t">
-          <div class="lp-head">
-            <p class="lp-label">Layer 03 · Secure Enclave</p>
-            <h3 id="layer-3-t" class="lp-title">Keys Kept <span class="grad">Apart.</span></h3>
-          </div>
-          <div class="lp-body">
-            <!-- TODO(Nick): add specific Secure Enclave work only if you confirm it. This panel explains Apple's design only. -->
-            <p>An isolated security subsystem within the chip, with its own secure boot process and protected cryptographic operations.</p>
-          </div>
-        </section>
-        <section class="layer-panel" id="layer-4" aria-labelledby="layer-4-t">
-          <div class="lp-head">
-            <p class="lp-label">Layer 04 · Kernel &amp; OS</p>
-            <h3 id="layer-4-t" class="lp-title">Where the System Decides <span class="grad">Who You Are.</span></h3>
-            <a class="lp-cta" href="writing.html#case-studies">macOS case study <span aria-hidden="true">→</span></a>
-          </div>
-          <div class="lp-body">
-            <p>The kernel and OS handle authentication, permissions and storage. When that breaks, data can look lost even when it isn't.</p>
-          </div>
-        </section>
-        <section class="layer-panel" id="layer-5" aria-labelledby="layer-5-t">
-          <div class="lp-head">
-            <p class="lp-label">Layer 05 · Data &amp; APFS</p>
-            <h3 id="layer-5-t" class="lp-title">Non-Destructive <span class="grad">Recovery.</span></h3>
-            <a class="lp-cta" href="writing.html#case-studies">macOS case study <span aria-hidden="true">→</span></a>
-          </div>
-          <div class="lp-body">
-            <p>APFS is the file system that holds your data. In a separate macOS case study, we worked through an account-access problem on a Ryzen Hackintosh without erasing the reported 401.5 GB data volume; file-integrity verification is pending.</p>
-          </div>
-        </section>
-      </div>
-      <div class="section-cta"><a href="repair.html" class="btn-ghost magnetic">Right to Repair <span aria-hidden="true">→</span></a></div>
-    </section>
-
-
-    <!-- ─── Principle strip ──────────────────────────────────── -->
+    <!-- ─── Values strip ─────────────────────────────────────── -->
     <section class="section" id="principle" aria-labelledby="principle-title">
       <div class="section-head">
         <div>
           <p class="eyebrow" data-scramble>Right to Repair · Open Source</p>
           <h2 id="principle-title" class="section-title">You Own It. You Should <span class="grad">Understand</span> It.</h2>
         </div>
-        <p class="section-note">Owning a device should mean you're allowed to look inside its software, learn how it boots, and get your own data back when something breaks. We publish what we find, free and open, so nobody has to learn it alone.</p>
+        <p class="section-note">Computers are meant to be tools of empowerment, creative expression, and personal agency. Here's what we stand for.</p>
       </div>
+      <ul class="values-grid">
+        <li class="tilt"><span class="m-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span><b>You own it, so you deserve to understand it.</b><span>Owning a device should mean you're allowed to look inside its software, learn how it boots, and get your own data back when something breaks.</span></li>
+        <li class="tilt"><span class="m-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span><b>Knowledge should be free.</b><span>We publish what we find, free and open, so nobody has to learn it alone. No paywall, no account.</span></li>
+        <li class="tilt"><span class="m-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></span><b>We show our work.</b><span>Every command is the one we ran, and the code is on GitHub. If it helped us, it should be able to help you.</span></li>
+      </ul>
       <div class="section-cta"><a href="repair.html#mission" class="btn-ghost magnetic">Read the mission <span aria-hidden="true">→</span></a></div>
+    </section>
+
+    <!-- ─── Closing invite ───────────────────────────────────── -->
+    <section class="section" id="start" aria-labelledby="start-title">
+      <div class="invite tilt">
+        <p class="eyebrow" data-scramble>Pull Up a Chair</p>
+        <h2 id="start-title" class="section-title">Come On In. <span class="grad">Start Anywhere.</span></h2>
+        <p class="section-note">Questions are welcome. Pick a door and dig in. We've got your back.</p>
+        <div class="hero-cta invite-cta">
+          <a href="writing.html" class="dl-btn magnetic">Start with the Blog</a>
+          <a href="tools.html" class="btn-ghost magnetic">Browse the Tools <span aria-hidden="true">→</span></a>
+          <a href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer" class="btn-outline-ok magnetic">Follow on GitHub <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
     </section>
 
   </main>

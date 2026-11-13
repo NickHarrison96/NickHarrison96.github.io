@@ -155,6 +155,40 @@
           </a>
         </div>
       </section>
+
+      <!-- Moved from the home page (Nick, 2026-11-13: the home page is a welcome, not an Apple page). Copy kept from the old "We Specialize in All Things Apple" layer explainer. -->
+      <section class="blog-row" id="inside-the-device" aria-labelledby="inside-the-device-title">
+        <h2 id="inside-the-device-title" class="blog-row-heading"><a class="magnetic" href="#inside-the-device">Inside an Apple Device <span class="grad" aria-hidden="true">›</span></a></h2>
+        <p class="blog-row-note">From the silicon up to your files. Every layer is something you're allowed to understand. Conceptual research layers; internal layout is illustrative, not to scale.</p>
+        <div class="blog-row-cards">
+          <article class="lp-card blog-card tilt" id="layer-1">
+            <span class="blog-card-tag">Layer 01 · Hardware &amp; Silicon</span>
+            <b>What the Software Runs On.</b>
+            <span>The chip and board every layer above depends on. We explore Apple's hardware and software security layers from the software side; nothing here is taken apart.</span>
+          </article>
+          <article class="lp-card blog-card tilt" id="layer-2">
+            <span class="blog-card-tag">Layer 02 · Boot ROM &amp; iBoot</span>
+            <b>Where Trust Starts.</b>
+            <span>On iPhone, Boot ROM verifies iBoot, which verifies and starts the iOS kernel. Our wider bootloader work also spans other platforms, including OpenCore on a Ryzen Hackintosh.</span>
+          </article>
+          <article class="lp-card blog-card tilt" id="layer-3">
+            <span class="blog-card-tag">Layer 03 · Secure Enclave</span>
+            <b>Keys Kept Apart.</b>
+            <!-- TODO(Nick): add specific Secure Enclave work only if you confirm it. This card explains Apple's design only. -->
+            <span>An isolated security subsystem within the chip, with its own secure boot process and protected cryptographic operations.</span>
+          </article>
+          <a class="lp-card blog-card tilt" id="layer-4" href="apfs-recovery.html">
+            <span class="blog-card-tag">Layer 04 · Kernel &amp; OS</span>
+            <b>Where the System Decides Who You Are.</b>
+            <span>The kernel and OS handle authentication, permissions and storage. When that breaks, data can look lost even when it isn't.</span>
+          </a>
+          <a class="lp-card blog-card tilt" id="layer-5" href="apfs-recovery.html">
+            <span class="blog-card-tag">Layer 05 · Data &amp; APFS</span>
+            <b>Non-Destructive Recovery.</b>
+            <span>APFS is the file system that holds your data. In a separate macOS case study, we worked through an account-access problem on a Ryzen Hackintosh without erasing the reported 401.5 GB data volume; file-integrity verification is pending.</span>
+          </a>
+        </div>
+      </section>
     </div>
 
 

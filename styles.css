@@ -2836,6 +2836,76 @@ html[data-fx="static"] .log-entry.enter {
   margin-top: 4px;
 }
 
+/* Homepage welcome (Nick, 2026-11-13): what-we-do cards, values strip, closing invite */
+.home-cards {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.home-cards .lp-card {
+  min-height: 190px;
+}
+
+.lp-card .lp-card-go {
+  margin-top: auto;
+  font: 600 12.5px var(--font-mono);
+  font-style: normal;
+  color: var(--brand);
+}
+
+.values-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+.values-grid li {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border-radius: var(--r);
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.values-grid b {
+  font: 700 16px / 1.35 var(--font-sans);
+  color: #fff;
+}
+
+.values-grid span:not(.m-icon) {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.invite {
+  text-align: center;
+  padding: clamp(28px, 5vw, 56px) clamp(18px, 4vw, 48px);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  background: radial-gradient(120% 140% at 50% 0%, var(--brand-tint) 0%, transparent 60%), var(--card);
+}
+
+.invite .section-note {
+  margin: 12px auto 0;
+  max-width: 560px;
+}
+
+.invite-cta {
+  justify-content: center;
+  margin-top: 22px;
+}
+
+@media (max-width: 860px) {
+  .values-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* Homepage responsive */
 @media (max-width: 1023px) {
   .hero-grid,
@@ -3767,6 +3837,13 @@ html[data-theme="jailbreak"][data-fx="full"] body::after {
   overflow: hidden;
 }
 
+/* Inside an Apple Device row (moved from the home page, 2026-11-13): show each layer's full copy. */
+#inside-the-device .blog-card > span:last-of-type {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
 .blog-row-note {
   margin: 14px 0 0;
   font: 400 13.5px / 1.6 var(--font-sans);
@@ -3970,6 +4047,102 @@ html[data-theme="jailbreak"][data-fx="full"] body::after {
   line-height: 1.6;
   color: var(--muted);
   max-width: 72ch;
+}
+
+/* Compact sources list, site-wide (Nick, 2026-11-13): small, muted, 1/2/3 columns at the page bottom,
+   numbered so body footnotes (sup.fn) can point at #ref-N and each ref can jump back with ↩. */
+.refs {
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  max-width: none;
+}
+
+.refs .refs-title {
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.refs-list {
+  margin: 0;
+  padding-left: 2.2em;
+  columns: 1;
+  column-gap: 32px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.refs-list li {
+  break-inside: avoid;
+  padding: 0 0 6px 0.2em;
+  overflow-wrap: anywhere;
+}
+
+.refs-list li::marker {
+  font-family: var(--font-mono);
+  color: var(--muted);
+}
+
+.refs-list a {
+  overflow-wrap: anywhere;
+}
+
+.refs-list code {
+  font-size: 0.95em;
+}
+
+.refs-list li:target {
+  color: var(--soft);
+  background: var(--brand-tint);
+  border-radius: 4px;
+}
+
+.refs-back {
+  text-decoration: none;
+  margin-left: 2px;
+}
+
+.refs .refs-note {
+  font-size: 0.78rem;
+  max-width: none;
+  margin-top: 10px;
+}
+
+sup.fn {
+  font-size: 0.68em;
+  line-height: 0;
+  margin-left: 1px;
+}
+
+sup.fn a {
+  text-decoration: none;
+  font-family: var(--font-mono);
+}
+
+sup.fn a:target {
+  background: var(--brand-tint);
+  border-radius: 3px;
+}
+
+[id^="ref-"],
+[id^="cite-"] {
+  scroll-margin-top: 120px;
+}
+
+@media (min-width: 600px) {
+  .refs-list {
+    columns: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .refs-list {
+    columns: 3;
+  }
 }
 
 @media (max-width: 760px) {

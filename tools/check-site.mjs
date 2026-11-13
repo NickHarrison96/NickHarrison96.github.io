@@ -23,7 +23,7 @@ const FUTURE_TARGETS = {
   'apfs-recovery.html': 4, 'work.html': 8, 'repair.html': 8, 'kali-wsl2-desktop-windows-11.html': 9, 'kali-wsl2-desktop-windows-10.html': 9, 'local-ai.html': 9, 'llama-cpp.html': 9, 'guide-kali-wsl2.html': 9, 'guide-ollama-claude-code-windows.html': 9,
   'guide-ollama-claude-code-macos.html': 9, 'guide-llama-cpp.html': 9,
 };
-const FUTURE_INDEX_IDS = { terminal: 3, projects: 3, 'case-study': 3, repair: 3, writing: 8, tools: 3 };
+const FUTURE_INDEX_IDS = { terminal: 3, projects: 3, 'case-study': 3, repair: 3, writing: 8, tools: 3, 'what-we-do': 9, principle: 9, start: 9 };
 // Links the homepage must keep. Phase 8 replaced the old ITEMS grid targets (mission.html, get-involved.html,
 // repair-guides.html, legislation.html, repair-cafes.html, talks.html — now redirect stubs) with the
 // repair.html sections they moved to; writing.html and downloads.html stay.
@@ -214,7 +214,9 @@ async function run() {
     // #log and #philosophy moved to writing.html in phase 8 (asserted there below and in check-ia).
     // Phase 9 (Nick, 2026-11-08): the featured-work grid (#projects) and the case-study teaser (#case-study)
     // left the homepage; check-guides.mjs asserts they are gone and what replaced them.
-    const homeIds = at(9) ? ['terminal', 'repair', 'writing'] : ['terminal', 'projects', 'case-study', 'repair', 'writing', 'tools'];
+    // Nick (2026-11-13): the home page became a welcome (hero/terminal, what we do, values, invite); the Apple
+    // module (#repair) moved to writing.html#inside-the-device and the writing grid lives on the Blog.
+    const homeIds = at(9) ? ['terminal', 'what-we-do', 'principle', 'start'] : ['terminal', 'projects', 'case-study', 'repair', 'writing', 'tools'];
     for (const id of homeIds) {
       if ((FUTURE_INDEX_IDS[id] ?? 0) <= PHASE) r.check(`index: section #${id}`, own.has(id));
     }
@@ -312,16 +314,16 @@ const VERBATIM_HOME = [
   ['Open source projects, AI integrations, and system-level tools maintained on GitHub.', 'work.html'],
   ['Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning.', 'work.html'],
   ['A Ryzen Hackintosh (OpenCore 1.0.8, MacPro7,1 SMBIOS) hit an account-access problem. This is how we worked around OpenDirectory locks and space limits with a parallel APFS volume, without erasing the reported 401.5 GB data volume. File-integrity verification is pending.', 'writing.html'],
-  ['APFS Directory Services desync bypass completed. 401.5 GB user payload mounted at /Volumes/Big Mac - Data without data loss.', 'index.html'],
   ['Hackintosh (SMBIOS: MacPro7,1)', 'index.html'],
   ['Computers are meant to be tools of empowerment, creative expression, and personal agency.', 'writing.html'],
   ['Breaking down UNIX, APFS, and bootloader internals into transparent, actionable guides.', 'writing.html'],
   ['Your data belongs to you. Every write-up tries non-destructive methods first and is honest about what can\'t be guaranteed.', 'writing.html'],
   ['Documenting solutions creates an indexable, open roadmap for developers faced with black screens.', 'writing.html'],
   ['Honoring the classical hacker ethos of learning how software and hardware work under the hood.', 'writing.html'],
-  ['We Specialize in All Things Apple', 'index.html'],
+  // Nick (2026-11-13): "We Specialize in All Things Apple" was retired with the home Apple module; its layer
+  // copy moved to writing.html. The terminal's recovery-status line is no longer asserted on the home page.
   ['You Own It. You Should Understand It.', 'index.html'],
-  ['without erasing the reported 401.5 GB data volume; file-integrity verification is pending.', 'index.html'],
+  ['without erasing the reported 401.5 GB data volume; file-integrity verification is pending.', 'writing.html'],
 ];
 
 const VERBATIM_CASE = [

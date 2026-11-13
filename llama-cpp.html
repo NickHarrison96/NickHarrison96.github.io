@@ -88,7 +88,7 @@
 
       <section class="case-section" aria-labelledby="installation">
         <h2 id="installation" class="case-h2"><span class="step-chip">1</span> Installation</h2>
-        <p class="case-p">The official README gives two command styles. The <a href="https://llama.app/docs/installation" target="_blank" rel="noopener noreferrer">llama.app installer</a> puts a <code>llama</code> command on your PATH, and you then run <code>llama cli</code> and <code>llama serve</code>. A build from source still produces the <code>llama-cli</code> and <code>llama-server</code> binaries (on Windows, <code>llama-cli.exe</code> and <code>llama-server.exe</code>) in <code>build/bin/</code>.</p>
+        <p class="case-p">The official README gives two command styles.<sup class="fn"><a href="#ref-1" id="cite-1" aria-label="Source 1">[1]</a></sup> The <a href="https://llama.app/docs/installation" target="_blank" rel="noopener noreferrer">llama.app installer</a> puts a <code>llama</code> command on your PATH, and you then run <code>llama cli</code> and <code>llama serve</code>. A build from source still produces the <code>llama-cli</code> and <code>llama-server</code> binaries (on Windows, <code>llama-cli.exe</code> and <code>llama-server.exe</code>) in <code>build/bin/</code>.</p>
 
         <h3 class="case-h3">One-line install</h3>
         <p class="case-p">On macOS and Linux:</p>
@@ -105,9 +105,9 @@
 
       <section class="case-section" aria-labelledby="quickstart">
         <h2 id="quickstart" class="case-h2"><span class="step-chip">2</span> Quickstart</h2>
-        <p class="case-p">Download a GGUF model from Hugging Face and chat in the terminal. The official README uses this example:</p>
+        <p class="case-p">Download a GGUF model from Hugging Face and chat in the terminal. The official README uses this example:<sup class="fn"><a href="#ref-1" id="cite-1-2" aria-label="Source 1">[1]</a></sup></p>
         <div class="code-block"><span class="c-cmd">llama cli</span> -hf ggml-org/Qwen3.5-0.8B-GGUF<button type="button" class="copy-btn" data-copy="llama cli -hf ggml-org/Qwen3.5-0.8B-GGUF" aria-label="Copy the llama cli Hugging Face quickstart command">copy</button></div>
-        <p class="case-p">The llama.app quickstart also shows a Gemma example, and you can pin a quant after the repo name with a colon:</p>
+        <p class="case-p">The llama.app quickstart also shows a Gemma example<sup class="fn"><a href="#ref-4" id="cite-4" aria-label="Source 4">[4]</a></sup>, and you can pin a quant after the repo name with a colon:</p>
         <div class="code-block"><span class="c-cmd">llama cli</span> -hf unsloth/gemma-4-E4B-it-GGUF:Q4_0<button type="button" class="copy-btn" data-copy="llama cli -hf unsloth/gemma-4-E4B-it-GGUF:Q4_0" aria-label="Copy the llama cli Gemma Hugging Face example">copy</button></div>
         <p class="case-p">If you already have a <code>.gguf</code> file on disk, point at it with <code>-m</code>:</p>
         <div class="code-block"><span class="c-cmd">llama cli</span> -m my-model.gguf<button type="button" class="copy-btn" data-copy="llama cli -m my-model.gguf" aria-label="Copy the llama cli local model command">copy</button></div>
@@ -118,7 +118,7 @@
 
       <section class="case-section" aria-labelledby="build">
         <h2 id="build" class="case-h2"><span class="step-chip">3</span> Build from source</h2>
-        <p class="case-p">Clone the official repository and use CMake. The default build is CPU-only; turn on one or more GPU backends to match your hardware. The official clone URL is <code>https://github.com/ggml-org/llama.cpp</code>.</p>
+        <p class="case-p">Clone the official repository and use CMake. The default build is CPU-only; turn on one or more GPU backends to match your hardware.<sup class="fn"><a href="#ref-2" id="cite-2" aria-label="Source 2">[2]</a></sup> The official clone URL is <code>https://github.com/ggml-org/llama.cpp</code>.<sup class="fn"><a href="#ref-1" id="cite-1-3" aria-label="Source 1">[1]</a></sup></p>
         <div class="code-block"><div><span class="c-cmd">git</span> clone https://github.com/ggml-org/llama.cpp</div><div>cd llama.cpp</div><div><span class="c-cmd">cmake</span> -B build</div><div><span class="c-cmd">cmake</span> --build build --config Release</div><button type="button" class="copy-btn" data-copy="git clone https://github.com/ggml-org/llama.cpp
 cd llama.cpp
 cmake -B build
@@ -137,7 +137,7 @@ cmake --build build --config Release" aria-label="Copy the default CPU cmake bui
               <tr><td>Apple silicon</td><td><code>-DGGML_METAL=ON</code></td><td>Metal is typically on by default on macOS. Disable it with <code>-DGGML_METAL=OFF</code>.</td></tr>
               <tr><td>AMD GPU (HIP / ROCm)</td><td><code>-DGGML_HIP=ON</code></td><td>Official ROCm path. You may also need <code>HIPCXX</code>, <code>HIP_PATH</code>, and a <code>-DGPU_TARGETS=</code> value for your GPU.</td></tr>
               <tr><td>Vulkan (cross-vendor)</td><td><code>-DGGML_VULKAN=ON</code></td><td>Documented for Windows and Linux, including AMD on Windows.</td></tr>
-              <tr><td>Intel GPU (SYCL)</td><td><code>-DGGML_SYCL=ON</code></td><td>Official SYCL backend for Intel GPUs. The documented configure also sets <code>-DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx</code>.</td></tr>
+              <tr><td>Intel GPU (SYCL)</td><td><code>-DGGML_SYCL=ON</code></td><td>Official SYCL backend for Intel GPUs. The documented configure also sets <code>-DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx</code>.<sup class="fn"><a href="#ref-12" id="cite-12" aria-label="Source 12">[12]</a></sup></td></tr>
               <tr><td>CPU only</td><td>default (no extra flag)</td><td>Works everywhere; slower than a GPU build when a GPU is available.</td></tr>
             </tbody>
           </table>
@@ -232,7 +232,7 @@ cmake --build build --config Release" aria-label="Copy the GPU backend cmake exa
 
       <section class="case-section" aria-labelledby="server">
         <h2 id="server" class="case-h2"><span class="step-chip">7</span> Server, API and Web UI</h2>
-        <p class="case-p"><code>llama serve</code> (or <code>llama-server</code> from a source build) starts an HTTP server with an OpenAI-compatible API, an Anthropic-compatible <code>/v1/messages</code> endpoint, and a built-in web UI. The current default bind address is <code>127.0.0.1:9931</code>.</p>
+        <p class="case-p"><code>llama serve</code> (or <code>llama-server</code> from a source build) starts an HTTP server with an OpenAI-compatible API, an Anthropic-compatible <code>/v1/messages</code> endpoint, and a built-in web UI. The current default bind address is <code>127.0.0.1:9931</code>.<sup class="fn"><a href="#ref-7" id="cite-7" aria-label="Source 7">[7]</a></sup></p>
         <div class="code-block"><div><span class="c-cmd">llama serve</span> -hf ggml-org/gemma-4-e4b-it-GGUF:Q4_0</div><div><span class="c-cmd">llama serve</span> -m my-model.gguf -c 16384 -ngl all --port 9931</div><button type="button" class="copy-btn" data-copy="llama serve -hf ggml-org/gemma-4-e4b-it-GGUF:Q4_0
 llama serve -m my-model.gguf -c 16384 -ngl all --port 9931" aria-label="Copy the llama serve example commands">copy</button></div>
         <p class="case-p">A minimal chat-completions request, from the official docs:</p>
@@ -248,11 +248,11 @@ llama serve -m my-model.gguf -c 16384 -ngl all --port 9931" aria-label="Copy the
           <li><code>-np</code>, <code>--parallel N</code> &mdash; number of server slots for concurrent requests.</li>
           <li><code>-a</code>, <code>--alias NAME</code> &mdash; model name reported by the API.</li>
         </ul>
-        <p class="case-p">The API includes OpenAI-compatible routes such as <code>/v1/chat/completions</code>, <code>/v1/completions</code>, <code>/v1/embeddings</code>, <code>/v1/rerank</code> and <code>/v1/models</code>, plus native llama.cpp endpoints. Streaming, JSON-schema structured output, and tool calling are documented in the official API and server pages.</p>
+        <p class="case-p">The API includes OpenAI-compatible routes such as <code>/v1/chat/completions</code>, <code>/v1/completions</code>, <code>/v1/embeddings</code>, <code>/v1/rerank</code> and <code>/v1/models</code>, plus native llama.cpp endpoints. Streaming, JSON-schema structured output, and tool calling are documented in the official API and server pages.<sup class="fn"><a href="#ref-8" id="cite-8" aria-label="Source 8">[8]</a></sup><sup class="fn"><a href="#ref-6" id="cite-6" aria-label="Source 6">[6]</a></sup></p>
         <h3 class="case-h3">Web UI</h3>
-        <p class="case-p">Open <code>http://localhost:9931</code> after starting the server. Official docs describe multimodal attachments, Markdown rendering, conversation branching, and a settings panel. If 9931 is already in use, pass another port with <code>--port</code>.</p>
+        <p class="case-p">Open <code>http://localhost:9931</code> after starting the server. Official docs describe multimodal attachments, Markdown rendering, conversation branching, and a settings panel.<sup class="fn"><a href="#ref-9" id="cite-9" aria-label="Source 9">[9]</a></sup> If 9931 is already in use, pass another port with <code>--port</code>.</p>
         <h3 class="case-h3">Router mode</h3>
-        <p class="case-p">Launch <code>llama serve</code> with no model to start a router that can load and unload models on demand:</p>
+        <p class="case-p">Launch <code>llama serve</code> with no model to start a router that can load and unload models on demand<sup class="fn"><a href="#ref-7" id="cite-7-2" aria-label="Source 7">[7]</a></sup>:</p>
         <div class="code-block"><span class="c-cmd">llama serve</span><button type="button" class="copy-btn" data-copy="llama serve" aria-label="Copy the llama serve router-mode command">copy</button></div>
         <p class="case-p">Models can come from the Hugging Face cache (<code>llama serve -cl</code> lists it), a models directory (<code>--models-dir</code>), or a preset file (<code>--models-preset</code>). Requests need to name the model.</p>
       </section>
@@ -260,7 +260,7 @@ llama serve -m my-model.gguf -c 16384 -ngl all --port 9931" aria-label="Copy the
       <section class="case-section" aria-labelledby="advanced">
         <h2 id="advanced" class="case-h2"><span class="step-chip">8</span> Advanced features</h2>
         <h3 class="case-h3">Multimodal input</h3>
-        <p class="case-p">llama.cpp handles image, audio and video input through <code>libmtmd</code>. The dedicated binary from a source build is <code>llama-mtmd-cli</code>. <code>llama-server</code> / <code>llama serve</code> can also load a multimodal projector.</p>
+        <p class="case-p">llama.cpp handles image, audio and video input through <code>libmtmd</code>.<sup class="fn"><a href="#ref-11" id="cite-11" aria-label="Source 11">[11]</a></sup> The dedicated binary from a source build is <code>llama-mtmd-cli</code>. <code>llama-server</code> / <code>llama serve</code> can also load a multimodal projector.</p>
         <div class="code-block"><div><span class="c-cmt"># Hugging Face model that includes a multimodal projector</span></div><div>llama-mtmd-cli -hf ggml-org/gemma-3-4b-it-GGUF</div><div>&nbsp;</div><div><span class="c-cmt"># Local text model plus a separate projector</span></div><div>llama-server -m gemma-3-4b-it-Q4_K_M.gguf --mmproj mmproj-gemma-3-4b-it-Q4_K_M.gguf</div><div>&nbsp;</div><div><span class="c-cmt"># Load the model without offloading the projector, or with multimodal disabled</span></div><div>llama-server -hf ggml-org/gemma-3-4b-it-GGUF --no-mmproj-offload</div><div>llama-server -hf ggml-org/gemma-3-4b-it-GGUF --no-mmproj</div><button type="button" class="copy-btn" data-copy="# Hugging Face model that includes a multimodal projector
 llama-mtmd-cli -hf ggml-org/gemma-3-4b-it-GGUF
 
@@ -271,7 +271,7 @@ llama-server -m gemma-3-4b-it-Q4_K_M.gguf --mmproj mmproj-gemma-3-4b-it-Q4_K_M.g
 llama-server -hf ggml-org/gemma-3-4b-it-GGUF --no-mmproj-offload
 llama-server -hf ggml-org/gemma-3-4b-it-GGUF --no-mmproj" aria-label="Copy the multimodal llama-mtmd-cli and llama-server examples">copy</button></div>
         <p class="case-p">Vision and OCR models are often trained with a particular prompt layout and may need a larger context, for example <code>-c 8192</code>. Check the model card.</p>
-        <p class="case-p">In the interactive CLI, official llama.app docs also describe <code>/image</code> and <code>/audio</code> slash commands, and <code>--image</code> / <code>--audio</code> flags.</p>
+        <p class="case-p">In the interactive CLI, official llama.app docs also describe <code>/image</code> and <code>/audio</code> slash commands<sup class="fn"><a href="#ref-5" id="cite-5" aria-label="Source 5">[5]</a></sup>, and <code>--image</code> / <code>--audio</code> flags.</p>
 
         <h3 class="case-h3">LoRA adapters</h3>
         <div class="code-block"><div><span class="c-cmt"># One or more adapters (comma-separated)</span></div><div>llama-cli -m base.gguf --lora adapter.gguf</div><div>llama-cli -m base.gguf --lora a.gguf,b.gguf</div><div>&nbsp;</div><div><span class="c-cmt"># Custom scales, current format: FNAME:SCALE</span></div><div>llama-cli -m base.gguf --lora-scaled adapter.gguf:0.5</div><div>llama-cli -m base.gguf --lora-scaled a.gguf:1.0,b.gguf:0.8</div><button type="button" class="copy-btn" data-copy="# One or more adapters (comma-separated)
@@ -303,7 +303,7 @@ llama-cli -m model.gguf --grammar 'root ::= &quot;yes&quot; | &quot;no&quot;' -p
 llama-cli -m model.gguf --device CUDA0 --n-gpu-layers all
 llama-cli -m model.gguf --device Vulkan0 -ngl all
 llama-cli -m model.gguf -ngl 0" aria-label="Copy the list-devices and device selection commands">copy</button></div>
-        <p class="case-p"><code>--list-devices</code> prints the backends the binary can see (for example <code>CUDA0</code> or <code>Vulkan0</code>). <code>-ngl 0</code> keeps the model on the CPU. On Windows, quote paths that contain spaces: <code>llama-cli.exe -m "C:\My Models\llama.gguf"</code>.</p>
+        <p class="case-p"><code>--list-devices</code> prints the backends the binary can see<sup class="fn"><a href="#ref-2" id="cite-2-2" aria-label="Source 2">[2]</a></sup> (for example <code>CUDA0</code> or <code>Vulkan0</code>). <code>-ngl 0</code> keeps the model on the CPU. On Windows, quote paths that contain spaces: <code>llama-cli.exe -m "C:\My Models\llama.gguf"</code>.</p>
       </section>
 
       <section class="case-section" aria-labelledby="troubleshooting">
@@ -353,30 +353,30 @@ llama-cli -m model.gguf -ngl 0" aria-label="Copy the list-devices and device sel
         </div>
       </section>
 
-      <section class="case-section" aria-labelledby="sources">
-        <h2 id="sources" class="case-h2">Sources checked</h2>
-        <ul class="case-list">
-          <li>llama.cpp README (install script, <code>llama cli</code> / <code>llama serve</code>, official clone URL): <a href="https://github.com/ggml-org/llama.cpp" target="_blank" rel="noopener noreferrer">https://github.com/ggml-org/llama.cpp</a></li>
-          <li>Build guide (CMake, <code>GGML_CUDA</code>, <code>GGML_METAL</code>, <code>GGML_HIP</code>, <code>GGML_VULKAN</code>, multi-backend, <code>--list-devices</code>): <a href="https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md" target="_blank" rel="noopener noreferrer">https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md</a></li>
-          <li>Installation: <a href="https://llama.app/docs/installation" target="_blank" rel="noopener noreferrer">https://llama.app/docs/installation</a></li>
-          <li>Quickstart: <a href="https://llama.app/docs/quickstart" target="_blank" rel="noopener noreferrer">https://llama.app/docs/quickstart</a></li>
-          <li>CLI: <a href="https://llama.app/docs/cli" target="_blank" rel="noopener noreferrer">https://llama.app/docs/cli</a></li>
-          <li>Server (llama.app): <a href="https://llama.app/docs/serve" target="_blank" rel="noopener noreferrer">https://llama.app/docs/serve</a></li>
-          <li>Server README (default <code>127.0.0.1:9931</code>, API, router mode, web UI): <a href="https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md" target="_blank" rel="noopener noreferrer">https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md</a></li>
-          <li>API docs: <a href="https://llama.app/docs/api" target="_blank" rel="noopener noreferrer">https://llama.app/docs/api</a></li>
-          <li>Web UI: <a href="https://llama.app/docs/webui" target="_blank" rel="noopener noreferrer">https://llama.app/docs/webui</a></li>
-          <li>CLI tool README: <a href="https://github.com/ggml-org/llama.cpp/blob/master/tools/cli/README.md" target="_blank" rel="noopener noreferrer">https://github.com/ggml-org/llama.cpp/blob/master/tools/cli/README.md</a></li>
-          <li>Multimodal tool: <a href="https://github.com/ggml-org/llama.cpp/blob/master/tools/mtmd/README.md" target="_blank" rel="noopener noreferrer">https://github.com/ggml-org/llama.cpp/blob/master/tools/mtmd/README.md</a></li>
-          <li>SYCL backend guide: <a href="https://github.com/ggml-org/llama.cpp/blob/master/docs/backend/SYCL.md" target="_blank" rel="noopener noreferrer">https://github.com/ggml-org/llama.cpp/blob/master/docs/backend/SYCL.md</a></li>
-          <li>MIT licence: <a href="https://github.com/ggml-org/llama.cpp/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">https://github.com/ggml-org/llama.cpp/blob/master/LICENSE</a></li>
-        </ul>
-      </section>
-
-      <p class="tutorial-mark">The llama.cpp logo is from <a href="https://github.com/ggml-org/llama-brand" target="_blank" rel="noopener noreferrer">ggml-org/llama-brand</a>, used here to identify llama.cpp. llama.cpp is released under the MIT licence by the ggml authors.</p>
       <div class="page-cta">
         <a href="local-ai.html#ollama" class="dl-btn magnetic">Local AI overview <svg aria-hidden="true" class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
         <a href="writing.html#local-ai" class="btn-ghost magnetic">Back to Blog</a>
       </div>
+
+      <section class="case-section refs" aria-labelledby="sources">
+        <h2 id="sources" class="case-h2 refs-title">Sources checked</h2>
+        <ol class="refs-list">
+          <li id="ref-1">llama.cpp README (install script, <code>llama cli</code> / <code>llama serve</code>, official clone URL): <a href="https://github.com/ggml-org/llama.cpp" target="_blank" rel="noopener noreferrer">github.com/ggml-org/llama.cpp</a> <a class="refs-back" href="#cite-1" aria-label="Back to text for source 1">↩</a> <a class="refs-back" href="#cite-1-2" aria-label="Back to text for source 1, use 2">↩<sup>2</sup></a> <a class="refs-back" href="#cite-1-3" aria-label="Back to text for source 1, use 3">↩<sup>3</sup></a></li>
+          <li id="ref-2">Build guide (CMake, <code>GGML_CUDA</code>, <code>GGML_METAL</code>, <code>GGML_HIP</code>, <code>GGML_VULKAN</code>, multi-backend, <code>--list-devices</code>): <a href="https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md" target="_blank" rel="noopener noreferrer">github.com/ggml-org/…/docs/build.md</a> <a class="refs-back" href="#cite-2" aria-label="Back to text for source 2">↩</a> <a class="refs-back" href="#cite-2-2" aria-label="Back to text for source 2, use 2">↩<sup>2</sup></a></li>
+          <li id="ref-3">Installation: <a href="https://llama.app/docs/installation" target="_blank" rel="noopener noreferrer">llama.app/docs/installation</a></li>
+          <li id="ref-4">Quickstart: <a href="https://llama.app/docs/quickstart" target="_blank" rel="noopener noreferrer">llama.app/docs/quickstart</a> <a class="refs-back" href="#cite-4" aria-label="Back to text for source 4">↩</a></li>
+          <li id="ref-5">CLI: <a href="https://llama.app/docs/cli" target="_blank" rel="noopener noreferrer">llama.app/docs/cli</a> <a class="refs-back" href="#cite-5" aria-label="Back to text for source 5">↩</a></li>
+          <li id="ref-6">Server (llama.app): <a href="https://llama.app/docs/serve" target="_blank" rel="noopener noreferrer">llama.app/docs/serve</a> <a class="refs-back" href="#cite-6" aria-label="Back to text for source 6">↩</a></li>
+          <li id="ref-7">Server README (default <code>127.0.0.1:9931</code>, API, router mode, web UI): <a href="https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md" target="_blank" rel="noopener noreferrer">github.com/ggml-org/…/server/README.md</a> <a class="refs-back" href="#cite-7" aria-label="Back to text for source 7">↩</a> <a class="refs-back" href="#cite-7-2" aria-label="Back to text for source 7, use 2">↩<sup>2</sup></a></li>
+          <li id="ref-8">API docs: <a href="https://llama.app/docs/api" target="_blank" rel="noopener noreferrer">llama.app/docs/api</a> <a class="refs-back" href="#cite-8" aria-label="Back to text for source 8">↩</a></li>
+          <li id="ref-9">Web UI: <a href="https://llama.app/docs/webui" target="_blank" rel="noopener noreferrer">llama.app/docs/webui</a> <a class="refs-back" href="#cite-9" aria-label="Back to text for source 9">↩</a></li>
+          <li id="ref-10">CLI tool README: <a href="https://github.com/ggml-org/llama.cpp/blob/master/tools/cli/README.md" target="_blank" rel="noopener noreferrer">github.com/ggml-org/…/cli/README.md</a></li>
+          <li id="ref-11">Multimodal tool: <a href="https://github.com/ggml-org/llama.cpp/blob/master/tools/mtmd/README.md" target="_blank" rel="noopener noreferrer">github.com/ggml-org/…/mtmd/README.md</a> <a class="refs-back" href="#cite-11" aria-label="Back to text for source 11">↩</a></li>
+          <li id="ref-12">SYCL backend guide: <a href="https://github.com/ggml-org/llama.cpp/blob/master/docs/backend/SYCL.md" target="_blank" rel="noopener noreferrer">github.com/ggml-org/…/backend/SYCL.md</a> <a class="refs-back" href="#cite-12" aria-label="Back to text for source 12">↩</a></li>
+          <li id="ref-13">MIT licence: <a href="https://github.com/ggml-org/llama.cpp/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">github.com/ggml-org/…/master/LICENSE</a> <a class="refs-back" href="#cite-13" aria-label="Back to text for source 13">↩</a></li>
+        </ol>
+        <p class="tutorial-mark refs-note">The llama.cpp logo is from <a href="https://github.com/ggml-org/llama-brand" target="_blank" rel="noopener noreferrer">ggml-org/llama-brand</a>, used here to identify llama.cpp. llama.cpp is released under the MIT licence by the ggml authors.<sup class="fn"><a href="#ref-13" id="cite-13" aria-label="Source 13">[13]</a></sup></p>
+      </section>
       </div>
     </article>
   </main>
