@@ -7,7 +7,7 @@ const R2R = 'right to repair';
 const ITEMS = [
   { label: 'Home', kind: 'page', href: 'index.html' },
   { label: 'Work', kind: 'hub', href: 'work.html', keys: 'projects repositories github' },
-  { label: 'Blog', kind: 'hub', href: 'writing.html', keys: 'blog case studies essays write-ups newsletter' },
+  { label: 'Blog', kind: 'hub', href: 'writing.html', keys: 'blog case studies essays tutorials write-ups newsletter' },
   { label: 'Right to Repair', kind: 'hub', href: 'repair.html', keys: 'campaign' },
   { label: 'Tools', kind: 'hub', href: 'tools.html', keys: 'write-ups kits engineering' },
   { label: 'Downloads', kind: 'hub', href: 'downloads.html', keys: 'downloads free software host folder' },
@@ -19,6 +19,9 @@ const ITEMS = [
   { label: 'Projects', kind: 'section', href: 'work.html#projects' },
   { label: 'Essays', kind: 'section', href: 'writing.html#essays' },
   { label: 'Case Studies', kind: 'section', href: 'writing.html#case-studies' },
+  { label: 'Tutorials', kind: 'section', href: 'writing.html#tutorials', keys: 'guides kali wsl2' },
+  { label: 'Kali Linux Graphical Desktop on Windows 11 with WSL2', kind: 'tutorial', href: 'kali-wsl2-desktop-windows-11.html', keys: 'kali linux wsl2 wslg win-kex windows 11 desktop' },
+  { label: 'Kali Linux Desktop on Windows 10 with WSL2 and Win-KeX', kind: 'tutorial', href: 'kali-wsl2-desktop-windows-10.html', keys: 'kali linux wsl2 win-kex windows 10 desktop' },
   { label: 'Philosophy · The Core Manifesto', kind: 'section', href: 'writing.html#philosophy' },
   { label: 'Free tools', kind: 'section', href: 'index.html#tools' },
   { label: 'Mission Statement', kind: R2R, href: 'repair.html#mission' },

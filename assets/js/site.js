@@ -15,7 +15,7 @@ setTier(detectTier());
    the hub it lives under (aria-current="true"); the hub page itself gets "page". */
 const fileOf = (url) => url.pathname.split('/').pop() || 'index.html';
 const here = fileOf(location);
-const HUB_OF = { 'apfs-recovery.html': 'writing.html' };
+const HUB_OF = { 'apfs-recovery.html': 'writing.html', 'kali-wsl2-desktop-windows-11.html': 'writing.html', 'kali-wsl2-desktop-windows-10.html': 'writing.html' };
 for (const a of document.querySelectorAll('.site-nav a, .footer-nav a')) {
   const u = new URL(a.href, location.href);
   if (u.origin !== location.origin || u.hash) continue;

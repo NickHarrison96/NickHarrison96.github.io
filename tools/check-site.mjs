@@ -20,7 +20,7 @@ const ALLOWED_RUNTIME_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com', 'git
 const ALLOWED_MISSING = new Set(['selfhost.local.js']);
 // Link targets that only exist from a later phase on (skipped by --phase runs before then).
 const FUTURE_TARGETS = {
-  'apfs-recovery.html': 4, 'work.html': 8, 'repair.html': 8, 'guide-kali-wsl2.html': 9, 'guide-ollama-claude-code-windows.html': 9,
+  'apfs-recovery.html': 4, 'work.html': 8, 'repair.html': 8, 'kali-wsl2-desktop-windows-11.html': 9, 'kali-wsl2-desktop-windows-10.html': 9, 'guide-kali-wsl2.html': 9, 'guide-ollama-claude-code-windows.html': 9,
   'guide-ollama-claude-code-macos.html': 9, 'guide-llama-cpp.html': 9,
 };
 const FUTURE_INDEX_IDS = { terminal: 3, projects: 3, 'case-study': 3, repair: 3, writing: 8, tools: 3 };

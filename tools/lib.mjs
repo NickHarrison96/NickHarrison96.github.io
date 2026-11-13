@@ -13,6 +13,7 @@ export const exists = (rel) => existsSync(join(ROOT, rel));
 export const PAGES = [
   ['index.html', 0], ['about.html', 0], ['downloads.html', 0], ['writing.html', 0],
   ['apfs-recovery.html', 4],
+  ['kali-wsl2-desktop-windows-11.html', 9], ['kali-wsl2-desktop-windows-10.html', 9],
   ['work.html', 8], ['repair.html', 8], ['tools.html', 10],
   ['guide-kali-wsl2.html', 9], ['guide-ollama-claude-code-windows.html', 9],
   ['guide-ollama-claude-code-macos.html', 9], ['guide-llama-cpp.html', 9],
@@ -75,6 +76,7 @@ export const HUBS = [
 ];
 export const HUB_OF = {
   'index.html': null, 'work.html': 'work.html', 'writing.html': 'writing.html', 'apfs-recovery.html': 'writing.html',
+  'kali-wsl2-desktop-windows-11.html': 'writing.html', 'kali-wsl2-desktop-windows-10.html': 'writing.html',
   'repair.html': 'repair.html', 'tools.html': 'tools.html', 'downloads.html': 'downloads.html', 'about.html': 'about.html',
   'guide-kali-wsl2.html': 'writing.html', 'guide-ollama-claude-code-windows.html': 'writing.html',
   'guide-ollama-claude-code-macos.html': 'writing.html', 'guide-llama-cpp.html': 'writing.html',
