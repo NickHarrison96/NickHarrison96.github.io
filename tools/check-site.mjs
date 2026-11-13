@@ -314,7 +314,7 @@ const VERBATIM_HOME = [
   [BIO, 'index.html', 9],
   // Nick (2026-11-13): Work tab removed. Dropped the work.html project-card verbatim assertions.
   ['A Ryzen Hackintosh (OpenCore 1.0.8, MacPro7,1 SMBIOS) hit an account-access problem. This is how we worked around OpenDirectory locks and space limits with a parallel APFS volume, without erasing the reported 401.5 GB data volume. File-integrity verification is pending.', 'writing.html'],
-  ['Hackintosh (SMBIOS: MacPro7,1)', 'index.html'],
+  ['MSI MPG X570 Gaming Edge WiFi', 'index.html'], // Nick (2026-11-13): show his standard rig, not the SMBIOS
   ['Computers are meant to be tools of empowerment, creative expression, and personal agency.', 'writing.html'],
   ['Breaking down UNIX, APFS, and bootloader internals into transparent, actionable guides.', 'writing.html'],
   ['Your data belongs to you. Every write-up tries non-destructive methods first and is honest about what can\'t be guaranteed.', 'writing.html'],

@@ -7,8 +7,8 @@ const input = document.getElementById('term-input');
 const out = document.getElementById('term-out');
 const body = document.getElementById('term-body');
 
-const PROMPT = 'nick@nicks-iMac:~$ ';
-const SPECS = ['{', '  "host": "nick@nicks-iMac.local",', '  "smbios": "MacPro7,1",', '  "bootloader": "OpenCore 1.0.8",', '  "motherboard": "MSI MPG X570 Gaming Edge WiFi",', '  "cpu": "AMD Ryzen 5 3600",', '  "gpu": "AMD Radeon RX 580 8GB (Metal: 48,799)",', '  "ram": "16GB DDR4 (9490MiB / 16384MiB active)"', '}'];
+const PROMPT = 'nick@x570:~$ ';
+const SPECS = ['{', '  "host": "nick@x570",', '  "motherboard": "MSI MPG X570 Gaming Edge WiFi",', '  "bios": "custom, built by Nick",', '  "cpu": "AMD Ryzen 5 3600",', '  "gpu": "AMD Radeon RX 580 8GB",', '  "ram": "16GB DDR4"', '}'];
 const PAGES = {
   home: 'index.html', writing: 'writing.html', 'case-study': 'apfs-recovery.html',
   essays: 'writing.html#essays', log: 'writing.html#log', manifesto: 'writing.html#philosophy', tutorials: 'writing.html#tutorials',
@@ -24,7 +24,7 @@ const COMMANDS = {
   help: () => [['info', 'Available commands: cat specs.json, recovery --status, ls ./tools, cat manifesto, whoami, open <page>, clear'],
     ['info', `pages: ${Object.keys(PAGES).join(' ')}`]],
   'cat specs.json': () => SPECS.map((t) => ['', t]),
-  'recovery --status': () => ['[OK] MacPro7,1 Target SMBIOS Operational.', "[OK] Target Volume 'Untitled' active on disk3s7.", '[OK] Kernel 25.6.0 running live.'].map((t) => ['ok', t]),
+  'recovery --status': () => ["[OK] Target Volume 'Untitled' active on disk3s7.", '[OK] Kernel 25.6.0 running live.'].map((t) => ['ok', t]),
   'ls ./tools': () => TOOLS.filter((t) => t.status === 'live').map((t) => ['ok', `${t.name.padEnd(16)}${t.version}`]),
   'cat manifesto': () => ['Repair Is a Right, Not a Privilege.', 'Parts. Tools. Manuals. For Everyone.', 'The Greenest Device Is the One You Already Own.'].map((t) => ['hl', t]),
   whoami: () => [['hl', "I'm Nick, a security researcher and tech enthusiast. I explore how devices work behind the scenes and how they protect your personal data every day. Through that research, I help companies and their teams make the devices you rely on safer and more secure."]],
