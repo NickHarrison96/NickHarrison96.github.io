@@ -15,7 +15,8 @@ export const PAGES = [
   ['apfs-recovery.html', 4],
   ['kali-wsl2-desktop-windows-11.html', 9], ['kali-wsl2-desktop-windows-10.html', 9],
   ['local-ai.html', 9], ['llama-cpp.html', 9],
-  ['work.html', 8], ['repair.html', 8], ['tools.html', 10],
+  // Nick (2026-11-13): Work tab removed
+  ['repair.html', 8], ['tools.html', 10],
   ['guide-kali-wsl2.html', 9], ['guide-ollama-claude-code-windows.html', 9],
   ['guide-ollama-claude-code-macos.html', 9], ['guide-llama-cpp.html', 9],
 ];
@@ -68,15 +69,19 @@ export const STUBS = [
   ['talks.html', 'repair.html', 'talks'],
   ['team.html', 'about.html', 'team'],
   ['socials.html', 'about.html', 'socials'],
+  // Nick (2026-11-13): Work tab removed. Old /work.html links land on the home page (no section id).
+  ['work.html', 'index.html', null],
 ];
 
 /** Header nav: the hubs, in order. Sub-pages map to the hub they live under. */
 export const HUBS = [
-  ['Work', 'work.html'], ['Blog', 'writing.html'], ['Right to Repair', 'repair.html'],
+  // Nick (2026-11-13): Work tab removed
+  ['Blog', 'writing.html'], ['Right to Repair', 'repair.html'],
   ['Tools', 'tools.html'], ['Downloads', 'downloads.html'], ['About', 'about.html'],
 ];
 export const HUB_OF = {
-  'index.html': null, 'work.html': 'work.html', 'writing.html': 'writing.html', 'apfs-recovery.html': 'writing.html',
+  // Nick (2026-11-13): Work tab removed
+  'index.html': null, 'writing.html': 'writing.html', 'apfs-recovery.html': 'writing.html',
   'kali-wsl2-desktop-windows-11.html': 'writing.html', 'kali-wsl2-desktop-windows-10.html': 'writing.html',
   'local-ai.html': 'writing.html', 'llama-cpp.html': 'writing.html',
   'repair.html': 'repair.html', 'tools.html': 'tools.html', 'downloads.html': 'downloads.html', 'about.html': 'about.html',

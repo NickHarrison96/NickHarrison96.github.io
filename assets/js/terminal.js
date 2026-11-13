@@ -10,7 +10,7 @@ const body = document.getElementById('term-body');
 const PROMPT = 'nick@nicks-iMac:~$ ';
 const SPECS = ['{', '  "host": "nick@nicks-iMac.local",', '  "smbios": "MacPro7,1",', '  "bootloader": "OpenCore 1.0.8",', '  "motherboard": "MSI MPG X570 Gaming Edge WiFi",', '  "cpu": "AMD Ryzen 5 3600",', '  "gpu": "AMD Radeon RX 580 8GB (Metal: 48,799)",', '  "ram": "16GB DDR4 (9490MiB / 16384MiB active)"', '}'];
 const PAGES = {
-  home: 'index.html', work: 'work.html', projects: 'work.html', writing: 'writing.html', 'case-study': 'apfs-recovery.html',
+  home: 'index.html', writing: 'writing.html', 'case-study': 'apfs-recovery.html',
   essays: 'writing.html#essays', log: 'writing.html#log', manifesto: 'writing.html#philosophy', tutorials: 'writing.html#tutorials',
   'kali-win11': 'kali-wsl2-desktop-windows-11.html', 'kali-win10': 'kali-wsl2-desktop-windows-10.html',
   'local-ai': 'local-ai.html', llama: 'llama-cpp.html', 'llama-cpp': 'llama-cpp.html',
