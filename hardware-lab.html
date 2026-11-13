@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#05070d">
+  <meta name="description"
+    content="Hardware bench and defensive security lab guide by Nick Harrison: flash dumps, bus sniffing, and CH341A / RP2350A / Ace V3 CPLD lab deployments." />
+  <title>Hardware Lab Guide &mdash; Nick Harrison</title>
+  <script>/* shell: runs before first paint — see AGENTS.md "Shell" */(function(d){d.classList.add('js');try{if(localStorage.getItem('nh-jailbreak')==='1')d.dataset.theme='jailbreak'}catch(e){}if(d.hasAttribute('data-boot')&&!location.hash&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{if(!sessionStorage.getItem('nh-booted')){sessionStorage.setItem('nh-booted','1');d.classList.add('booting')}}catch(e){}}})(document.documentElement);</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="assets/hardware-lab/lab.css">
+</head>
+
+<body class="sub">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <canvas id="fx-bg" aria-hidden="true"></canvas>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span class="brand-text">
+          <span class="brand-name">NICK HARRISON</span>
+          <span class="brand-role">SYSTEMS &amp; AI ENGINEER <span class="brand-role-extra">· RIGHT TO REPAIR</span></span>
+        </span>
+      </a>
+      <nav class="site-nav" id="site-nav" aria-label="Site">
+        <a href="work.html">Work</a>
+        <a href="writing.html">Blog</a>
+        <a href="repair.html">Right to Repair</a>
+        <a href="tools.html">Tools</a>
+        <a href="downloads.html">Downloads</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="site-actions">
+        <button class="search-btn" type="button" data-palette-open aria-label="Search (Ctrl+K)">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-label">Search</span>
+          <kbd aria-hidden="true">⌘K</kbd>
+        </button>
+        <a class="gh-link magnetic" href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="Nick Harrison on GitHub">
+          <img src="https://github.com/NickHarrison96.png?size=96" alt="" class="gh-avatar" width="28" height="28">
+          <span class="gh-text">github.com/nickharrison96</span>
+        </a>
+        <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+          <span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+      <main id="main" class="hub">
+    <article class="lab-article">
+      <a href="tools.html" class="back-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to Tools</a>
+
+      <header class="page-hero">
+        <div class="badge">Lab Guide</div>
+        <h1 class="card-title">Hardware Bench &amp; <em>Defensive Security</em> Lab Guide</h1>
+        <p class="page-lede">A technical breakdown and apprentice training reference covering the <strong>CH341A SPI/I2C Programmer Kit</strong>, <strong>ELEGOO Breadboard Prototyping Kit</strong>, <strong>RP2350A Microcontroller</strong>, <strong>Arduino Uno + USB Host Shield</strong>, and the <strong>Xilinx XC2C128 CPLD (Xbox 360 Ace V3)</strong> with its dedicated JTAG/SPI programmer.</p>
+      </header>
+
+      <!-- TODO(Nick): Omitted the source intro that framed this as bridging "standard board-level hardware repair (EEPROM/BIOS recovery and signal probing)" with defensive testing. Confirm a research-only intro if you want one here. -->
+
+      <nav aria-label="Guide sections">
+        <ul class="lab-toc">
+          <li><a href="#kit">1. CH341A kit</a></li>
+          <li><a href="#checklist">2. Safe flashing checklist</a></li>
+          <li><a href="#cpld">3. Ace V3 CPLD</a></li>
+          <li><a href="#deployments">4. Lab deployments</a></li>
+        </ul>
+      </nav>
+
+      <figure class="lab-diagram" id="fig-bench">
+            <svg viewBox="0 0 780 236" role="img" aria-labelledby="fig-bench-title fig-bench-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-bench-title">Hardware security bench overview</title>
+                <desc id="fig-bench-desc">Stylized bench layout showing CH341A programmer, ELEGOO breadboard with SPI flash, RP2350A sniffer, Arduino Uno with USB Host Shield, and Ace V3 CPLD connected for lab work.</desc>
+
+                <rect x="8" y="8" width="764" height="220" rx="10" fill="#0d1117" stroke="#30363d"/>
+                <!-- CH341A -->
+                <rect x="28" y="40" width="120" height="70" rx="4" fill="#161b22" stroke="#58a6ff" stroke-width="1.5"/>
+                <text x="88" y="68" text-anchor="middle" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="600">CH341A</text>
+                <text x="88" y="86" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9">SPI / TTL</text>
+                <rect x="48" y="96" width="80" height="8" rx="1" fill="#238636"/>
+                <!-- ELEGOO breadboard -->
+                <rect x="180" y="36" width="200" height="90" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+                <text x="280" y="54" text-anchor="middle" fill="#c9d1d9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="600">ELEGOO BREADBOARD</text>
+                <!-- flash chip on board -->
+                <rect x="230" y="68" width="56" height="36" rx="2" fill="#010409" stroke="#d29922"/>
+                <text x="258" y="90" text-anchor="middle" fill="#d29922" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9">25xx</text>
+                <!-- power rails -->
+                <line x1="190" y1="110" x2="370" y2="110" stroke="#f85149" stroke-width="2"/>
+                <line x1="190" y1="116" x2="370" y2="116" stroke="#58a6ff" stroke-width="2"/>
+                <!-- RP2350A -->
+                <rect x="420" y="40" width="130" height="70" rx="4" fill="#161b22" stroke="#a371f7" stroke-width="1.5"/>
+                <text x="485" y="68" text-anchor="middle" fill="#a371f7" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="600">RP2350A</text>
+                <text x="485" y="86" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9">PIO sniffer</text>
+                <!-- Arduino + Host -->
+                <rect x="580" y="40" width="160" height="70" rx="4" fill="#161b22" stroke="#238636" stroke-width="1.5"/>
+                <text x="660" y="68" text-anchor="middle" fill="#3fb950" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="600">UNO + Host</text>
+                <text x="660" y="86" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9">USB fuzzer</text>
+                <!-- CPLD -->
+                <rect x="180" y="145" width="200" height="48" rx="4" fill="#161b22" stroke="#d29922" stroke-width="1.5"/>
+                <text x="280" y="166" text-anchor="middle" fill="#d29922" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="600">Ace V3 · XC2C128</text>
+                <text x="280" y="182" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9">CPLD · 150 MHz · JTAG</text>
+                <!-- wires -->
+                <path d="M148 75 H180" stroke="#58a6ff" stroke-width="1.5" fill="none"/>
+                <path d="M380 80 H420" stroke="#a371f7" stroke-width="1.5" fill="none"/>
+                <path d="M280 126 V145" stroke="#d29922" stroke-width="1.5" fill="none"/>
+                <text x="390" y="214" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">Lab bench · research tooling (not a teardown)</text>
+
+            </svg>
+            <figcaption>Bench overview: CH341A programmer, ELEGOO breadboard with a 25-series SPI flash, RP2350A bus sniffer, Arduino Uno + USB Host Shield fuzzer, and Ace V3 CPLD. <span class="illust-note">(illustrative)</span></figcaption>
+        </figure>
+
+      <section class="lab-section" id="kit" aria-labelledby="kit-title">
+        <h2 id="kit-title"><span class="step-number">1</span> CH341A Programmer Kit: Apprentice Hardware Breakdown</h2>
+        <!-- TODO(Nick): The source why-box opened with "Before touching customer motherboards or embedded targets, technicians and apprentices must…" — omitted as repair-service framing. The electrical purpose below is kept from the same sentence. -->
+        <div class="lab-why">
+          <p><strong>Why are we doing this?</strong><br>
+          Understand what each adapter in the CH341A kit actually does electrically so they don't reverse-polarize an IC or over-volt a low-voltage BIOS chip.</p>
+        </div>
+
+        <div class="lab-table-wrap">
+          <table class="lab-table">
+            <thead>
+              <tr>
+                <th scope="col">Component</th>
+                <th scope="col">Architecture &amp; Function</th>
+                <th scope="col">Primary Workshop Application</th>
+                <th scope="col">Connection &amp; Safety Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>CH341A USB Programmer Board</strong></td>
+                <td>USB-to-SPI/I2C master controller with a 12MHz crystal oscillator, AMS1117 regulator, and self-recovery fuse.</td>
+                <td>Reading, writing, and recovering 25-series SPI NOR flash and 24-series I2C EEPROMs on dead boards and routers; USB-to-TTL serial console.</td>
+                <td>Plugs directly into USB. <strong>Verify logic voltage first:</strong> many black-PCB units output 5V on data pins even when jumpered to 3.3V.</td>
+              </tr>
+              <tr>
+                <td><strong>SOP8 / SOIC8 Test Clip &amp; Ribbon Cable</strong></td>
+                <td>Spring-loaded 8-pin test clip wired to a 2x4 IDC header via a flat ribbon cable.</td>
+                <td><strong>In-circuit (online) programming</strong>—clipping onto surface-mount BIOS/EEPROM chips without desoldering.</td>
+                <td>Match the red stripe (Pin 1) on the ribbon cable to Pin 1 on both the programmer header and target IC dot/notch.</td>
+              </tr>
+              <tr>
+                <td><strong>1.8V Adapter Board</strong></td>
+                <td>Voltage-level translator module featuring a blue ZIF socket and onboard step-down regulation.</td>
+                <td>Safely reading/flashing modern low-voltage 1.8V SPI flash chips found on newer laptops, GPUs, and Apple boards.</td>
+                <td>Seats directly into the CH341A ZIF socket; never attach a 1.8V chip directly to an unadapted 3.3V/5V programmer.</td>
+              </tr>
+              <tr>
+                <td><strong>SOP8 150mil / 200-209mil ZIF Adapter</strong></td>
+                <td>Spring-loaded Zero Insertion Force (ZIF) socket mounted on a DIP8 breakout PCB.</td>
+                <td>Securely holding desoldered SOP8/SOIC8 chips for clean, reliable bench reads without flaky clip contact.</td>
+                <td>Press top bezel down to open contacts, seat chip with Pin 1 aligned, release, and lock into the main CH341A socket.</td>
+              </tr>
+              <tr>
+                <td><strong>SOIC8 / DIP8 Breakout &amp; Header Boards</strong></td>
+                <td>Passive PCBs with multi-row pin headers and dual-width SMD footprints.</td>
+                <td>Converting narrow (150mil) or wide (200mil) SMD chips to 2.54mm breadboard pitch for custom wiring or logic sniffing.</td>
+                <td>Ideal for soldering a test chip once and wiring it into the ELEGOO breadboard alongside an RP2350A analyzer.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="lab-callout lab-callout-warn">
+          <p><strong>Mandatory Bench Mod — The CH341A 3.3V Logic Fix:</strong><br>
+          Measure <code>MISO</code> and <code>MOSI</code> against <code>GND</code> with a multimeter while plugged in. If they output 5V, lift Pin 28 of the CH341A IC (or cut the 5V trace feeding VCC) and bridge it to the 3.3V output pin of the onboard AMS1117 regulator. Use the ELEGOO breadboard power module and resistors to test clean 3.3V levels before touching live boards.</p>
+        </div>
+
+        <figure class="lab-diagram" id="fig-ch341a-mod">
+            <svg viewBox="0 0 780 240" role="img" aria-labelledby="fig-ch341a-mod-title fig-ch341a-mod-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-ch341a-mod-title">CH341A 3.3V logic-level modification</title>
+                <desc id="fig-ch341a-mod-desc">Illustrative diagram of a CH341A board showing the AMS1117 3.3V regulator and Pin 28 of the CH341A IC bridged for 3.3V logic on MISO and MOSI.</desc>
+
+                <rect x="10" y="10" width="760" height="220" rx="8" fill="#0d1117" stroke="#30363d"/>
+                <!-- board outline -->
+                <rect x="80" y="40" width="360" height="160" rx="6" fill="#161b22" stroke="#58a6ff" stroke-width="1.5"/>
+                <text x="260" y="62" text-anchor="middle" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="600">CH341A BOARD</text>
+                <!-- USB -->
+                <rect x="40" y="90" width="50" height="40" rx="3" fill="#010409" stroke="#8b949e"/>
+                <text x="65" y="114" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9">USB</text>
+                <!-- CH341A IC -->
+                <rect x="140" y="85" width="100" height="70" rx="3" fill="#010409" stroke="#c9d1d9"/>
+                <text x="190" y="115" text-anchor="middle" fill="#c9d1d9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="600">CH341A</text>
+                <text x="190" y="132" text-anchor="middle" fill="#f85149" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9">Pin 28 (VCC)</text>
+                <!-- AMS1117 -->
+                <rect x="280" y="95" width="90" height="50" rx="3" fill="#010409" stroke="#3fb950"/>
+                <text x="325" y="118" text-anchor="middle" fill="#3fb950" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="600">AMS1117</text>
+                <text x="325" y="134" text-anchor="middle" fill="#3fb950" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9">3.3V out</text>
+                <!-- bridge arrow -->
+                <path d="M240 120 H280" stroke="#d29922" stroke-width="2.5" fill="none" marker-end="url(#arrowY)"/>
+                <text x="260" y="110" text-anchor="middle" fill="#d29922" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9">bridge</text>
+                <!-- ZIF / header -->
+                <rect x="390" y="80" width="30" height="80" rx="2" fill="#010409" stroke="#8b949e"/>
+                <text x="405" y="175" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="8">ZIF</text>
+                <!-- legend / steps -->
+                <text x="500" y="70" fill="#ffffff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="600">3.3V Logic Fix</text>
+                <text x="500" y="98" fill="#c9d1d9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">1. Measure MISO/MOSI vs GND</text>
+                <text x="500" y="118" fill="#c9d1d9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">2. If 5V: lift Pin 28 (or cut 5V)</text>
+                <text x="500" y="138" fill="#c9d1d9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">3. Bridge Pin 28 → AMS1117 3.3V</text>
+                <text x="500" y="158" fill="#c9d1d9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">4. Re-check: data lines = 3.3V</text>
+                <text x="500" y="188" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">Board layout varies by seller.</text>
+                <defs>
+                  <marker id="arrowY" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L6,3 L0,6 Z" fill="#d29922"/>
+                  </marker>
+                </defs>
+
+            </svg>
+            <figcaption>Mandatory CH341A 3.3V logic fix: lift or rewire Pin 28 of the CH341A IC to the AMS1117 3.3V rail so MISO/MOSI are safe for modern flash. <span class="illust-note">(illustrative)</span></figcaption>
+        </figure>
+      </section>
+
+      <section class="lab-section" id="checklist" aria-labelledby="checklist-title">
+        <h2 id="checklist-title"><span class="step-number">2</span> Apprentice Troubleshooting &amp; Safe Flashing Checklist</h2>
+        <div class="lab-why">
+          <p><strong>Why are we doing this?</strong><br>
+          90% of corrupted BIOS flashes and "dead" reads (<code>0x00</code> or <code>0xFF</code>) happen because of poor physical contact, back-powering the target board, or skipping backup verification. Use this checklist on the bench before every flash.</p>
+        </div>
+
+        <div class="lab-checklist">
+          <h4>Pre-Flight Checks</h4>
+          <div class="lab-check">
+            <input type="checkbox" id="chk1">
+            <label for="chk1"><strong>1. Verify 3.3V Logic Level</strong>
+              <span class="subtext">Confirm MISO/MOSI data lines read 3.3V (or use the 1.8V adapter for low-voltage chips).</span></label>
+          </div>
+          <div class="lab-check">
+            <input type="checkbox" id="chk2">
+            <label for="chk2"><strong>2. Isolate All Target Power</strong>
+              <span class="subtext">Disconnect AC adapters, main batteries, and CMOS coin cells so the CH341A doesn't try to power the entire motherboard chipset.</span></label>
+          </div>
+        </div>
+
+        <figure class="lab-diagram" id="fig-soic8-pinout">
+            <svg viewBox="0 0 520 360" role="img" aria-labelledby="fig-soic8-pinout-title fig-soic8-pinout-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-soic8-pinout-title">SOIC-8 25-series SPI flash pinout</title>
+                <desc id="fig-soic8-pinout-desc">Standard top-view pinout of a 25-series SPI NOR flash in SOIC-8: Pin 1 CS, 2 DO/MISO, 3 WP, 4 GND, 5 DI/MOSI, 6 CLK, 7 HOLD, 8 VCC.</desc>
+
+                <rect x="8" y="8" width="504" height="344" rx="8" fill="#0d1117" stroke="#30363d"/>
+                <!-- chip centered -->
+                <rect x="185" y="30" width="150" height="130" rx="5" fill="#161b22" stroke="#c9d1d9" stroke-width="2"/>
+                <path d="M240 30 A20 12 0 0 1 280 30" fill="#0d1117" stroke="#c9d1d9" stroke-width="2"/>
+                <circle cx="205" cy="52" r="5" fill="#d29922"/>
+                <text x="260" y="95" text-anchor="middle" fill="#ffffff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600">25-series</text>
+                <text x="260" y="115" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">SPI NOR · SOIC-8</text>
+                <!-- pin stubs left -->
+                <g stroke-width="1.5">
+                  <rect x="160" y="45" width="25" height="12" fill="#010409" stroke="#58a6ff"/>
+                  <rect x="160" y="70" width="25" height="12" fill="#010409" stroke="#58a6ff"/>
+                  <rect x="160" y="95" width="25" height="12" fill="#010409" stroke="#8b949e"/>
+                  <rect x="160" y="120" width="25" height="12" fill="#010409" stroke="#f85149"/>
+                  <rect x="335" y="45" width="25" height="12" fill="#010409" stroke="#3fb950"/>
+                  <rect x="335" y="70" width="25" height="12" fill="#010409" stroke="#8b949e"/>
+                  <rect x="335" y="95" width="25" height="12" fill="#010409" stroke="#a371f7"/>
+                  <rect x="335" y="120" width="25" height="12" fill="#010409" stroke="#58a6ff"/>
+                </g>
+                <text x="145" y="55" text-anchor="end" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">1</text>
+                <text x="145" y="80" text-anchor="end" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">2</text>
+                <text x="145" y="105" text-anchor="end" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">3</text>
+                <text x="145" y="130" text-anchor="end" fill="#f85149" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">4</text>
+                <text x="375" y="55" fill="#3fb950" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">8</text>
+                <text x="375" y="80" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">7</text>
+                <text x="375" y="105" fill="#a371f7" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">6</text>
+                <text x="375" y="130" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">5</text>
+                <!-- legend table -->
+                <text x="260" y="185" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">Top view · Pin 1 = orange dot / notch</text>
+                <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13">
+                  <text x="40" y="220" fill="#58a6ff">1 CS</text>
+                  <text x="40" y="245" fill="#58a6ff">2 DO / MISO</text>
+                  <text x="40" y="270" fill="#8b949e">3 WP#</text>
+                  <text x="40" y="295" fill="#f85149">4 GND</text>
+                  <text x="280" y="220" fill="#58a6ff">5 DI / MOSI</text>
+                  <text x="280" y="245" fill="#a371f7">6 CLK</text>
+                  <text x="280" y="270" fill="#8b949e">7 HOLD# / RESET#</text>
+                  <text x="280" y="295" fill="#3fb950">8 VCC</text>
+                </g>
+                <text x="260" y="330" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">standard 25xx SPI NOR pinout</text>
+            </svg>
+            <figcaption>Standard SOIC-8 pinout for 25-series SPI NOR flash (top view). Align the ribbon red stripe and clip bevel with Pin 1 (CS).</figcaption>
+        </figure>
+        <figure class="lab-diagram" id="fig-sop8-clip">
+            <svg viewBox="0 0 780 250" role="img" aria-labelledby="fig-sop8-clip-title fig-sop8-clip-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-sop8-clip-title">SOP8 test clip to CH341A wiring</title>
+                <desc id="fig-sop8-clip-desc">Diagram of a SOP8 spring clip on a flash chip connected via ribbon cable to the CH341A header, with Pin 1 red stripe highlighted on both ends.</desc>
+
+                <rect x="10" y="10" width="760" height="230" rx="8" fill="#0d1117" stroke="#30363d"/>
+                <!-- target board chip -->
+                <rect x="40" y="70" width="100" height="70" rx="4" fill="#161b22" stroke="#8b949e"/>
+                <text x="90" y="100" text-anchor="middle" fill="#c9d1d9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">FLASH IC</text>
+                <text x="90" y="118" text-anchor="middle" fill="#d29922" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">● Pin 1</text>
+                <!-- clip -->
+                <rect x="160" y="55" width="90" height="100" rx="4" fill="#161b22" stroke="#58a6ff" stroke-width="1.5"/>
+                <text x="205" y="95" text-anchor="middle" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="600">SOP8</text>
+                <text x="205" y="112" text-anchor="middle" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="600">CLIP</text>
+                <text x="205" y="132" text-anchor="middle" fill="#d29922" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9">red = Pin 1</text>
+                <!-- ribbon -->
+                <g>
+                  <rect x="250" y="85" width="220" height="40" rx="2" fill="#1c2128" stroke="#30363d"/>
+                  <line x1="250" y1="92" x2="470" y2="92" stroke="#f85149" stroke-width="3"/>
+                  <text x="360" y="115" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">ribbon · red stripe = Pin 1</text>
+                </g>
+                <!-- CH341A header -->
+                <rect x="490" y="60" width="140" height="110" rx="4" fill="#161b22" stroke="#58a6ff" stroke-width="1.5"/>
+                <text x="560" y="90" text-anchor="middle" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="600">CH341A</text>
+                <text x="560" y="108" text-anchor="middle" fill="#c9d1d9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">2×4 IDC header</text>
+                <text x="560" y="130" text-anchor="middle" fill="#d29922" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">Pin 1 · red stripe</text>
+                <text x="560" y="150" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9">ZIF / clip port</text>
+                <!-- arrows -->
+                <path d="M140 105 H160" stroke="#c9d1d9" stroke-width="1.5" fill="none"/>
+                <path d="M470 105 H490" stroke="#c9d1d9" stroke-width="1.5" fill="none"/>
+                <text x="390" y="210" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">In-circuit: clip onto SMD flash · match Pin 1 on chip, ribbon, and programmer</text>
+
+            </svg>
+            <figcaption>SOP8 / SOIC8 spring clip for in-circuit programming. Match the ribbon red stripe to Pin 1 on both the flash IC and the CH341A header. <span class="illust-note">(illustrative)</span></figcaption>
+        </figure>
+
+        <div class="lab-checklist">
+          <h4>Physical Connection</h4>
+          <div class="lab-check">
+            <input type="checkbox" id="chk3">
+            <label for="chk3"><strong>3. Align Pin 1 Orientation</strong>
+              <span class="subtext">Verify the ribbon cable red stripe aligns with Pin 1 on the CH341A ZIF header and the recessed dot/bevel on the flash IC.</span></label>
+          </div>
+          <div class="lab-check">
+            <input type="checkbox" id="chk4">
+            <label for="chk4"><strong>4. Clean Chip Legs &amp; Seat Clip Flush</strong>
+              <span class="subtext">Scrub oxidized flux off chip pins with 99% IPA. If reads return all <code>0x00</code> or <code>0xFF</code>, re-seat the clip or desolder onto the ZIF adapter.</span></label>
+          </div>
+        </div>
+
+        <div class="lab-checklist">
+          <h4>Software &amp; Verification</h4>
+          <div class="lab-check">
+            <input type="checkbox" id="chk5">
+            <label for="chk5"><strong>5. Confirm JEDEC Chip ID</strong>
+              <span class="subtext">Detect the exact manufacturer and capacity ID in software (e.g., <code>flashrom -p ch341a_spi</code>) before touching Erase or Write.</span></label>
+          </div>
+          <div class="lab-check">
+            <input type="checkbox" id="chk6">
+            <label for="chk6"><strong>6. Pull &amp; Hash Two Identical Backup Dumps</strong>
+              <span class="subtext">Read the original chip twice and verify matching SHA256 hashes before erasing—never overwrite the only copy of original board firmware/ME regions.</span></label>
+          </div>
+        </div>
+
+        <pre><code># Example flashrom workflow for verifying consistent backup dumps
+flashrom -p ch341a_spi -r backup_1.bin
+flashrom -p ch341a_spi -r backup_2.bin
+certutil -hashfile backup_1.bin SHA256
+certutil -hashfile backup_2.bin SHA256</code></pre>
+      </section>
+
+      <section class="lab-section" id="cpld" aria-labelledby="cpld-title">
+        <h2 id="cpld-title"><span class="step-number">3</span> First Principles: How the Xbox 360 Ace V3 CPLD Works</h2>
+        <div class="lab-why">
+          <p><strong>Why are we doing this?</strong><br>
+          Your unused Xbox 360 Ace V3 houses a <strong>Xilinx XC2C128 CoolRunner-II CPLD</strong> and a <strong>150MHz crystal oscillator</strong>, and your 360 programmer speaks JTAG/XSVF natively. Understanding how programmable hardware differs from microcontrollers unlocks nanosecond-level signal control.</p>
+        </div>
+        <ul>
+          <li><strong>Microcontrollers (RP2350A / Arduino Uno) = Sequential Software:</strong> A CPU fetches instructions line-by-line from memory. Even fast C code has interrupt latency and clock jitter when trying to toggle pins at exact sub-microsecond intervals.</li>
+          <li><strong>Standard 7400-Series ICs = Fixed Hardware:</strong> Logic gates (AND, OR, NOT) are permanently etched in silicon. You cannot change behavior without rewiring the breadboard.</li>
+          <li><strong>CPLD (Xilinx XC2C128) = Reconfigurable Hardware:</strong> Contains thousands of raw logic macrocells and flip-flops connected by an internal programmable switchboard. Writing Verilog configures physical logic paths—once flashed via your 360 programmer's 6-pin JTAG header (<code>TMS</code>, <code>TDI</code>, <code>TDO</code>, <code>TCK</code>, <code>GND</code>, <code>VCC</code>), the silicon executes everything in <strong>true parallel hardware</strong> with ~6.67ns clock resolution (at 150MHz).</li>
+        </ul>
+      </section>
+
+      <section class="lab-section" id="deployments" aria-labelledby="deployments-title">
+        <h2 id="deployments-title"><span class="step-number">4</span> Defensive Hardware Security Lab Deployments</h2>
+        <div class="lab-why">
+          <p><strong>Why are we doing this?</strong><br>
+          Combining all five bench tools lets you replicate commercial hardware-security testbeds (like fault-injection and protocol-fuzzing stations) to audit embedded firmware resilience, secure boot locks, and bus validation.</p>
+        </div>
+
+        <figure class="lab-diagram" id="fig-deployments">
+            <svg viewBox="0 0 780 340" role="img" aria-labelledby="fig-deployments-title fig-deployments-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-deployments-title">Lab deployment signal-flow topology</title>
+                <desc id="fig-deployments-desc">Three parallel research topologies: A fault-injection with RP2350A trigger into Ace V3 CPLD glitch and CH341A TTL log; B USB fuzzer with SPI sniffer and PN2222 power cycle; C CH341A firmware dump for secure-boot audit.</desc>
+
+                <rect x="10" y="10" width="760" height="320" rx="8" fill="#0d1117" stroke="#30363d"/>
+                <!-- A -->
+                <text x="30" y="40" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="600">A · Fault injection</text>
+                <rect x="30" y="55" width="100" height="40" rx="3" fill="#161b22" stroke="#a371f7"/>
+                <text x="80" y="80" text-anchor="middle" fill="#a371f7" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">RP2350A</text>
+                <path d="M130 75 H160" stroke="#c9d1d9" stroke-width="1.5" marker-end="url(#arr)"/>
+                <rect x="160" y="55" width="100" height="40" rx="3" fill="#161b22" stroke="#d29922"/>
+                <text x="210" y="80" text-anchor="middle" fill="#d29922" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">Ace V3 CPLD</text>
+                <path d="M260 75 H290" stroke="#c9d1d9" stroke-width="1.5" marker-end="url(#arr)"/>
+                <rect x="290" y="55" width="100" height="40" rx="3" fill="#161b22" stroke="#f85149"/>
+                <text x="340" y="80" text-anchor="middle" fill="#f85149" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">glitch FET</text>
+                <path d="M390 75 H420" stroke="#c9d1d9" stroke-width="1.5" marker-end="url(#arr)"/>
+                <rect x="420" y="55" width="100" height="40" rx="3" fill="#161b22" stroke="#8b949e"/>
+                <text x="470" y="80" text-anchor="middle" fill="#c9d1d9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">TARGET</text>
+                <path d="M470 95 V115 H580 V75" stroke="#58a6ff" stroke-width="1.5" fill="none" marker-end="url(#arrB)"/>
+                <rect x="580" y="55" width="100" height="40" rx="3" fill="#161b22" stroke="#58a6ff"/>
+                <text x="630" y="80" text-anchor="middle" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">CH341A TTL</text>
+
+                <!-- B -->
+                <text x="30" y="155" fill="#3fb950" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="600">B · Bus fuzz + recovery</text>
+                <rect x="30" y="170" width="120" height="40" rx="3" fill="#161b22" stroke="#3fb950"/>
+                <text x="90" y="195" text-anchor="middle" fill="#3fb950" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">Uno + Host</text>
+                <path d="M150 190 H190" stroke="#c9d1d9" stroke-width="1.5" marker-end="url(#arr)"/>
+                <rect x="190" y="170" width="100" height="40" rx="3" fill="#161b22" stroke="#8b949e"/>
+                <text x="240" y="195" text-anchor="middle" fill="#c9d1d9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">USB / SPI</text>
+                <path d="M290 190 H330" stroke="#c9d1d9" stroke-width="1.5" marker-end="url(#arr)"/>
+                <rect x="330" y="170" width="100" height="40" rx="3" fill="#161b22" stroke="#a371f7"/>
+                <text x="380" y="195" text-anchor="middle" fill="#a371f7" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">RP2350A tap</text>
+                <path d="M430 190 H470" stroke="#c9d1d9" stroke-width="1.5" marker-end="url(#arr)"/>
+                <rect x="470" y="170" width="110" height="40" rx="3" fill="#161b22" stroke="#d29922"/>
+                <text x="525" y="195" text-anchor="middle" fill="#d29922" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">PN2222 cycle</text>
+                <path d="M580 190 H610" stroke="#c9d1d9" stroke-width="1.5" marker-end="url(#arr)"/>
+                <rect x="610" y="170" width="90" height="40" rx="3" fill="#161b22" stroke="#8b949e"/>
+                <text x="655" y="195" text-anchor="middle" fill="#c9d1d9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">TARGET</text>
+
+                <!-- C -->
+                <text x="30" y="250" fill="#d29922" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="600">C · Firmware audit</text>
+                <rect x="30" y="265" width="120" height="40" rx="3" fill="#161b22" stroke="#58a6ff"/>
+                <text x="90" y="290" text-anchor="middle" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">CH341A 3.3V</text>
+                <path d="M150 285 H200" stroke="#c9d1d9" stroke-width="1.5" marker-end="url(#arr)"/>
+                <rect x="200" y="265" width="120" height="40" rx="3" fill="#161b22" stroke="#d29922"/>
+                <text x="260" y="290" text-anchor="middle" fill="#d29922" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">SOP8 / ZIF</text>
+                <path d="M320 285 H370" stroke="#c9d1d9" stroke-width="1.5" marker-end="url(#arr)"/>
+                <rect x="370" y="265" width="120" height="40" rx="3" fill="#161b22" stroke="#8b949e"/>
+                <text x="430" y="290" text-anchor="middle" fill="#c9d1d9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">SPI NOR dump</text>
+                <path d="M490 285 H540" stroke="#c9d1d9" stroke-width="1.5" marker-end="url(#arr)"/>
+                <rect x="540" y="265" width="160" height="40" rx="3" fill="#161b22" stroke="#3fb950"/>
+                <text x="620" y="290" text-anchor="middle" fill="#3fb950" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">diff · fuse · keys</text>
+
+                <defs>
+                  <marker id="arr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                    <path d="M0,0 L7,3.5 L0,7 Z" fill="#c9d1d9"/>
+                  </marker>
+                  <marker id="arrB" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                    <path d="M0,0 L7,3.5 L0,7 Z" fill="#58a6ff"/>
+                  </marker>
+                </defs>
+
+            </svg>
+            <figcaption>Signal flow for Deployments A–C: glitch trigger chain, USB/SPI fuzz with sniffer and PN2222 recovery, and CH341A firmware dump for secure-boot auditing. <span class="illust-note">(illustrative)</span></figcaption>
+        </figure>
+
+        <h3>Deployment A: Precision Voltage / Reset Fault-Injection (Glitching) Rig</h3>
+        <p><strong>Goal:</strong> Test whether an embedded bootloader or cryptographic check fails securely when its power rail or reset line is momentarily glitched during execution.</p>
+        <ol>
+          <li><strong>Trigger &amp; Telemetry (RP2350A):</strong> Use the RP2350A's Programmable I/O (PIO) state machines to monitor the target device's UART or SPI traffic and fire a hardware trigger pulse the instant a target boot string or opcode appears.</li>
+          <li><strong>Nanosecond Glitch Pulse (Ace V3 CPLD):</strong> Flash a custom Verilog counter onto the XC2C128 (via your 360 programmer) that waits for the RP2350A trigger, counts an exact number of 150MHz clock ticks, and drives a transistor/MOSFET from the ELEGOO kit to crowbar the target's core voltage rail or reset line.</li>
+          <li><strong>Serial Logging (CH341A TTL Mode):</strong> Connect the CH341A's USB-to-TTL pins (<code>RX</code>, <code>TX</code>, <code>GND</code>) to log whether the target crashed, booted normally, or bypassed an instruction check.</li>
+        </ol>
+
+        <h3>Deployment B: Automated Bus-Fuzzing &amp; Recovery Harness</h3>
+        <p><strong>Goal:</strong> Stress-test USB, SPI, or I2C parsers on embedded peripherals to uncover buffer overflows or unhandled state lockups.</p>
+        <ol>
+          <li><strong>Active Fuzzing Host (Arduino Uno + USB Host Shield):</strong> Enumerate target USB peripherals and send malformed descriptors or boundary-condition packets.</li>
+          <li><strong>High-Speed Bus Sniffer (RP2350A):</strong> Tap <code>CS</code>, <code>CLK</code>, <code>MOSI</code>, and <code>MISO</code> across an ELEGOO breadboard breakout to capture exact bus transactions leading up to a fault.</li>
+          <li><strong>Automated Power Cycling (ELEGOO NPN Transistor):</strong> Drive a PN2222 transistor from the microcontroller to hard-reset the target's VCC rail automatically whenever the UART console detects a hang.</li>
+        </ol>
+
+        <figure class="lab-diagram" id="fig-pn2222">
+            <svg viewBox="0 0 780 280" role="img" aria-labelledby="fig-pn2222-title fig-pn2222-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-pn2222-title">PN2222 NPN low-side power switch</title>
+                <desc id="fig-pn2222-desc">Schematic of a PN2222 NPN transistor used as a low-side switch: MCU GPIO through a base resistor to the base, emitter to GND, collector to target VCC return, with a flyback diode across an inductive load if present.</desc>
+
+                <rect x="10" y="10" width="760" height="260" rx="8" fill="#0d1117" stroke="#30363d"/>
+                <!-- MCU -->
+                <rect x="40" y="90" width="110" height="70" rx="4" fill="#161b22" stroke="#a371f7" stroke-width="1.5"/>
+                <text x="95" y="120" text-anchor="middle" fill="#a371f7" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="600">MCU GPIO</text>
+                <text x="95" y="140" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9">RP2350A / Uno</text>
+                <!-- base resistor -->
+                <line x1="150" y1="125" x2="210" y2="125" stroke="#c9d1d9" stroke-width="2"/>
+                <rect x="210" y="112" width="50" height="26" rx="2" fill="#010409" stroke="#d29922"/>
+                <text x="235" y="130" text-anchor="middle" fill="#d29922" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">Rb</text>
+                <line x1="260" y1="125" x2="310" y2="125" stroke="#c9d1d9" stroke-width="2"/>
+                <!-- transistor symbol -->
+                <circle cx="340" cy="125" r="36" fill="none" stroke="#58a6ff" stroke-width="1.5"/>
+                <line x1="310" y1="125" x2="325" y2="125" stroke="#c9d1d9" stroke-width="2"/>
+                <!-- vertical bar -->
+                <line x1="325" y1="100" x2="325" y2="150" stroke="#c9d1d9" stroke-width="3"/>
+                <!-- collector up -->
+                <line x1="325" y1="105" x2="355" y2="85" stroke="#c9d1d9" stroke-width="2"/>
+                <line x1="355" y1="85" x2="355" y2="50" stroke="#c9d1d9" stroke-width="2"/>
+                <!-- emitter down with arrow -->
+                <line x1="325" y1="145" x2="355" y2="165" stroke="#c9d1d9" stroke-width="2"/>
+                <polygon points="348,155 355,165 342,162" fill="#c9d1d9"/>
+                <line x1="355" y1="165" x2="355" y2="200" stroke="#c9d1d9" stroke-width="2"/>
+                <!-- GND -->
+                <line x1="340" y1="200" x2="370" y2="200" stroke="#f85149" stroke-width="2"/>
+                <line x1="345" y1="208" x2="365" y2="208" stroke="#f85149" stroke-width="2"/>
+                <line x1="350" y1="216" x2="360" y2="216" stroke="#f85149" stroke-width="2"/>
+                <text x="380" y="206" fill="#f85149" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">GND</text>
+                <!-- labels C B E -->
+                <text x="360" y="72" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">C</text>
+                <text x="300" y="118" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">B</text>
+                <text x="365" y="175" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">E</text>
+                <text x="340" y="240" text-anchor="middle" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="600">PN2222</text>
+                <!-- target VCC rail -->
+                <line x1="355" y1="50" x2="520" y2="50" stroke="#3fb950" stroke-width="2"/>
+                <text x="450" y="40" text-anchor="middle" fill="#3fb950" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">target VCC (switched return)</text>
+                <!-- load box -->
+                <rect x="520" y="70" width="140" height="80" rx="4" fill="#161b22" stroke="#3fb950" stroke-width="1.5"/>
+                <text x="590" y="105" text-anchor="middle" fill="#3fb950" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="600">TARGET</text>
+                <text x="590" y="125" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9">VCC rail / reset</text>
+                <line x1="520" y1="50" x2="520" y2="70" stroke="#3fb950" stroke-width="2"/>
+                <line x1="590" y1="150" x2="590" y2="200" stroke="#c9d1d9" stroke-width="2"/>
+                <line x1="355" y1="200" x2="590" y2="200" stroke="#c9d1d9" stroke-width="1.5" stroke-dasharray="4 3"/>
+                <text x="390" y="30" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">GPIO HIGH → saturates NPN → pulls load to GND (hard reset / power cycle)</text>
+
+            </svg>
+            <figcaption>ELEGOO PN2222 as a low-side switch: MCU GPIO drives the base through Rb; when on, the collector pulls the target rail/reset toward GND for automated power cycling. <span class="illust-note">(illustrative)</span></figcaption>
+        </figure>
+
+        <h3>Deployment C: Firmware Binary &amp; Secure-Boot Auditing</h3>
+        <p><strong>Goal:</strong> Audit production firmware images across hardware revisions for exposed debug interfaces or hardcoded secrets.</p>
+        <ul>
+          <li>Pull raw SPI NOR dumps using the modified 3.3V CH341A (or 1.8V adapter) and ZIF/SOP8 clip.</li>
+          <li>Diff firmware revisions to verify that JTAG/SWD debug fuses are locked in production builds, cryptographic keys aren't stored in plaintext, and rollback protection counters increment properly.</li>
+        </ul>
+
+        <figure class="lab-diagram" id="fig-spi-timing">
+            <svg viewBox="0 0 700 310" role="img" aria-labelledby="fig-spi-timing-title fig-spi-timing-desc" xmlns="http://www.w3.org/2000/svg">
+                <title id="fig-spi-timing-title">SPI JEDEC ID (0x9F) timing waveform</title>
+                <desc id="fig-spi-timing-desc">SPI Mode 0 timing diagram showing CS going low, eight CLK cycles shifting out MOSI command 0x9F (10011111), then three bytes of JEDEC ID on MISO.</desc>
+
+                <rect x="8" y="8" width="684" height="294" rx="8" fill="#0d1117" stroke="#30363d"/>
+                <text x="350" y="36" text-anchor="middle" fill="#ffffff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600">SPI · Read JEDEC ID (0x9F) · Mode 0</text>
+                <!-- CS -->
+                <text x="40" y="70" fill="#f85149" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="600">CS</text>
+                <path d="M80 55 H120 V80 H560 V55 H660" stroke="#f85149" stroke-width="2.5" fill="none"/>
+                <text x="340" y="98" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">active low</text>
+                <!-- CLK -->
+                <text x="40" y="140" fill="#a371f7" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="600">CLK</text>
+                <path d="M80 150 H120
+                  V118 H145 V150 H170
+                  V118 H195 V150 H220
+                  V118 H245 V150 H270
+                  V118 H295 V150 H320
+                  V118 H345 V150 H370
+                  V118 H395 V150 H420
+                  V118 H445 V150 H470
+                  V118 H495 V150 H520
+                  H660" stroke="#a371f7" stroke-width="2.5" fill="none"/>
+                <g fill="#8b949e" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="middle">
+                  <text x="132" y="170">7</text><text x="182" y="170">6</text>
+                  <text x="232" y="170">5</text><text x="282" y="170">4</text>
+                  <text x="332" y="170">3</text><text x="382" y="170">2</text>
+                  <text x="432" y="170">1</text><text x="482" y="170">0</text>
+                </g>
+                <!-- MOSI 0x9F = 10011111 -->
+                <text x="40" y="210" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="600">MOSI</text>
+                <path d="M80 220 H120
+                  V188 H170
+                  V220 H220
+                  V220 H270
+                  V188 H320
+                  V188 H370
+                  V188 H420
+                  V188 H470
+                  V188 H520
+                  V220 H660" stroke="#58a6ff" stroke-width="2.5" fill="none"/>
+                <g fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" text-anchor="middle">
+                  <text x="145" y="180">1</text><text x="195" y="240">0</text>
+                  <text x="245" y="240">0</text><text x="295" y="180">1</text>
+                  <text x="345" y="180">1</text><text x="395" y="180">1</text>
+                  <text x="445" y="180">1</text><text x="495" y="180">1</text>
+                </g>
+                <text x="320" y="255" text-anchor="middle" fill="#58a6ff" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12">cmd 0x9F</text>
+                <!-- MISO -->
+                <text x="40" y="280" fill="#3fb950" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="600">MISO</text>
+                <path d="M80 285 H520 V268 H660" stroke="#3fb950" stroke-width="2.5" fill="none"/>
+                <text x="590" y="262" text-anchor="middle" fill="#3fb950" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">ID bytes</text>
+            </svg>
+            <figcaption>First lab waveform: CS goes low, MOSI clocks out JEDEC ID command 0x9F (binary 10011111), then the chip returns manufacturer/type/density on MISO.</figcaption>
+        </figure>
+
+        <div class="lab-callout lab-callout-ok">
+          <p><strong>Recommended First Lab Exercise:</strong><br>
+          Start by seating a spare 25-series SPI flash chip on the SOIC8 breakout board in the ELEGOO breadboard. Wire the 3.3V-verified CH341A to read its JEDEC ID while tapping <code>CLK</code> and <code>MOSI</code> with the RP2350A—allowing apprentices to visually correlate software commands with real electrical waveforms on the bus.</p>
+        </div>
+      </section>
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span><strong>Nick Harrison</strong><span>nickharrison96.github.io</span></span>
+      </div>
+      <nav class="footer-nav" aria-label="Site hubs">
+        <a href="work.html">Work</a>
+        <a href="writing.html">Blog</a>
+        <a href="repair.html">Right to Repair</a>
+        <a href="tools.html">Tools</a>
+        <a href="downloads.html">Downloads</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="footer-social">
+        <a href="mailto:harrisontechdev@gmail.com" aria-label="Email">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.1 24.1 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.1 24.1 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+        </a>
+        <a href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        </a>
+      </div>
+      <p class="footer-legal">&copy; 2026 Nick Harrison. Open Technical License. <span>Right to Repair &mdash; built to be opened, fixed, and reused.</span></p>
+      <a class="to-top" href="#main">Top &uarr;</a>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/site.js"></script>
+  <script type="module" src="assets/hardware-lab/current-hub.js"></script>
+</body>
+
+</html>
