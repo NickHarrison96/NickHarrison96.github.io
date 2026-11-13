@@ -270,7 +270,7 @@ export async function runGuides(r) {
   r.check('index: hero badges', JSON.stringify(badges) === JSON.stringify(BADGES), JSON.stringify(badges));
   r.check('index: hero CTA "Read the Guides" → writing.html', /<a href="writing\.html" class="dl-btn[^"]*">Read the Guides<\/a>/.test(h));
   r.check('index: no "Read APFS Recovery Case Study" CTA', !ht.includes('Read APFS Recovery Case Study'));
-  r.check('index: exactly one link to apfs-recovery.html', count(h, 'href="apfs-recovery.html') === 1, String(count(h, 'href="apfs-recovery.html')));
+  r.check('index: no link to apfs-recovery.html (case study is on Blog)', count(h, 'href="apfs-recovery.html') === 0, String(count(h, 'href="apfs-recovery.html')));
   r.check('index: no #case-study section', !ids(h).has('case-study'));
   r.check('index: no featured-work project grid', !/class="project-grid/.test(h) && !/>Featured Work</.test(h));
   const wr = /<section class="section" id="writing"[\s\S]*?<\/section>/.exec(h)?.[0] || '';

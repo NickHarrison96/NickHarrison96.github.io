@@ -239,7 +239,8 @@ async function run() {
   if (at(4) && html['apfs-recovery.html']) {
     const text = pageText(html['apfs-recovery.html']);
     for (const phrase of VERBATIM_CASE) r.check(`apfs verbatim: "${phrase.slice(0, 48)}…"`, text.includes(phrase));
-    for (const f of ['index.html', 'writing.html']) r.check(`${f} links apfs-recovery.html`, /href="apfs-recovery\.html/.test(html[f] || ''));
+    r.check('writing.html links apfs-recovery.html', /href="apfs-recovery\.html/.test(html['writing.html'] || ''));
+    r.check('index.html does not link apfs-recovery.html', !/href="apfs-recovery\.html/.test(html['index.html'] || ''));
     r.check('apfs: 4 timeline phases', (html['apfs-recovery.html'].match(/<li class="phase(?: [^"]*)?"/g) || []).length === 4);
   }
 

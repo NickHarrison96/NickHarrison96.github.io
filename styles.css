@@ -187,6 +187,12 @@ html[data-fx="lite"] #fx-bg.live {
   display: block;
 }
 
+@media (pointer: coarse) {
+  #fx-bg {
+    display: none !important;
+  }
+}
+
 /* `main` keeps the 1200px measure. AGENTS.md layout gotcha: long unbreakable
    strings (model filenames on downloads.html) must not stretch the page. */
 main {
@@ -1956,6 +1962,32 @@ html[data-fx="static"] .marquee-track {
   background: radial-gradient(360px circle at var(--mx, -500px) var(--my, -500px), var(--spot, rgba(56, 189, 248, 0.14)), transparent 45%);
 }
 
+/* CSS fallback glow so hover, keyboard focus and taps still light up when
+   fx-physics is off (coarse pointer / STATIC). Inline --glow from JS wins on
+   fine-pointer desktops, so magnetic/tilt motion is unchanged. */
+.tilt:hover,
+.tilt:focus-visible,
+.tilt:active,
+.magnetic:hover,
+.magnetic:focus-visible,
+.magnetic:active {
+  --glow: 1;
+  --mx: 50%;
+  --my: 38%;
+}
+
+.lp-card:hover,
+.lp-card:focus-visible,
+.lp-card:active {
+  border-color: rgba(56, 189, 248, 0.55);
+}
+
+.lp-card:active,
+.blog-card:active,
+.magnetic:active {
+  box-shadow: 0 0 22px -4px rgba(56, 189, 248, 0.55);
+}
+
 /* Projects */
 .project-grid {
   display: grid;
@@ -2181,6 +2213,10 @@ html[data-fx="static"] .marquee-track {
   line-height: 1.6;
   color: var(--muted);
   max-width: 500px;
+}
+
+.repair-lede-narrow {
+  display: none;
 }
 
 .layer-list {
@@ -2821,8 +2857,7 @@ html[data-fx="static"] .log-entry.enter {
   .marquee,
   .term,
   .stack-stage,
-  .layer-list,
-  #fx-bg {
+  .layer-list {
     display: none !important;
   }
 
@@ -2852,6 +2887,14 @@ html[data-fx="static"] .log-entry.enter {
   .repair-title {
     font-size: clamp(28px, 7vw, 34px);
     line-height: 1.16;
+  }
+
+  .repair-lede-wide {
+    display: none;
+  }
+
+  .repair-lede-narrow {
+    display: inline;
   }
 
   .layer-panel[hidden] {
@@ -3663,8 +3706,12 @@ html[data-theme="jailbreak"][data-fx="full"] body::after {
 }
 
 .blog-card:hover,
-.blog-card:focus-visible {
+.blog-card:focus-visible,
+.blog-card:active {
   z-index: 1;
+  --glow: 1;
+  --mx: 50%;
+  --my: 40%;
 }
 
 .blog-card:focus-visible,

@@ -3,8 +3,8 @@
 //   LITE    ≤ 4 cores, ≤ 4 GB device memory, or Save-Data.
 //   FULL    everything else.
 // A session never climbs back up from STATIC. `?fx=full|lite|static` overrides the
-// detection for testing (reduced motion still wins). Narrow viewports and coarse
-// pointers default to STATIC so the WebGL grid and particles stay off on mobile.
+// detection for testing (reduced motion still wins). Coarse pointers default to
+// STATIC (no WebGL); a fine-pointer desktop keeps the full tier at any width.
 import { FX } from './fx-config.js';
 
 const root = document.documentElement;
@@ -23,20 +23,16 @@ export function isNarrowView() {
   return !!(window.matchMedia && matchMedia('(max-width: 1023px)').matches);
 }
 
-/** Touch-first pointer; used with isNarrowView() to default effects to STATIC. */
+/** Touch-first pointer: default the effect tier to STATIC (no WebGL canvas). */
 export function isCoarsePointer() {
   return !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
-}
-
-export function isCompactUi() {
-  return isNarrowView() || isCoarsePointer();
 }
 
 export function detectTier() {
   if (prefersReducedMotion()) return 'static';
   const forced = new URLSearchParams(location.search).get('fx');
   if (forced in RANK) return forced;
-  if (isCompactUi()) return 'static';
+  if (isCoarsePointer()) return 'static';
   const cores = navigator.hardwareConcurrency || 8;
   const mem = navigator.deviceMemory || 8;
   const saveData = !!(navigator.connection && navigator.connection.saveData);
@@ -57,9 +53,9 @@ export function setTier(next) {
 /* Reduced motion switched on mid-session → STATIC. */
 if (window.matchMedia) {
   const dropToStatic = () => {
-    if (prefersReducedMotion() || isCompactUi()) setTier('static');
+    if (prefersReducedMotion() || isCoarsePointer()) setTier('static');
   };
-  for (const q of ['(prefers-reduced-motion: reduce)', '(max-width: 1023px)', '(pointer: coarse)']) {
+  for (const q of ['(prefers-reduced-motion: reduce)', '(pointer: coarse)']) {
     const m = matchMedia(q);
     m.addEventListener ? m.addEventListener('change', dropToStatic) : m.addListener(dropToStatic);
   }
