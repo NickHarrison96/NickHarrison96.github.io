@@ -102,6 +102,7 @@ if (document.querySelector('main.home')) import('./home.js');
 if (document.getElementById('log-list')) import('./log.js');
 if (document.querySelector('.section-nav')) import('./sections.js');
 if (document.querySelector('main.case')) import('./case.js');
+if (document.querySelector('.tutorial-toc[data-observe]')) import('./guide-toc.js');
 
 /* Effects last: the shader compile must not delay the UI modules above. */
 if (root.dataset.fx !== 'static') {

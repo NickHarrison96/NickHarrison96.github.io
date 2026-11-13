@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#05070d">
+  <meta name="description"
+    content="Local AI on your own hardware: llama.cpp, the original open-source engine for running GGUF models, then Ollama, and a short look at the wider ecosystem built on that work." />
+  <title>Local AI &mdash; Nick Harrison</title>
+  <script>/* shell: runs before first paint — see AGENTS.md "Shell" */(function(d){d.classList.add('js');try{if(localStorage.getItem('nh-jailbreak')==='1')d.dataset.theme='jailbreak'}catch(e){}if(d.hasAttribute('data-boot')&&!location.hash&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{if(!sessionStorage.getItem('nh-booted')){sessionStorage.setItem('nh-booted','1');d.classList.add('booting')}}catch(e){}}})(document.documentElement);</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="sub">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <canvas id="fx-bg" aria-hidden="true"></canvas>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span class="brand-text">
+          <span class="brand-name">NICK HARRISON</span>
+          <span class="brand-role">SYSTEMS &amp; AI ENGINEER <span class="brand-role-extra">· RIGHT TO REPAIR</span></span>
+        </span>
+      </a>
+      <nav class="site-nav" id="site-nav" aria-label="Site">
+        <a href="work.html">Work</a>
+        <a href="writing.html">Blog</a>
+        <a href="repair.html">Right to Repair</a>
+        <a href="tools.html">Tools</a>
+        <a href="downloads.html">Downloads</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="site-actions">
+        <button class="search-btn" type="button" data-palette-open aria-label="Search (Ctrl+K)">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-label">Search</span>
+          <kbd aria-hidden="true">⌘K</kbd>
+        </button>
+        <a class="gh-link magnetic" href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="Nick Harrison on GitHub">
+          <img src="https://github.com/NickHarrison96.png?size=96" alt="" class="gh-avatar" width="28" height="28">
+          <span class="gh-text">github.com/nickharrison96</span>
+        </a>
+        <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+          <span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="case">
+    <article class="case-article local-ai">
+      <a href="writing.html#local-ai" class="back-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to Blog</a>
+
+      <header class="case-head">
+        <div class="pill">LOCAL AI &middot; LLAMA.CPP &middot; OLLAMA &middot; ECOSYSTEM</div>
+        <h1 class="teaser-title">Local <span class="grad">AI</span></h1>
+        <p class="teaser-lede">Run large language models on your own machine. This page is the starting point: the original engine, the friendlier app that followed, and a short look at the wider set of tools built on that work.</p>
+        <nav class="tutorial-toc" aria-label="On this page">
+          <a href="#llama-cpp">llama.cpp</a>
+          <a href="#ollama">Ollama</a>
+          <a href="#ecosystem">Ecosystem</a>
+        </nav>
+      </header>
+
+      <div class="lineage">
+        <article class="lineage-card" id="llama-cpp" aria-labelledby="llama-cpp-title">
+          <div class="tutorial-logo lineage-logo">
+            <img src="assets/llama-cpp-icon-dark.svg" alt="llama.cpp logo" width="96" height="96" decoding="async">
+          </div>
+          <p class="lineage-kicker">Came first <time datetime="2023-03-10">March 2023</time></p>
+          <h2 id="llama-cpp-title" class="lineage-title">llama.cpp</h2>
+          <p class="lineage-body">llama.cpp is the original open-source C/C++ engine for running large language models locally, in the GGUF format, on CPU and GPU. Georgi Gerganov started the project in March 2023. It is maintained by the ggml authors under the MIT licence, and it is the foundation a lot of later local-AI software builds on.</p>
+          <a class="lineage-action magnetic" href="llama-cpp.html">Open the llama.cpp guide <svg aria-hidden="true" class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+        </article>
+
+        <div class="lineage-arrow" aria-hidden="true">
+          <span class="lineage-arrow-mark">&gt;&gt;</span>
+          <span class="lineage-arrow-caption">then</span>
+        </div>
+
+        <article class="lineage-card" id="ollama" aria-labelledby="ollama-title">
+          <div class="tutorial-logo lineage-logo logo-plate">
+            <img src="assets/ollama-logo.svg" alt="Ollama logo" width="96" height="96" decoding="async">
+          </div>
+          <p class="lineage-kicker">Followed <time datetime="2023-06-26">June 2023</time></p>
+          <h2 id="ollama-title" class="lineage-title">Ollama</h2>
+          <p class="lineage-body">Ollama is a friendlier app and command-line tool for downloading and running models on your own hardware. Its official project lists llama.cpp &mdash; founded by Georgi Gerganov &mdash; as a supported backend, and it pins a llama.cpp source tree in its own build. Ollama is also released under the MIT licence.</p>
+          <p class="lineage-action lineage-action--soon" aria-disabled="true">Guide coming soon</p>
+        </article>
+
+        <div class="lineage-arrow" aria-hidden="true">
+          <span class="lineage-arrow-mark">&gt;&gt;</span>
+          <span class="lineage-arrow-caption">then</span>
+        </div>
+
+        <article class="lineage-card" id="ecosystem" aria-labelledby="ecosystem-title">
+          <div class="tutorial-logo lineage-logo lineage-logo--neutral" aria-hidden="true">
+            <svg aria-hidden="true" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
+              <circle cx="16" cy="7" r="3"/>
+              <circle cx="7" cy="24" r="3"/>
+              <circle cx="25" cy="24" r="3"/>
+              <path d="M16 10v5M14.3 15 9 21M17.7 15 23 21"/>
+            </svg>
+          </div>
+          <p class="lineage-kicker">Wider set of tools</p>
+          <h2 id="ecosystem-title" class="lineage-title">Ecosystem</h2>
+          <p class="lineage-body">A growing set of apps, bindings and servers build on llama.cpp, use its GGUF model format, or ship a fork of the engine. The examples below are ones whose own official docs or repositories say so. This is not a complete catalogue, and some of these tools also support other engines.</p>
+          <ul class="eco-list">
+            <li><a href="https://www.lmstudio.ai/llms.txt" target="_blank" rel="noopener noreferrer">LM Studio</a> &mdash; a desktop app that can run GGUF models with llama.cpp (and MLX on Apple Silicon).</li>
+            <li><a href="https://github.com/abetlen/llama-cpp-python" target="_blank" rel="noopener noreferrer">llama-cpp-python</a> &mdash; Python bindings for llama.cpp, with an optional OpenAI-compatible server.</li>
+            <li><a href="https://koboldai.com/KoboldCpp/" target="_blank" rel="noopener noreferrer">KoboldCpp</a> &mdash; a single-package server that &ldquo;builds off llama.cpp&rdquo; and runs GGML and GGUF models.</li>
+            <li><a href="https://docs.gpt4all.io/index.html" target="_blank" rel="noopener noreferrer">GPT4All</a> &mdash; a desktop app and Python SDK that run local GGUF models with a llama.cpp backend.</li>
+            <li><a href="https://docs.jan.ai/desktop/local-engine/llama-cpp" target="_blank" rel="noopener noreferrer">Jan</a> &mdash; a desktop app that ships a built-in llama.cpp engine for local GGUF models.</li>
+            <li><a href="https://localai.io/docs/model-compatibility/" target="_blank" rel="noopener noreferrer">LocalAI</a> &mdash; a self-hosted OpenAI-compatible API that lists llama.cpp as one of its backends.</li>
+          </ul>
+        </article>
+      </div>
+
+      <section class="case-section" aria-labelledby="local-ai-sources">
+        <h2 id="local-ai-sources" class="case-h2">Sources checked</h2>
+        <ul class="case-list">
+          <li>llama.cpp repository, description, and MIT licence (repo created 10 March 2023): <a href="https://github.com/ggml-org/llama.cpp" target="_blank" rel="noopener noreferrer">https://github.com/ggml-org/llama.cpp</a></li>
+          <li>llama.cpp licence text: <a href="https://github.com/ggml-org/llama.cpp/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">https://github.com/ggml-org/llama.cpp/blob/master/LICENSE</a></li>
+          <li>Ollama repository (created 26 June 2023; MIT licence; llama.cpp listed under Supported backends): <a href="https://github.com/ollama/ollama" target="_blank" rel="noopener noreferrer">https://github.com/ollama/ollama</a></li>
+          <li>Ollama licence: <a href="https://github.com/ollama/ollama/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">https://github.com/ollama/ollama/blob/main/LICENSE</a></li>
+          <li>Ollama notes on updating its pinned llama.cpp source: <a href="https://github.com/ollama/ollama/blob/main/llama/README.md" target="_blank" rel="noopener noreferrer">https://github.com/ollama/ollama/blob/main/llama/README.md</a></li>
+          <li>Ollama website: <a href="https://ollama.com/" target="_blank" rel="noopener noreferrer">https://ollama.com/</a></li>
+          <li>LM Studio docs (llms.txt): <a href="https://www.lmstudio.ai/llms.txt" target="_blank" rel="noopener noreferrer">https://www.lmstudio.ai/llms.txt</a></li>
+          <li>llama-cpp-python: <a href="https://github.com/abetlen/llama-cpp-python" target="_blank" rel="noopener noreferrer">https://github.com/abetlen/llama-cpp-python</a></li>
+          <li>KoboldCpp: <a href="https://koboldai.com/KoboldCpp/" target="_blank" rel="noopener noreferrer">https://koboldai.com/KoboldCpp/</a></li>
+          <li>GPT4All documentation: <a href="https://docs.gpt4all.io/index.html" target="_blank" rel="noopener noreferrer">https://docs.gpt4all.io/index.html</a> and <a href="https://docs.gpt4all.io/gpt4all_desktop/models.html" target="_blank" rel="noopener noreferrer">Models</a></li>
+          <li>Jan, Local AI Engine (llama.cpp): <a href="https://docs.jan.ai/desktop/local-engine/llama-cpp" target="_blank" rel="noopener noreferrer">https://docs.jan.ai/desktop/local-engine/llama-cpp</a></li>
+          <li>LocalAI model compatibility: <a href="https://localai.io/docs/model-compatibility/" target="_blank" rel="noopener noreferrer">https://localai.io/docs/model-compatibility/</a></li>
+          <li>llama.cpp brand assets and usage: <a href="https://github.com/ggml-org/llama-brand" target="_blank" rel="noopener noreferrer">https://github.com/ggml-org/llama-brand</a> and <a href="https://github.com/ggml-org/llama-brand/blob/master/BRAND-USAGE.md" target="_blank" rel="noopener noreferrer">BRAND-USAGE.md</a></li>
+          <li>Ollama logo (official repository): <a href="https://github.com/ollama/ollama/blob/main/docs/logo.svg" target="_blank" rel="noopener noreferrer">https://github.com/ollama/ollama/blob/main/docs/logo.svg</a></li>
+          <li>Ollama Terms of Service (branding): <a href="https://ollama.com/terms" target="_blank" rel="noopener noreferrer">https://ollama.com/terms</a></li>
+        </ul>
+      </section>
+
+      <p class="tutorial-mark">The llama.cpp logo is from <a href="https://github.com/ggml-org/llama-brand" target="_blank" rel="noopener noreferrer">ggml-org/llama-brand</a> and is used here to identify llama.cpp. The Ollama logo is the official mark from the Ollama repository, used here only to identify Ollama.</p>
+      <div class="page-cta">
+        <a href="llama-cpp.html" class="dl-btn magnetic">llama.cpp guide <svg aria-hidden="true" class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+        <a href="writing.html#local-ai" class="btn-ghost magnetic">Back to Blog</a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span><strong>Nick Harrison</strong><span>nickharrison96.github.io</span></span>
+      </div>
+      <nav class="footer-nav" aria-label="Site hubs">
+        <a href="work.html">Work</a>
+        <a href="writing.html">Blog</a>
+        <a href="repair.html">Right to Repair</a>
+        <a href="tools.html">Tools</a>
+        <a href="downloads.html">Downloads</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="footer-social">
+        <a href="mailto:harrisontechdev@gmail.com" aria-label="Email">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.1 24.1 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.1 24.1 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+        </a>
+        <a href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        </a>
+      </div>
+      <p class="footer-legal">&copy; 2026 Nick Harrison. Open Technical License. <span>Right to Repair &mdash; built to be opened, fixed, and reused.</span></p>
+      <a class="to-top" href="#main">Top &uarr;</a>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/site.js"></script>
+</body>
+
+</html>

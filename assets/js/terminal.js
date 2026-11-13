@@ -13,6 +13,7 @@ const PAGES = {
   home: 'index.html', work: 'work.html', projects: 'work.html', writing: 'writing.html', 'case-study': 'apfs-recovery.html',
   essays: 'writing.html#essays', log: 'writing.html#log', manifesto: 'writing.html#philosophy', tutorials: 'writing.html#tutorials',
   'kali-win11': 'kali-wsl2-desktop-windows-11.html', 'kali-win10': 'kali-wsl2-desktop-windows-10.html',
+  'local-ai': 'local-ai.html', llama: 'llama-cpp.html', 'llama-cpp': 'llama-cpp.html',
   repair: 'repair.html', mission: 'repair.html#mission', legislation: 'repair.html#legislation',
   'get-involved': 'repair.html#get-involved', guides: 'repair.html#guides', 'repair-guides': 'repair.html#guides',
   cafes: 'repair.html#cafes', 'repair-cafes': 'repair.html#cafes', talks: 'repair.html#talks',
