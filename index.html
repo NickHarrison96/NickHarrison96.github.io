@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#05070d">
   <meta name="description"
-    content="Nick Harrison — systems &amp; AI engineer, hardware troubleshooter and Right to Repair campaigner. Projects, the APFS recovery case study, free tools and field notes." />
+    content="Nick Harrison — systems &amp; AI engineer, hardware troubleshooter and Right to Repair campaigner. Projects, free tools and field notes." />
   <title>Nick Harrison — Systems &amp; AI Engineer · Right to Repair</title>
   <script>/* shell: runs before first paint — see AGENTS.md "Shell" */(function(d){d.classList.add('js');try{if(localStorage.getItem('nh-jailbreak')==='1')d.dataset.theme='jailbreak'}catch(e){}if(d.hasAttribute('data-boot')&&!location.hash&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{if(!sessionStorage.getItem('nh-booted')){sessionStorage.setItem('nh-booted','1');d.classList.add('booting')}}catch(e){}}})(document.documentElement);</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,8 +27,6 @@
       <pre class="boot-log"><span style="--i:0">OpenCore 1.0.8 · MacPro7,1 · MSI MPG X570 Gaming Edge WiFi</span>
 <span style="--i:1">OCC: AMD Ryzen 5 3600 · 6 cores / 12 threads ....... ok</span>
 <span style="--i:2">OCGPU: AMD Radeon RX 580 8GB · Metal ............... ok</span>
-<span style="--i:3">OCAPFS: container disk3 · 'Untitled' (disk3s7) ..... ok</span>
-<span style="--i:4">OCB: /Volumes/Big Mac - Data · 401.5 GB ........ mounted</span>
 <span style="--i:5" class="boot-go">OCB: booting nickharrison96.github.io_</span></pre>
       <p class="boot-skip">press any key to skip</p>
     </div>
@@ -36,9 +34,10 @@
 
   <div class="marquee" role="region" aria-label="Highlights">
     <div class="marquee-track">
-      <div class="marquee-group"><span>LATEST CASE STUDY: macOS APFS Recovery &amp; Bypass</span><span class="mq-sep" aria-hidden="true">•</span><span>nickharrison96.github.io</span><span class="mq-sep" aria-hidden="true">•</span><span>iMac20,1 OpenCore Systems Architecture</span><span class="mq-sep" aria-hidden="true">•</span><span>LiteLLM AI Gateway Contributions</span><span class="mq-sep" aria-hidden="true">•</span><span>Non-Destructive Data Preservation</span><span class="mq-sep" aria-hidden="true">•</span><span>Right to Repair: You own it. You should be able to fix it.</span><span class="mq-sep" aria-hidden="true">•</span><span>Free tools: no account, no strings</span><span class="mq-sep" aria-hidden="true">•</span></div>
-      <div class="marquee-group" aria-hidden="true"><span>LATEST CASE STUDY: macOS APFS Recovery &amp; Bypass</span><span class="mq-sep" aria-hidden="true">•</span><span>nickharrison96.github.io</span><span class="mq-sep" aria-hidden="true">•</span><span>iMac20,1 OpenCore Systems Architecture</span><span class="mq-sep" aria-hidden="true">•</span><span>LiteLLM AI Gateway Contributions</span><span class="mq-sep" aria-hidden="true">•</span><span>Non-Destructive Data Preservation</span><span class="mq-sep" aria-hidden="true">•</span><span>Right to Repair: You own it. You should be able to fix it.</span><span class="mq-sep" aria-hidden="true">•</span><span>Free tools: no account, no strings</span><span class="mq-sep" aria-hidden="true">•</span></div>
+      <div class="marquee-group"><span>nickharrison96.github.io</span><span class="mq-sep" aria-hidden="true">•</span><span>iMac20,1 OpenCore Systems Architecture</span><span class="mq-sep" aria-hidden="true">•</span><span>LiteLLM AI Gateway Contributions</span><span class="mq-sep" aria-hidden="true">•</span><span>Non-Destructive Data Preservation</span><span class="mq-sep" aria-hidden="true">•</span><span>Right to Repair: You own it. You should be able to fix it.</span><span class="mq-sep" aria-hidden="true">•</span><span>Free tools: no account, no strings</span><span class="mq-sep" aria-hidden="true">•</span></div>
+      <div class="marquee-group" aria-hidden="true"><span>nickharrison96.github.io</span><span class="mq-sep" aria-hidden="true">•</span><span>iMac20,1 OpenCore Systems Architecture</span><span class="mq-sep" aria-hidden="true">•</span><span>LiteLLM AI Gateway Contributions</span><span class="mq-sep" aria-hidden="true">•</span><span>Non-Destructive Data Preservation</span><span class="mq-sep" aria-hidden="true">•</span><span>Right to Repair: You own it. You should be able to fix it.</span><span class="mq-sep" aria-hidden="true">•</span><span>Free tools: no account, no strings</span><span class="mq-sep" aria-hidden="true">•</span></div>
     </div>
+    <button type="button" class="marquee-toggle" aria-pressed="false" aria-label="Pause highlights">Pause</button>
   </div>
 
   <header class="site-header">
@@ -90,12 +89,11 @@
           <ul class="badges" aria-label="Focus areas">
             <li style="--c:#38bdf8">MacPro7,1 OpenCore</li>
             <li style="--c:#818cf8">LiteLLM Gateway</li>
-            <li style="--c:#34d399">APFS Recovery</li>
             <li style="--c:#fbbf24">Stable Diffusion</li>
             <li style="--c:#f9a8d4">Right to Repair</li>
           </ul>
           <div class="hero-cta">
-            <a href="apfs-recovery.html" class="dl-btn magnetic">Read APFS Recovery Case Study</a>
+            <a href="writing.html" class="dl-btn magnetic">Read the Blog</a>
             <a href="work.html" class="btn-ghost magnetic">View Repositories</a>
             <a href="#tools" class="btn-outline-ok magnetic"><span aria-hidden="true">↓</span> Get the Tools</a>
           </div>
@@ -126,8 +124,6 @@
     kMMMMMMMMMMMMMMMMMMMMMMd    <b>Memory:</b> <span>9490MiB / 16384MiB</span>
      ;KMMMMMMMWXXWMMMMMMMk.
        .cooc,.    .,coo:.</pre>
-            <div><span class="t-user">nick@nicks-iMac</span>:<span class="t-path">~</span>$ status --latest-incident</div>
-            <div class="t-incident"><strong>[RESOLVED]</strong> APFS Directory Services desync bypass completed. 401.5 GB user payload mounted at <code>/Volumes/Big Mac - Data</code> without data loss.</div>
             <div id="term-out" class="term-out" aria-live="polite"></div>
             <form class="term-input-row" autocomplete="off">
               <label for="term-input"><span class="t-user">nick@nicks-iMac</span>:<span class="t-path">~</span>$ </label>

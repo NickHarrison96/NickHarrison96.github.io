@@ -53,6 +53,11 @@ export const RETIRED = [
  * Where "Nicholas" may still appear in tracked site files: only inside URLs, email addresses and @handles.
  * Site files = every tracked text file outside docs/ and tools/ (the checker and the plan quote the old name).
  */
+/** Unique sentence from the duplicate "Where This Started" block that used to sit under About → Team. */
+export const RETIRED_ABOUT = [
+  'So the kid with more determination than money taught himself — studied, researched, and built his own path into repair with nothing to go on but stubbornness and a firm belief that people deserve far more control over what they own than they\'re ever given.',
+];
+
 export const NAME_ALLOWED = [/\bhttps?:\/\/[^\s"'<>)]+/gi, /\b[\w.+-]+@[\w-]+(?:\.[\w-]+)+\b/g, /(^|[\s(])@[A-Za-z0-9_]+/g];
 
 /* ── detectors (pure, exercised by --selftest) ───────────────────────────── */
@@ -221,9 +226,11 @@ export async function runIA(r) {
     for (const id of ['log', 'philosophy']) r.check(`ia index: #${id} moved off the homepage`, !ids(h).has(id));
     r.check('ia index: marquee kept', /class="marquee"/.test(h));
     r.check('ia index: teardown stack kept', /class="stack-stage"/.test(h) && (h.match(/class="layer-panel"/g) || []).length === 5);
-    for (const href of ['work.html', 'writing.html', 'downloads.html', 'apfs-recovery.html', ...SECTION_IDS['repair.html'].map((id) => `repair.html#${id}`)]) {
+    // The APFS case study lives on the Blog (writing.html); index must not link to it.
+    for (const href of ['work.html', 'writing.html', 'downloads.html', ...SECTION_IDS['repair.html'].map((id) => `repair.html#${id}`)]) {
       r.check(`ia index: links ${href}`, h.includes(`href="${href}"`));
     }
+    r.check('ia index: no apfs-recovery.html link (case study is on Blog)', !h.includes('href="apfs-recovery.html"'));
     // "All work →" left with the featured-work section (phase 9); the hero's "View Repositories" links work.html.
     r.check('ia index: hero links work.html', /<a href="work\.html" class="btn-ghost[^"]*">View Repositories<\/a>/.test(h));
     r.check('ia index: "All tools →"', /href="downloads\.html"[^>]*>All tools <span aria-hidden="true">→<\/span>/.test(h));
@@ -304,7 +311,8 @@ export async function runIA(r) {
     let oldHtml = '';
     try { oldHtml = git(['show', `main:${oldF}`]); } catch (e) { r.check(`ia preserve ${oldF}: read from main`, false, e.message); continue; }
     const n = blocks(mainOf(oldHtml)).length;
-    const miss = html[newF] ? missingBlocks(mainOf(oldHtml), [mainOf(html[newF])]) : ['(target missing)'];
+    let miss = html[newF] ? missingBlocks(mainOf(oldHtml), [mainOf(html[newF])]) : ['(target missing)'];
+    if (newF === 'about.html') miss = miss.filter((b) => !RETIRED_ABOUT.some((r) => b.includes(r) || r.includes(b)));
     if (r.check(`ia preserve main:${oldF} → ${newF} (${n} blocks)`, n > 0 && miss.length === 0, `${miss.length} missing: ${showMissing(miss)}`)) preserved += n;
   }
   let base = '';

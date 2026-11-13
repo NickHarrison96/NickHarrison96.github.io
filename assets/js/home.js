@@ -2,6 +2,7 @@
 // teardown. The field log moved to writing.html (log.js). Every section is readable
 // without this module; it only adds behaviour.
 import { TOOLS } from './catalog.js';
+import { isNarrowView } from './fx-tier.js';
 
 /* Old homepage anchors whose sections moved to writing.html keep working. */
 const MOVED = { '#log': 'writing.html#log', '#philosophy': 'writing.html#philosophy' };
@@ -28,9 +29,9 @@ if (grid) {
     </article>`).join('');
 }
 
-/* ── Right to Repair teardown ────────────────────────────────────────────── */
+/* ── Right to Repair teardown (desktop only; mobile shows every panel as text) */
 const repair = document.getElementById('repair');
-if (repair) {
+if (repair && !isNarrowView()) {
   const tabs = [...repair.querySelectorAll('.layer-list a')].sort((a, b) => a.dataset.layer - b.dataset.layer);
   const panels = tabs.map((t) => document.getElementById(t.hash.slice(1)));
   const plates = [...repair.querySelectorAll('.plate')];
