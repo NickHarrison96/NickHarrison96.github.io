@@ -185,14 +185,16 @@ export async function runIA(r) {
   }
   if (html['repair.html']) r.check('ia repair.html: section nav is sticky', /\.section-nav\s*\{[^}]*position:\s*sticky/.test(read('styles.css')));
 
-  // Writing hub: featured case study, essays, field log (filters + search), manifesto at the bottom.
+  // Writing hub: categorized title-card rows, manifesto at the bottom.
   if (html['writing.html']) {
     const w = html['writing.html'];
     const own = ids(w);
-    for (const id of ['featured', 'essays', 'log', 'philosophy', 'log-list', 'log-q']) r.check(`ia writing.html: #${id}`, own.has(id));
-    r.check('ia writing.html: featured card → apfs-recovery.html', /id="featured"[\s\S]*?href="apfs-recovery\.html"/.test(w));
-    // Phase 9 added the Guides chip (all, case, project, guide, tool, writeup, campaign).
-    r.check('ia writing.html: log filter chips', (w.match(/class="chip" data-filter=/g) || []).length === 7);
+    const rows = ['case-studies', 'essays', 'projects', 'tools', 'right-to-repair'];
+    for (const id of [...rows, 'philosophy', 'log']) r.check(`ia writing.html: #${id}`, own.has(id));
+    r.check('ia writing.html: case study card → apfs-recovery.html', /id="case-studies"[\s\S]*?href="apfs-recovery\.html"/.test(w));
+    r.check('ia writing.html: category row headings link to their anchors', rows.every((id) => w.includes(`href="#${id}"`)));
+    r.check('ia writing.html: title cards present', (w.match(/class="lp-card blog-card/g) || []).length >= 5);
+    r.check('ia writing.html: no log filter chips', (w.match(/class="chip" data-filter=/g) || []).length === 0);
     r.check('ia writing.html: manifesto is the last section', w.lastIndexOf('<section') === w.indexOf('<section class="section" id="philosophy"'));
     r.check('ia writing.html: manifesto title', pageText(w).includes('Why We Publish & Share These Write-Ups'));
   }

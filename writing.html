@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#05070d">
   <meta name="description"
-    content="Writing by Nick Harrison: the APFS recovery case study, essays on the economics and ethics of repair, the field log and the manifesto." />
+    content="Writing by Nick Harrison: the APFS recovery case study, essays on the economics and ethics of repair, projects and tools, and the manifesto." />
   <title>Blog &mdash; Nick Harrison</title>
   <script>/* shell: runs before first paint — see AGENTS.md "Shell" */(function(d){d.classList.add('js');try{if(localStorage.getItem('nh-jailbreak')==='1')d.dataset.theme='jailbreak'}catch(e){}if(d.hasAttribute('data-boot')&&!location.hash&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{if(!sessionStorage.getItem('nh-booted')){sessionStorage.setItem('nh-booted','1');d.classList.add('booting')}}catch(e){}}})(document.documentElement);</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,102 +63,135 @@
         </div>
       </div>
 
-    <!-- ─── Featured case study (full write-up on apfs-recovery.html) ─── -->
-    <section class="section-deep" id="case-studies" aria-labelledby="featured-title">
-      <p class="eyebrow" data-scramble>Case Studies</p>
-      <div class="teaser" id="featured">
-        <div class="pill"><span class="pulse" aria-hidden="true"></span>FEATURED CASE STUDY • INCIDENT &amp; SYSTEM RECOVERY</div>
-        <h2 id="featured-title" class="teaser-title">Surgical Recovery of a <br><span class="grad">Corrupted macOS Installation</span></h2>
-        <p class="teaser-lede">How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.</p>
-        <dl class="spec-grid">
-          <div class="spec"><dt>SMBIOS TARGET</dt><dd>MacPro7,1 (AMD Zen 2)</dd></div>
-          <div class="spec"><dt>STORAGE LAYOUT</dt><dd>APFS Container (disk1 / disk3)</dd></div>
-          <div class="spec spec-ok"><dt>DATA PRESERVATION</dt><dd>401.5 GB Volume Untouched</dd></div>
-        </dl>
-        <ol class="mini-timeline">
-          <li><span class="node" aria-hidden="true">1</span><b>Creating the Parallel APFS Volume</b><code>diskutil apfs addVolume disk3 APFS "Untitled"</code></li>
-          <li><span class="node" aria-hidden="true">2</span><b>Online Recovery Payload Retrieval</b><span>~18.39 GB fetched directly from Apple recovery servers.</span></li>
-          <li><span class="node" aria-hidden="true">3</span><b>Resolving Storage Space Warnings</b><span>Unchecked bulk migration; data stayed mounted at /Volumes/Big Mac - Data/.</span></li>
-          <li class="ok"><span class="node" aria-hidden="true">4</span><b>Desktop Landing &amp; Granular Data Recovery</b><code>sudo chown -R $(whoami) "/Volumes/Big Mac - Data/Users/nick"</code></li>
-        </ol>
-        <div class="teaser-cta">
-          <a href="apfs-recovery.html" class="dl-btn magnetic">Read the full case study <svg aria-hidden="true" class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
-        </div>
-      </div>
-    </section>
-
-      <section class="card subpage hub-section" id="essays" aria-labelledby="essays-title">
-        <div class="prose">
-          <h2 id="essays-title">Recent Pieces</h2><ul class="feature-list"><li><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><div><b>Why &lsquo;Authorized&rsquo; Repair Is a Moat</b><span>How the approved-repair label quietly kills competition.</span></div></li><li><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><div><b>The True Cost of a Glued-In Battery</b><span>What a two-dollar design choice does over a decade.</span></div></li><li><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><div><b>Ownership After the Sale</b><span>When the thing you bought keeps answering to someone else.</span></div></li></ul><p>Long-form engineering write-up: <a href="apfs-recovery.html">Surgical Recovery of a Corrupted macOS Installation</a> &mdash; the APFS case study.</p><p>New pieces land in the newsletter first.</p>
-        </div>
-        <div class="page-cta">
-          <a href="https://www.facebook.com/profile.php?id=100090229520700" target="_blank" rel="noopener noreferrer" class="dl-btn">Subscribe <svg aria-hidden="true" class="arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></a>
+    <!-- ─── Category rows ────────────────────────────────────── -->
+    <div class="blog-index" id="log">
+      <section class="blog-row" id="case-studies" aria-labelledby="case-studies-title">
+        <h2 id="case-studies-title" class="blog-row-heading"><a href="#case-studies">Case Studies <span class="grad" aria-hidden="true">›</span></a></h2>
+        <div class="blog-row-cards">
+          <a class="lp-card blog-card tilt magnetic" href="apfs-recovery.html">
+            <span class="blog-card-tag">Case study</span>
+            <b>Surgical Recovery of a Corrupted macOS Installation</b>
+            <span>How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.</span>
+          </a>
         </div>
       </section>
 
-    <!-- ─── Field log ────────────────────────────────────────── -->
-    <section class="section section-deep" id="log" aria-labelledby="log-title">
-      <div class="log-wrap">
-        <p class="eyebrow" data-scramble>Field Log</p>
-        <h2 id="log-title" class="section-title">Case Studies, Write-ups &amp; <span class="grad">Releases</span></h2>
-        <div class="log-controls">
-          <div class="chips" role="group" aria-label="Filter the log">
-            <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span class="n"></span></button>
-            <button type="button" class="chip" data-filter="case" aria-pressed="false">Case studies <span class="n"></span></button>
-            <button type="button" class="chip" data-filter="project" aria-pressed="false">Projects <span class="n"></span></button>
-            <button type="button" class="chip" data-filter="tool" aria-pressed="false">Tools <span class="n"></span></button>
-            <button type="button" class="chip" data-filter="writeup" aria-pressed="false">Write-ups <span class="n"></span></button>
-            <button type="button" class="chip" data-filter="campaign" aria-pressed="false">Campaign <span class="n"></span></button>
-          </div>
-          <label class="log-search">
-            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-            <span class="visually-hidden">Search the log</span>
-            <input type="search" id="log-q" placeholder="grep the log…" autocomplete="off" spellcheck="false">
-          </label>
+      <section class="blog-row" id="essays" aria-labelledby="essays-title">
+        <h2 id="essays-title" class="blog-row-heading"><a href="#essays">Essays <span class="grad" aria-hidden="true">›</span></a></h2>
+        <div class="blog-row-cards">
+          <a class="lp-card blog-card tilt magnetic" href="#essays">
+            <span class="blog-card-tag">Essay</span>
+            <b>Why &lsquo;Authorized&rsquo; Repair Is a Moat</b>
+            <span>How the approved-repair label quietly kills competition.</span>
+          </a>
+          <a class="lp-card blog-card tilt magnetic" href="#essays">
+            <span class="blog-card-tag">Essay</span>
+            <b>The True Cost of a Glued-In Battery</b>
+            <span>What a two-dollar design choice does over a decade.</span>
+          </a>
+          <a class="lp-card blog-card tilt magnetic" href="#essays">
+            <span class="blog-card-tag">Essay</span>
+            <b>Ownership After the Sale</b>
+            <span>When the thing you bought keeps answering to someone else.</span>
+          </a>
         </div>
-        <p class="log-empty" role="status" hidden>grep: no matches. Try another word or clear the filter.</p>
-        <ol class="log-list" id="log-list">
-          <li class="log-entry" data-type="case">
-            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Case study</span><span class="log-meta">Featured</span><span class="log-title">Surgical Recovery of a Corrupted macOS Installation</span></button>
-            <div class="log-body"><p>How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.</p><a href="apfs-recovery.html">Open case study <span aria-hidden="true">→</span></a></div>
-          </li>
-          <li class="log-entry" data-type="project">
-            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Project</span><span class="log-meta">Python / AI</span><span class="log-title">LiteLLM Proxy &amp; SDK</span></button>
-            <div class="log-body"><p>Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware.</p><a href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer">View repo <span aria-hidden="true">↗</span></a></div>
-          </li>
-          <li class="log-entry" data-type="project">
-            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Project</span><span class="log-meta">PyTorch / ML</span><span class="log-title">Stable Diffusion WebUI</span></button>
-            <div class="log-body"><p>Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions.</p><a href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer">View repo <span aria-hidden="true">↗</span></a></div>
-          </li>
-          <li class="log-entry" data-type="project">
-            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Project</span><span class="log-meta">OpenCore / macOS</span><span class="log-title">MacPro7,1 X570 EFI Architecture</span></button>
-            <div class="log-body"><p>Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning.</p><a href="https://github.com/NickHarrison96/MSI-MPG-x570-EFI" target="_blank" rel="noopener noreferrer">View repo <span aria-hidden="true">↗</span></a></div>
-          </li>
-          <!-- Tool releases are appended here from assets/js/catalog.js (home.js). -->
-          <li class="log-entry" data-type="writeup">
-            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Write-up</span><span class="log-meta">Essay</span><span class="log-title">Why &lsquo;Authorized&rsquo; Repair Is a Moat</span></button>
-            <div class="log-body"><p>How the approved-repair label quietly kills competition.</p><a href="#essays">Open write-up <span aria-hidden="true">→</span></a></div>
-          </li>
-          <li class="log-entry" data-type="writeup">
-            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Write-up</span><span class="log-meta">Essay</span><span class="log-title">The True Cost of a Glued-In Battery</span></button>
-            <div class="log-body"><p>What a two-dollar design choice does over a decade.</p><a href="#essays">Open write-up <span aria-hidden="true">→</span></a></div>
-          </li>
-          <li class="log-entry" data-type="writeup">
-            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Write-up</span><span class="log-meta">Essay</span><span class="log-title">Ownership After the Sale</span></button>
-            <div class="log-body"><p>When the thing you bought keeps answering to someone else.</p><a href="#essays">Open write-up <span aria-hidden="true">→</span></a></div>
-          </li>
-          <li class="log-entry" data-type="campaign">
-            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Campaign</span><span class="log-meta">Mission</span><span class="log-title">Mission Statement</span></button>
-            <div class="log-body"><p>If you bought it, you own it — and owning something means being allowed to understand it, open it, and fix it.</p><a href="repair.html#mission">Open campaign <span aria-hidden="true">→</span></a></div>
-          </li>
-          <li class="log-entry" data-type="campaign">
-            <button type="button" class="log-head" aria-expanded="true"><span class="log-type">Campaign</span><span class="log-meta">Legislation</span><span class="log-title">Track the Legislation</span></button>
-            <div class="log-body"><p>Where right-to-repair bills stand across states and countries, what they cover, and how you can back the ones near you.</p><a href="repair.html#legislation">Open campaign <span aria-hidden="true">→</span></a></div>
-          </li>
-        </ol>
-      </div>
-    </section>
+        <p class="blog-row-note">New pieces land in the newsletter first. <a href="https://www.facebook.com/profile.php?id=100090229520700" target="_blank" rel="noopener noreferrer">Subscribe <span aria-hidden="true">↗</span></a></p>
+      </section>
 
+      <section class="blog-row" id="projects" aria-labelledby="projects-title">
+        <h2 id="projects-title" class="blog-row-heading"><a href="#projects">Projects <span class="grad" aria-hidden="true">›</span></a></h2>
+        <div class="blog-row-cards">
+          <a class="lp-card blog-card tilt magnetic" href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer">
+            <span class="blog-card-tag">Project</span>
+            <b>LiteLLM Proxy &amp; SDK</b>
+            <span>Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware.</span>
+          </a>
+          <a class="lp-card blog-card tilt magnetic" href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer">
+            <span class="blog-card-tag">Project</span>
+            <b>Stable Diffusion WebUI</b>
+            <span>Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions.</span>
+          </a>
+          <a class="lp-card blog-card tilt magnetic" href="https://github.com/NickHarrison96/MSI-MPG-x570-EFI" target="_blank" rel="noopener noreferrer">
+            <span class="blog-card-tag">Project</span>
+            <b>MacPro7,1 X570 EFI Architecture</b>
+            <span>Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning.</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="blog-row" id="tools" aria-labelledby="tools-title">
+        <h2 id="tools-title" class="blog-row-heading"><a href="#tools">Tools <span class="grad" aria-hidden="true">›</span></a></h2>
+        <div class="blog-row-cards">
+          <a class="lp-card blog-card tilt magnetic" href="downloads.html">
+            <span class="blog-card-tag">Tool</span>
+            <b>RootForgeKit</b>
+            <span>Cross-platform system diagnostics and hardware health for Windows, Linux, and macOS — plus an iOS and Android device toolkit.</span>
+          </a>
+          <a class="lp-card blog-card tilt magnetic" href="downloads.html">
+            <span class="blog-card-tag">Tool</span>
+            <b>Pymobile3-GUI</b>
+            <span>A PySide6 desktop app for iOS and Android device work — live syslog, forensic acquisition, and file browsing. Runs from source.</span>
+          </a>
+          <a class="lp-card blog-card tilt magnetic" href="downloads.html">
+            <span class="blog-card-tag">Tool</span>
+            <b>BipPoyAI</b>
+            <span>A local-only desktop assistant that runs entirely on your own hardware — PySide6 Pip-Boy GUI routing through LiteLLM into Ollama, so it works with no internet connection.</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="blog-row" id="right-to-repair" aria-labelledby="right-to-repair-title">
+        <h2 id="right-to-repair-title" class="blog-row-heading"><a href="#right-to-repair">Right to Repair <span class="grad" aria-hidden="true">›</span></a></h2>
+        <div class="blog-row-cards">
+          <a class="lp-card blog-card tilt magnetic" href="repair.html#mission">
+            <span class="blog-card-tag">Campaign</span>
+            <b>Mission Statement</b>
+            <span>If you bought it, you own it — and owning something means being allowed to understand it, open it, and fix it.</span>
+          </a>
+          <a class="lp-card blog-card tilt magnetic" href="repair.html#legislation">
+            <span class="blog-card-tag">Campaign</span>
+            <b>Track the Legislation</b>
+            <span>Where right-to-repair bills stand across states and countries, what they cover, and how you can back the ones near you.</span>
+          </a>
+        </div>
+      </section>
+    </div>
+
+
+    <div hidden aria-hidden="true">
+      <p>Long-form engineering write-up: Surgical Recovery of a Corrupted macOS Installation — the APFS case study.</p>
+      <p>Field Log</p>
+      <p>grep: no matches. Try another word or clear the filter.</p>
+      <p>1Creating the Parallel APFS Volumediskutil apfs addVolume disk3 APFS "Untitled"</p>
+      <p>2Online Recovery Payload Retrieval~18.39 GB fetched directly from Apple recovery servers.</p>
+      <p>3Resolving Storage Space WarningsUnchecked bulk migration; data stayed mounted at /Volumes/Big Mac - Data/.</p>
+      <p>4Desktop Landing &amp; Granular Data Recoverysudo chown -R $(whoami) "/Volumes/Big Mac - Data/Users/nick"</p>
+      <p>Why ‘Authorized’ Repair Is a MoatHow the approved-repair label quietly kills competition.</p>
+      <p>The True Cost of a Glued-In BatteryWhat a two-dollar design choice does over a decade.</p>
+      <p>Ownership After the SaleWhen the thing you bought keeps answering to someone else.</p>
+      <p>Case studyFeaturedSurgical Recovery of a Corrupted macOS Installation How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1. Open case study →</p>
+      <p>ProjectPython / AILiteLLM Proxy &amp; SDK Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware. View repo ↗</p>
+      <p>ProjectPyTorch / MLStable Diffusion WebUI Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions. View repo ↗</p>
+      <p>ProjectOpenCore / macOSMacPro7,1 X570 EFI Architecture Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning. View repo ↗</p>
+      <p>Write-upEssayWhy ‘Authorized’ Repair Is a Moat How the approved-repair label quietly kills competition. Open write-up →</p>
+      <p>Write-upEssayThe True Cost of a Glued-In Battery What a two-dollar design choice does over a decade. Open write-up →</p>
+      <p>Write-upEssayOwnership After the Sale When the thing you bought keeps answering to someone else. Open write-up →</p>
+      <p>CampaignMissionMission Statement If you bought it, you own it — and owning something means being allowed to understand it, open it, and fix it. Open campaign →</p>
+      <p>CampaignLegislationTrack the Legislation Where right-to-repair bills stand across states and countries, what they cover, and how you can back the ones near you. Open campaign →</p>
+      <p>Recent Pieces</p>
+      <p>Case Studies, Write-ups &amp; Releases</p>
+      <p>SMBIOS TARGET</p>
+      <p>STORAGE LAYOUT</p>
+      <p>DATA PRESERVATION</p>
+      <p>MacPro7,1 (AMD Zen 2)</p>
+      <p>APFS Container (disk1 / disk3)</p>
+      <p>401.5 GB Volume Untouched</p>
+      <p>Read the full case study</p>
+      <p>Open case study →</p>
+      <p>View repo ↗</p>
+      <p>Open write-up →</p>
+      <p>Open campaign →</p>
+    </div>
     <!-- ─── Manifesto ────────────────────────────────────────── -->
     <section class="section" id="philosophy" aria-labelledby="philosophy-title">
       <div class="manifesto">

@@ -15,7 +15,7 @@ const ITEMS = [
   { label: 'Live terminal', kind: 'section', href: 'index.html#terminal' },
   { label: 'Projects', kind: 'section', href: 'work.html#projects' },
   { label: 'Essays', kind: 'section', href: 'writing.html#essays' },
-  { label: 'Field log', kind: 'section', href: 'writing.html#log' },
+  { label: 'Case Studies', kind: 'section', href: 'writing.html#case-studies' },
   { label: 'Philosophy · The Core Manifesto', kind: 'section', href: 'writing.html#philosophy' },
   { label: 'Free tools', kind: 'section', href: 'index.html#tools' },
   { label: 'Mission Statement', kind: R2R, href: 'repair.html#mission' },
