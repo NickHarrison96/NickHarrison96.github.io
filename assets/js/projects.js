@@ -14,7 +14,7 @@ export const PROJECTS = [
     accent: [56, 189, 248],
     description: 'Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware.',
     area: 'AI Infrastructure',
-    url: 'https://github.com/nickpharrison',
+    url: 'https://github.com/NickHarrison96',
     keys: 'ai llm gateway python',
   },
   {
@@ -25,7 +25,7 @@ export const PROJECTS = [
     accent: [129, 140, 248],
     description: 'Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions.',
     area: 'Generative Pipelines',
-    url: 'https://github.com/nickpharrison',
+    url: 'https://github.com/NickHarrison96',
     keys: 'ml pytorch generative',
   },
   {
