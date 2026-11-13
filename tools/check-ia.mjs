@@ -40,6 +40,10 @@ export const RENAMED = { 'All Downloads →': 'All tools →' };
  * project names appear in no tracked site file.
  */
 export const RETIRED = [
+  // Nick (2026-11-13): LiteLLM, Stable Diffusion and X570 project cards removed (not his work).
+  "ProjectPython / AILiteLLM Proxy & SDK Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware. View repo ↗",
+  "ProjectPyTorch / MLStable Diffusion WebUI Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions. View repo ↗",
+  "ProjectOpenCore / macOSMacPro7,1 X570 EFI Architecture Custom OpenCore 1.0.8 EFI for MSI MPG X570 Gaming Edge WiFi. Dual-boots macOS Tahoe and Windows 11 with custom ACPI (SSDT-USB-Darwin) and RX 580 Metal tuning. View repo ↗",
   'The tool cards need JavaScript. Everything is listed on the downloads page.', 'the downloads page',
   'LiteLLM Proxy & SDK',
   'Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware.',
@@ -277,7 +281,7 @@ export async function runIA(r) {
   if (html['writing.html']) {
     const w = html['writing.html'];
     const own = ids(w);
-    const rows = ['case-studies', 'essays', 'projects', 'right-to-repair'];
+    const rows = ['case-studies', 'essays', 'right-to-repair']; // Nick (2026-11-13): Projects row removed (not his work)
     for (const id of [...rows, 'philosophy', 'log']) r.check(`ia writing.html: #${id}`, own.has(id));
     r.check('ia writing.html: case study card → apfs-recovery.html', /id="case-studies"[\s\S]*?href="apfs-recovery\.html"/.test(w));
     r.check('ia writing.html: category row headings link to their anchors', rows.every((id) => w.includes(`href="#${id}"`)));
