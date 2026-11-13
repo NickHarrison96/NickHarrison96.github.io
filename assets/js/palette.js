@@ -7,7 +7,7 @@ const R2R = 'right to repair';
 const ITEMS = [
   { label: 'Home', kind: 'page', href: 'index.html' },
   { label: 'Work', kind: 'hub', href: 'work.html', keys: 'projects repositories github' },
-  { label: 'Writing', kind: 'hub', href: 'writing.html', keys: 'essays write-ups newsletter' },
+  { label: 'Blog', kind: 'hub', href: 'writing.html', keys: 'blog case studies essays write-ups newsletter' },
   { label: 'Right to Repair', kind: 'hub', href: 'repair.html', keys: 'campaign' },
   { label: 'Tools', kind: 'hub', href: 'downloads.html', keys: 'downloads free software host folder' },
   { label: 'About', kind: 'hub', href: 'about.html', keys: 'company harrison technology solutions' },

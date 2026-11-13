@@ -52,7 +52,7 @@
       </a>
       <nav class="site-nav" id="site-nav" aria-label="Site">
         <a href="work.html">Work</a>
-        <a href="writing.html">Writing</a>
+        <a href="writing.html">Blog</a>
         <a href="repair.html">Right to Repair</a>
         <a href="downloads.html">Tools</a>
         <a href="about.html">About</a>
@@ -145,44 +145,6 @@
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- ─── Latest writing: case-study teaser + essays (all on writing.html) ─── -->
-    <section class="section" id="writing" aria-labelledby="writing-title">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow" data-scramble>Latest Writing</p>
-          <h2 id="writing-title" class="section-title">Case Studies &amp; <span class="grad">Essays</span></h2>
-        </div>
-        <p class="section-note">Essays and a newsletter on the economics and ethics of repair &mdash; why we throw so much away, who profits from it, and what a fixable future looks like.</p>
-      </div>
-    <article class="section-deep" id="case-study" aria-labelledby="case-title">
-      <div class="teaser">
-        <div class="pill"><span class="pulse" aria-hidden="true"></span>FEATURED CASE STUDY • INCIDENT &amp; SYSTEM RECOVERY</div>
-        <h2 id="case-title" class="teaser-title">Surgical Recovery of a <br><span class="grad">Corrupted macOS Installation</span></h2>
-        <p class="teaser-lede">How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.</p>
-        <dl class="spec-grid">
-          <div class="spec"><dt>SMBIOS TARGET</dt><dd>MacPro7,1 (AMD Zen 2)</dd></div>
-          <div class="spec"><dt>STORAGE LAYOUT</dt><dd>APFS Container (disk1 / disk3)</dd></div>
-          <div class="spec spec-ok"><dt>DATA PRESERVATION</dt><dd>401.5 GB Volume Untouched</dd></div>
-        </dl>
-        <ol class="mini-timeline">
-          <li><span class="node" aria-hidden="true">1</span><b>Creating the Parallel APFS Volume</b><code>diskutil apfs addVolume disk3 APFS "Untitled"</code></li>
-          <li><span class="node" aria-hidden="true">2</span><b>Online Recovery Payload Retrieval</b><span>~18.39 GB fetched directly from Apple recovery servers.</span></li>
-          <li><span class="node" aria-hidden="true">3</span><b>Resolving Storage Space Warnings</b><span>Unchecked bulk migration; data stayed mounted at /Volumes/Big Mac - Data/.</span></li>
-          <li class="ok"><span class="node" aria-hidden="true">4</span><b>Desktop Landing &amp; Granular Data Recovery</b><code>sudo chown -R $(whoami) "/Volumes/Big Mac - Data/Users/nick"</code></li>
-        </ol>
-        <div class="teaser-cta">
-          <a href="apfs-recovery.html" class="dl-btn magnetic">Read the full case study <svg aria-hidden="true" class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
-        </div>
-      </div>
-    </article>
-      <ul class="essay-grid" aria-label="Essays">
-        <li><a class="essay-card lp-card tilt" href="writing.html#essays"><b>Why &lsquo;Authorized&rsquo; Repair Is a Moat</b><span>How the approved-repair label quietly kills competition.</span></a></li>
-        <li><a class="essay-card lp-card tilt" href="writing.html#essays"><b>The True Cost of a Glued-In Battery</b><span>What a two-dollar design choice does over a decade.</span></a></li>
-        <li><a class="essay-card lp-card tilt" href="writing.html#essays"><b>Ownership After the Sale</b><span>When the thing you bought keeps answering to someone else.</span></a></li>
-      </ul>
-      <div class="section-cta"><a href="writing.html" class="btn-ghost magnetic">All writing <span aria-hidden="true">→</span></a></div>
     </section>
 
     <!-- ─── Right to Repair: teardown stack ──────────────────── -->
@@ -295,7 +257,7 @@
       </div>
       <nav class="footer-nav" aria-label="Site hubs">
         <a href="work.html">Work</a>
-        <a href="writing.html">Writing</a>
+        <a href="writing.html">Blog</a>
         <a href="repair.html">Right to Repair</a>
         <a href="downloads.html">Tools</a>
         <a href="about.html">About</a>
