@@ -3485,6 +3485,7 @@ html[data-theme="jailbreak"][data-fx="full"] body::after {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+  padding: 6px 4px;
 }
 
 .blog-card {
@@ -3499,7 +3500,16 @@ html[data-theme="jailbreak"][data-fx="full"] body::after {
   text-decoration: none;
 }
 
+.blog-card:hover,
 .blog-card:focus-visible {
+  z-index: 1;
+}
+
+.blog-card:focus-visible,
+.blog-row-heading a:focus-visible {
+  --glow: 1;
+  --mx: 50%;
+  --my: 40%;
   outline: 2px solid var(--brand);
   outline-offset: 3px;
 }
@@ -3555,9 +3565,11 @@ html[data-theme="jailbreak"][data-fx="full"] body::after {
     scroll-snap-type: none;
   }
 
-  .blog-card.tilt {
+  .blog-card.tilt,
+  .blog-row-heading a.magnetic {
     transform: none;
     will-change: auto;
+    box-shadow: none;
   }
 }
 
