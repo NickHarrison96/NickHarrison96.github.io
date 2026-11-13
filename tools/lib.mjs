@@ -70,7 +70,7 @@ export const STUBS = [
 
 /** Header nav: the five hubs, in order (phase 8). Sub-pages map to the hub they live under. */
 export const HUBS = [
-  ['Work', 'work.html'], ['Writing', 'writing.html'], ['Right to Repair', 'repair.html'],
+  ['Work', 'work.html'], ['Blog', 'writing.html'], ['Right to Repair', 'repair.html'],
   ['Tools', 'downloads.html'], ['About', 'about.html'],
 ];
 export const HUB_OF = {
