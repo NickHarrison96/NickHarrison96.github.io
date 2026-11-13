@@ -187,6 +187,12 @@ html[data-fx="lite"] #fx-bg.live {
   display: block;
 }
 
+@media (pointer: coarse) {
+  #fx-bg {
+    display: none !important;
+  }
+}
+
 /* `main` keeps the 1200px measure. AGENTS.md layout gotcha: long unbreakable
    strings (model filenames on downloads.html) must not stretch the page. */
 main {
@@ -541,6 +547,12 @@ html:not(.js) [data-palette-open] {
   overflow-wrap: anywhere;
 }
 
+.footer-brand > span span {
+  display: block;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .footer-brand strong {
   display: block;
   color: #fff;
@@ -630,6 +642,8 @@ html:not(.js) [data-palette-open] {
   .footer-nav a,
   .to-top {
     min-height: 44px;
+    min-width: 44px;
+    padding-inline: 8px;
   }
 
   .to-top {
@@ -1495,10 +1509,11 @@ html:not(.js) [data-palette-open] {
 }
 
 .marquee {
+  position: relative;
   background: var(--brand-tint);
   border-bottom: 1px solid rgba(14, 165, 233, 0.2);
   color: var(--brand);
-  padding: 7px 0;
+  padding: 7px 56px 7px 0;
   overflow: hidden;
   font: 500 12px var(--font-mono);
   white-space: nowrap;
@@ -1510,8 +1525,37 @@ html:not(.js) [data-palette-open] {
   animation: marquee 40s linear infinite;
 }
 
-.marquee:hover .marquee-track {
+.marquee:hover .marquee-track,
+.marquee.is-paused .marquee-track {
   animation-play-state: paused;
+}
+
+.marquee-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--raised);
+  color: var(--soft);
+  font: 600 11px var(--font-mono);
+  cursor: pointer;
+}
+
+.marquee-toggle:hover,
+.marquee-toggle:focus-visible {
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.marquee-toggle:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
 }
 
 .marquee-group {
@@ -1918,6 +1962,32 @@ html[data-fx="static"] .marquee-track {
   background: radial-gradient(360px circle at var(--mx, -500px) var(--my, -500px), var(--spot, rgba(56, 189, 248, 0.14)), transparent 45%);
 }
 
+/* CSS fallback glow so hover, keyboard focus and taps still light up when
+   fx-physics is off (coarse pointer / STATIC). Inline --glow from JS wins on
+   fine-pointer desktops, so magnetic/tilt motion is unchanged. */
+.tilt:hover,
+.tilt:focus-visible,
+.tilt:active,
+.magnetic:hover,
+.magnetic:focus-visible,
+.magnetic:active {
+  --glow: 1;
+  --mx: 50%;
+  --my: 38%;
+}
+
+.lp-card:hover,
+.lp-card:focus-visible,
+.lp-card:active {
+  border-color: rgba(56, 189, 248, 0.55);
+}
+
+.lp-card:active,
+.blog-card:active,
+.magnetic:active {
+  box-shadow: 0 0 22px -4px rgba(56, 189, 248, 0.55);
+}
+
 /* Projects */
 .project-grid {
   display: grid;
@@ -2143,6 +2213,10 @@ html[data-fx="static"] .marquee-track {
   line-height: 1.6;
   color: var(--muted);
   max-width: 500px;
+}
+
+.repair-lede-narrow {
+  display: none;
 }
 
 .layer-list {
@@ -2762,6 +2836,76 @@ html[data-fx="static"] .log-entry.enter {
   margin-top: 4px;
 }
 
+/* Homepage welcome (Nick, 2026-11-13): what-we-do cards, values strip, closing invite */
+.home-cards {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.home-cards .lp-card {
+  min-height: 190px;
+}
+
+.lp-card .lp-card-go {
+  margin-top: auto;
+  font: 600 12.5px var(--font-mono);
+  font-style: normal;
+  color: var(--brand);
+}
+
+.values-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+.values-grid li {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border-radius: var(--r);
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.values-grid b {
+  font: 700 16px / 1.35 var(--font-sans);
+  color: #fff;
+}
+
+.values-grid span:not(.m-icon) {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.invite {
+  text-align: center;
+  padding: clamp(28px, 5vw, 56px) clamp(18px, 4vw, 48px);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  background: radial-gradient(120% 140% at 50% 0%, var(--brand-tint) 0%, transparent 60%), var(--card);
+}
+
+.invite .section-note {
+  margin: 12px auto 0;
+  max-width: 560px;
+}
+
+.invite-cta {
+  justify-content: center;
+  margin-top: 22px;
+}
+
+@media (max-width: 860px) {
+  .values-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* Homepage responsive */
 @media (max-width: 1023px) {
   .hero-grid,
@@ -2779,7 +2923,138 @@ html[data-fx="static"] .log-entry.enter {
     gap: 20px;
   }
 
-  .stack-stage {
+  /* Lighter mobile mode: drop heavy homepage UI. */
+  .marquee,
+  .term,
+  .stack-stage,
+  .layer-list {
+    display: none !important;
+  }
+
+  .hero {
+    padding: 28px 0 40px;
+  }
+
+  .hero-copy {
+    gap: 14px;
+  }
+
+  .hero-title {
+    font-size: clamp(28px, 8vw, 34px);
+    line-height: 1.16;
+  }
+
+  /* One lede: keep the campaign sentence, hide the longer bio. */
+  .hero-lede:not(.hero-lede-sm) {
+    display: none;
+  }
+
+  .hero-lede-sm {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .repair-title {
+    font-size: clamp(28px, 7vw, 34px);
+    line-height: 1.16;
+  }
+
+  .repair-lede-wide {
+    display: none;
+  }
+
+  .repair-lede-narrow {
+    display: inline;
+  }
+
+  .layer-panel[hidden] {
+    display: grid !important;
+  }
+
+  .layer-panels {
+    margin-top: 8px;
+  }
+
+  .footer-nav a,
+  .to-top {
+    min-height: 44px;
+    min-width: 44px;
+    padding-inline: 8px;
+  }
+
+  .brand {
+    min-height: 44px;
+  }
+
+  .note a,
+  .prose a[href^="mailto:"] {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .code-block .copy-btn {
+    min-height: 44px;
+  }
+
+  .blog-row-heading a {
+    min-height: 44px;
+    padding-block: 8px;
+  }
+
+  .blog-row-note a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .section-nav {
+    flex-wrap: wrap;
+    overflow: visible;
+    scrollbar-width: auto;
+  }
+
+  /* Accordion chrome (enabled by sections.js on .hub-accordion). */
+  .hub-acc-btn {
+    display: none;
+  }
+
+  html.js .hub-accordion .page-hero {
+    position: relative;
+    padding-right: 44px;
+  }
+
+  html.js .hub-accordion .hub-acc-btn {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    z-index: 1;
+  }
+
+  html.js .hub-accordion .hub-acc-btn::after {
+    content: '';
+    position: absolute;
+    right: 12px;
+    top: 28px;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--soft);
+    border-bottom: 2px solid var(--soft);
+    transform: rotate(45deg);
+  }
+
+  html.js .hub-accordion .hub-section.is-open .hub-acc-btn::after {
+    top: 32px;
+    transform: rotate(225deg);
+  }
+
+  html.js .hub-accordion .hub-section:not(.is-open) > :not(.page-hero) {
     display: none;
   }
 }
@@ -3109,6 +3384,36 @@ html:not(.js) .copy-btn {
     padding-right: 16px;
     padding-top: 52px;
   }
+}
+
+
+.case-article .teaser-title {
+  overflow-wrap: break-word;
+}
+
+.case-list {
+  margin: 0;
+  padding-left: 1.35em;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: var(--soft);
+  max-width: 72ch;
+  min-width: 0;
+}
+
+.case-list li {
+  padding-left: 0.2em;
+}
+
+.case-list .code-block {
+  margin-top: 10px;
+}
+
+.case-list a {
+  overflow-wrap: anywhere;
 }
 
 /* ─── Boot splash (index.html; shown only when <html> has .booting) ──────── */
@@ -3446,6 +3751,170 @@ html[data-theme="jailbreak"][data-fx="full"] body::after {
   }
 }
 
+/* ─── Blog hub: categorized title-card rows ─────────────────────────────── */
+.blog-index {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(36px, 5vw, 56px);
+  margin: clamp(36px, 6vw, 64px) 0 0;
+  scroll-margin-top: var(--header-real, var(--header-h));
+}
+
+.blog-row {
+  scroll-margin-top: calc(var(--header-real, var(--header-h)) + 12px);
+}
+
+.blog-row-heading {
+  margin: 0 0 16px;
+  font: 800 clamp(22px, 3vw, 28px) / 1.15 var(--font-sans);
+  letter-spacing: -0.03em;
+}
+
+.blog-row-heading a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.blog-row-heading a:hover {
+  color: var(--brand-soft);
+}
+
+.blog-row-heading .grad {
+  font-weight: 700;
+}
+
+.blog-row-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  padding: 6px 4px;
+}
+
+.blog-card {
+  min-height: 180px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.blog-card:hover,
+.blog-card:focus {
+  color: inherit;
+  text-decoration: none;
+}
+
+.blog-card:hover,
+.blog-card:focus-visible,
+.blog-card:active {
+  z-index: 1;
+  --glow: 1;
+  --mx: 50%;
+  --my: 40%;
+}
+
+.blog-card:focus-visible,
+.blog-row-heading a:focus-visible {
+  --glow: 1;
+  --mx: 50%;
+  --my: 40%;
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+
+.blog-card-tag {
+  font: 500 11px / 1.2 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-soft);
+}
+
+.blog-card > span:last-of-type {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Inside an Apple Device row (moved from the home page, 2026-11-13): show each layer's full copy. */
+#inside-the-device .blog-card > span:last-of-type {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.blog-row-note {
+  margin: 14px 0 0;
+  font: 400 13.5px / 1.6 var(--font-sans);
+  color: var(--soft);
+}
+
+.blog-row-note a {
+  font-weight: 600;
+  color: var(--brand-soft);
+}
+
+.blog-row-note a:hover {
+  color: #fff;
+}
+
+@media (max-width: 899px) {
+  .blog-row {
+    position: relative;
+  }
+
+  .blog-row-cards {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 4px;
+    padding: 4px 4px 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .blog-row-cards > .blog-card {
+    flex: 0 0 min(80vw, 280px);
+    scroll-snap-align: start;
+  }
+
+  /* Faint swipe cue: edge fade + dots when a row has more than one card. */
+  .blog-row:has(.blog-card:nth-child(2)) .blog-row-cards {
+    mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 32px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 32px), transparent 100%);
+  }
+
+  .blog-row:has(.blog-card:nth-child(2))::after {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 6px;
+    margin: 2px auto 0;
+    border-radius: 999px;
+    background:
+      radial-gradient(circle closest-side, var(--brand) 100%, transparent 100%) 0 / 8px 6px,
+      radial-gradient(circle closest-side, var(--faint) 100%, transparent 100%) 10px / 8px 6px,
+      radial-gradient(circle closest-side, var(--faint) 100%, transparent 100%) 20px / 8px 6px;
+    background-repeat: no-repeat;
+    opacity: 0.85;
+    pointer-events: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blog-row-cards {
+    scroll-snap-type: none;
+  }
+
+  .blog-card.tilt,
+  .blog-row-heading a.magnetic {
+    transform: none;
+    will-change: auto;
+    box-shadow: none;
+  }
+}
+
 /* ─── Reduced motion: no animation, no transitions, no smooth scroll ─────── */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -3458,5 +3927,500 @@ html[data-theme="jailbreak"][data-fx="full"] body::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+}
+
+/* ─── Tutorial guides (Kali WSL2, Local AI, llama.cpp) ───────────────────── */
+/* Does not alter shared header, footer, or other .case-article pages. */
+.tutorial-guide .case-head {
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.tutorial-guide .case-head .pill,
+.tutorial-guide .case-head .note,
+.tutorial-guide .case-head .teaser-lede {
+  align-self: center;
+}
+
+.tutorial-guide .case-head .teaser-lede,
+.tutorial-guide .case-head .note {
+  max-width: 68ch;
+}
+
+.tutorial-logo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  margin: 2px auto 6px;
+  border-radius: 50%;
+  box-shadow:
+    0 0 24px 6px rgba(56, 189, 248, 0.22),
+    0 0 48px 14px rgba(129, 140, 248, 0.14);
+}
+
+.tutorial-logo img {
+  width: 96px;
+  height: 96px;
+  display: block;
+}
+
+.tutorial-toc {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+  max-width: 48rem;
+}
+
+.tutorial-toc a {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--brand-ring);
+  background: var(--brand-tint);
+  color: var(--brand-soft);
+  font: 500 12px / 1.3 var(--font-mono);
+  text-decoration: none;
+}
+
+.tutorial-toc a:hover,
+.tutorial-toc a:focus-visible {
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.tutorial-guide .case-h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tutorial-guide .step-chip {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.85em;
+  height: 1.85em;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--brand-tint);
+  border: 1px solid var(--brand-ring);
+  color: var(--brand-soft);
+  font: 700 13px / 1 var(--font-mono);
+}
+
+.tutorial-guide .code-block {
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-left: 3px solid var(--brand);
+  background:
+    linear-gradient(90deg, rgba(14, 165, 233, 0.07), transparent 28%),
+    var(--bg-deep);
+}
+
+.tutorial-guide .c-cmd {
+  color: var(--brand-soft);
+}
+
+.tutorial-guide .note {
+  text-align: left;
+  border-color: var(--brand-ring);
+  box-shadow: inset 3px 0 0 var(--brand);
+}
+
+.tutorial-guide .tutorial-callout {
+  padding: clamp(18px, 3vw, 28px);
+  border-radius: var(--r-lg);
+  background: var(--card);
+  border: 1px solid var(--brand-ring);
+  box-shadow: inset 3px 0 0 var(--indigo);
+}
+
+.tutorial-mark {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 72ch;
+}
+
+/* Compact sources list, site-wide (Nick, 2026-11-13): small, muted, 1/2/3 columns at the page bottom,
+   numbered so body footnotes (sup.fn) can point at #ref-N and each ref can jump back with ↩. */
+.refs {
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  max-width: none;
+}
+
+.refs .refs-title {
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.refs-list {
+  margin: 0;
+  padding-left: 2.2em;
+  columns: 1;
+  column-gap: 32px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.refs-list li {
+  break-inside: avoid;
+  padding: 0 0 6px 0.2em;
+  overflow-wrap: anywhere;
+}
+
+.refs-list li::marker {
+  font-family: var(--font-mono);
+  color: var(--muted);
+}
+
+.refs-list a {
+  overflow-wrap: anywhere;
+}
+
+.refs-list code {
+  font-size: 0.95em;
+}
+
+.refs-list li:target {
+  color: var(--soft);
+  background: var(--brand-tint);
+  border-radius: 4px;
+}
+
+.refs-back {
+  text-decoration: none;
+  margin-left: 2px;
+}
+
+.refs .refs-note {
+  font-size: 0.78rem;
+  max-width: none;
+  margin-top: 10px;
+}
+
+sup.fn {
+  font-size: 0.68em;
+  line-height: 0;
+  margin-left: 1px;
+}
+
+sup.fn a {
+  text-decoration: none;
+  font-family: var(--font-mono);
+}
+
+sup.fn a:target {
+  background: var(--brand-tint);
+  border-radius: 3px;
+}
+
+[id^="ref-"],
+[id^="cite-"] {
+  scroll-margin-top: 120px;
+}
+
+@media (min-width: 600px) {
+  .refs-list {
+    columns: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .refs-list {
+    columns: 3;
+  }
+}
+
+@media (max-width: 760px) {
+  .tutorial-logo,
+  .tutorial-logo img {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+
+/* ─── Local AI intro + llama.cpp guide additions ─────────────────────────── */
+.tutorial-guide .case-h3,
+.local-ai .case-h3 {
+  font: 600 20px / 1.35 var(--font-sans);
+  color: #fff;
+  margin: 4px 0 0;
+}
+
+.tutorial-guide .c-cmt {
+  color: var(--muted);
+}
+
+/* Logo on a light plate (unmodified dark marks, e.g. official Ollama logo). */
+.logo-plate {
+  background: #fafafa;
+  box-shadow: 0 0 24px 6px rgba(56, 189, 248, 0.18), 0 0 48px 14px rgba(129, 140, 248, 0.12);
+}
+
+.logo-plate img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.lineage-logo--neutral {
+  color: var(--brand-soft);
+  box-shadow:
+    0 0 24px 6px rgba(56, 189, 248, 0.18),
+    0 0 48px 14px rgba(129, 140, 248, 0.12);
+}
+
+.lineage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: start;
+  gap: 16px 12px;
+}
+
+.lineage-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  border-radius: var(--r-lg);
+  background: var(--card);
+  border: 1px solid var(--brand-ring);
+  box-shadow: inset 3px 0 0 var(--brand);
+}
+
+.lineage-card:target {
+  border-color: var(--brand);
+}
+
+.lineage-kicker {
+  margin: 0;
+  font: 500 12px / 1.4 var(--font-mono);
+  color: var(--brand-soft);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.lineage-title {
+  margin: 0;
+  font: 700 24px / 1.25 var(--font-sans);
+  color: #fff;
+}
+
+.lineage-body {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--soft);
+  max-width: 68ch;
+}
+
+.eco-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.eco-list li {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--soft);
+  padding-left: 14px;
+  border-left: 2px solid var(--brand-ring);
+}
+
+.eco-list a {
+  color: var(--brand-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.eco-list a:hover,
+.eco-list a:focus-visible {
+  color: #fff;
+}
+
+.lineage-action {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 4px 0 0;
+  color: var(--brand-soft);
+  font: 600 15px / 1.3 var(--font-sans);
+  text-decoration: none;
+}
+
+.lineage-action .arrow {
+  width: 16px;
+  height: 16px;
+}
+
+.lineage-action:hover,
+.lineage-action:focus-visible {
+  color: #fff;
+}
+
+.lineage-action--soon {
+  color: var(--muted);
+  font-weight: 500;
+  cursor: default;
+}
+
+.lineage-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 44px;
+  /* Sit beside the 96px logos (card padding 24px + half logo). */
+  padding-top: 52px;
+  color: var(--brand-soft);
+  font: 600 12px / 1.3 var(--font-mono);
+}
+
+.lineage-arrow-mark {
+  font-size: 22px;
+  letter-spacing: -0.08em;
+  color: var(--brand);
+}
+
+@media (max-width: 900px) {
+  .lineage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lineage-arrow {
+    flex-direction: row;
+    justify-self: center;
+    min-height: 32px;
+    padding-top: 0;
+  }
+
+  .lineage-arrow-mark {
+    transform: rotate(90deg);
+  }
+}
+
+
+/* Tables in guides: scroll independently on narrow viewports. */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--brand-ring);
+  border-radius: var(--r-lg);
+  background: var(--bg-deep);
+  max-width: 100%;
+}
+
+.table-wrap:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.guide-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.guide-table th,
+.guide-table td {
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+  color: var(--soft);
+}
+
+.guide-table th {
+  font: 600 12px / 1.4 var(--font-mono);
+  color: var(--brand-soft);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: var(--brand-tint);
+}
+
+.guide-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.guide-table code {
+  font-size: 13px;
+}
+
+/* Sticky side TOC on wide screens; remains a wrap-chip jump list otherwise. */
+.tutorial-toc a[aria-current] {
+  border-color: var(--brand);
+  color: #fff;
+  background: var(--brand-tint);
+}
+
+@media (min-width: 1200px) {
+  .case-article.guide-with-toc {
+    max-width: 1180px;
+    display: grid;
+    grid-template-columns: 13.5rem minmax(0, 1fr);
+    column-gap: 32px;
+    row-gap: clamp(32px, 5vw, 56px);
+  }
+
+  .guide-with-toc > .back-link,
+  .guide-with-toc > .case-head {
+    grid-column: 1 / -1;
+  }
+
+  .guide-with-toc > .tutorial-toc {
+    grid-column: 1;
+    position: sticky;
+    top: calc(var(--header-real, var(--header-h)) + 16px);
+    align-self: start;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    max-width: none;
+    max-height: calc(100vh - var(--header-real, var(--header-h)) - 32px);
+    overflow: auto;
+    margin-top: 0;
+    gap: 6px;
+  }
+
+  .guide-with-toc > .tutorial-toc a {
+    justify-content: flex-start;
+  }
+
+  .guide-with-toc > .guide-body {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(40px, 6vw, 64px);
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide-with-toc > .tutorial-toc {
+    transition: none;
   }
 }

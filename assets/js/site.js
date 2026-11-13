@@ -2,7 +2,7 @@
 // Shell behaviour lives here; effects and page features are separate modules it imports.
 // Removing this one script tag leaves a fully working static site (plan: rollback).
 
-import { detectTier, setTier, startWatchdog, isForced } from './fx-tier.js';
+import { detectTier, setTier, startWatchdog, isForced, isNarrowView } from './fx-tier.js';
 
 const root = document.documentElement;
 const header = document.querySelector('.site-header');
@@ -15,7 +15,7 @@ setTier(detectTier());
    the hub it lives under (aria-current="true"); the hub page itself gets "page". */
 const fileOf = (url) => url.pathname.split('/').pop() || 'index.html';
 const here = fileOf(location);
-const HUB_OF = { 'apfs-recovery.html': 'writing.html' };
+const HUB_OF = { 'apfs-recovery.html': 'writing.html', 'kali-wsl2-desktop-windows-11.html': 'writing.html', 'kali-wsl2-desktop-windows-10.html': 'writing.html' };
 for (const a of document.querySelectorAll('.site-nav a, .footer-nav a')) {
   const u = new URL(a.href, location.href);
   if (u.origin !== location.origin || u.hash) continue;
@@ -57,6 +57,19 @@ if (menuBtn && nav) {
   });
 }
 
+/* Ticker pause/resume (desktop; the bar is hidden under 1024px). */
+const marquee = document.querySelector('.marquee');
+const mqBtn = marquee && marquee.querySelector('.marquee-toggle');
+if (marquee && mqBtn) {
+  const setPaused = (paused) => {
+    marquee.classList.toggle('is-paused', paused);
+    mqBtn.setAttribute('aria-pressed', String(paused));
+    mqBtn.setAttribute('aria-label', paused ? 'Resume highlights' : 'Pause highlights');
+    mqBtn.textContent = paused ? 'Play' : 'Pause';
+  };
+  mqBtn.addEventListener('click', () => setPaused(!marquee.classList.contains('is-paused')));
+}
+
 /* Copy buttons: <button data-copy="text" data-copy-idle="copy">. */
 document.addEventListener('click', async (e) => {
   const btn = e.target.closest('[data-copy]');
@@ -74,12 +87,22 @@ document.addEventListener('click', async (e) => {
 // Palette + Konami load first; data-ready marks them wired (used by tools/smoke.mjs).
 Promise.all([import('./palette.js'), import('./konami.js')]).then(() => { root.dataset.ready = '1'; });
 if (root.classList.contains('booting')) import('./boot.js');
-if (document.getElementById('term-input')) import('./terminal.js');
+const loadTerminal = () => {
+  if (!document.getElementById('term-input') || isNarrowView() || loadTerminal.done) return;
+  loadTerminal.done = true;
+  import('./terminal.js');
+};
+loadTerminal();
+if (window.matchMedia) {
+  const mq = matchMedia('(max-width: 1023px)');
+  mq.addEventListener ? mq.addEventListener('change', loadTerminal) : mq.addListener(loadTerminal);
+}
 if (document.querySelector('[data-scramble]')) import('./scramble.js').then((m) => m.startScramble());
 if (document.querySelector('main.home')) import('./home.js');
 if (document.getElementById('log-list')) import('./log.js');
 if (document.querySelector('.section-nav')) import('./sections.js');
 if (document.querySelector('main.case')) import('./case.js');
+if (document.querySelector('.tutorial-toc[data-observe]')) import('./guide-toc.js');
 
 /* Effects last: the shader compile must not delay the UI modules above. */
 if (root.dataset.fx !== 'static') {

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#05070d">
+  <meta name="description"
+    content="Run Kali Linux™ on Windows 11 under WSL2. You can open single Linux GUI apps through WSLg, or run the full Kali desktop through Win-KeX." />
+  <title>Kali Linux Graphical Desktop on Windows 11 with WSL2 &mdash; Nick Harrison</title>
+  <script>/* shell: runs before first paint — see AGENTS.md "Shell" */(function(d){d.classList.add('js');try{if(localStorage.getItem('nh-jailbreak')==='1')d.dataset.theme='jailbreak'}catch(e){}if(d.hasAttribute('data-boot')&&!location.hash&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{if(!sessionStorage.getItem('nh-booted')){sessionStorage.setItem('nh-booted','1');d.classList.add('booting')}}catch(e){}}})(document.documentElement);</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="sub">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <canvas id="fx-bg" aria-hidden="true"></canvas>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span class="brand-text">
+          <span class="brand-name">NICK HARRISON</span>
+          <span class="brand-role">SYSTEMS &amp; AI ENGINEER <span class="brand-role-extra">· RIGHT TO REPAIR</span></span>
+        </span>
+      </a>
+      <nav class="site-nav" id="site-nav" aria-label="Site">
+        <a href="work.html">Work</a>
+        <a href="writing.html">Blog</a>
+        <a href="repair.html">Right to Repair</a>
+        <a href="tools.html">Tools</a>
+        <a href="downloads.html">Downloads</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="site-actions">
+        <button class="search-btn" type="button" data-palette-open aria-label="Search (Ctrl+K)">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-label">Search</span>
+          <kbd aria-hidden="true">⌘K</kbd>
+        </button>
+        <a class="gh-link magnetic" href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="Nick Harrison on GitHub">
+          <img src="https://github.com/NickHarrison96.png?size=96" alt="" class="gh-avatar" width="28" height="28">
+          <span class="gh-text">github.com/nickharrison96</span>
+        </a>
+        <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+          <span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="case">
+    <article class="case-article tutorial-guide">
+      <a href="writing.html#tutorials" class="back-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to Blog</a>
+
+      <header class="case-head">
+        <div class="tutorial-logo">
+          <img src="assets/kali-dragon-white.svg" alt="Kali Linux logo" width="96" height="96" decoding="async">
+        </div>
+        <div class="pill">TUTORIAL • WINDOWS 11 · KALI LINUX (WSL2)</div>
+        <h1 class="teaser-title">Kali Linux™ Graphical Desktop on <span class="grad">Windows 11 with WSL2</span></h1>
+        <p class="teaser-lede">Run Kali Linux on Windows 11 under WSL2. You can open single Linux GUI apps through WSLg, or run the full Kali desktop in a window through Win-KeX.</p>
+        <p class="note"><strong>Most recent guide.</strong></p>
+        <nav class="tutorial-toc" aria-label="Guide steps">
+          <a href="#install-wsl2">1. Install WSL2</a>
+          <a href="#install-kali">2. Install Kali</a>
+          <a href="#update-packages">3. Update packages</a>
+          <a href="#wslg-apps">4. Single GUI apps</a>
+          <a href="#win-kex">5. Full desktop</a>
+          <a href="#shutdown">6. Shut down</a>
+          <a href="#troubleshooting">7. Troubleshooting</a>
+        </nav>
+      </header>
+
+      <section class="case-section" aria-labelledby="install-wsl2">
+        <h2 id="install-wsl2" class="case-h2"><span class="step-chip">1</span> Install WSL2</h2>
+        <ol class="case-list">
+          <li>Right-click <strong>Start</strong> and pick <strong>Terminal (Admin)</strong>.</li>
+          <li>
+            If WSL is not on this PC yet, run:
+          <div class="code-block"><span class="c-cmd">wsl</span> --install<button type="button" class="copy-btn" data-copy="wsl --install" aria-label="Copy the wsl --install command">copy</button></div>
+          </li>
+        </ol>
+        <p class="case-p">This turns on the Windows features WSL needs and, on a first install, also sets up Ubuntu by default.<sup class="fn"><a href="#ref-1" id="cite-1" aria-label="Source 1">[1]</a></sup> Restart when Windows asks you to. To install Kali in that first step instead, use <code>wsl --install -d kali-linux</code>.</p>
+        <p class="case-p">If <code>wsl --install</code> only prints help text, WSL is already installed. Skip ahead to installing Kali.</p>
+        <p class="case-p">Then update WSL and make sure version 2 is the default:</p>
+          <div class="code-block"><div><span class="c-cmd">wsl</span> --update</div><div><span class="c-cmd">wsl</span> --set-default-version 2</div><button type="button" class="copy-btn" data-copy="wsl --update&#10;wsl --set-default-version 2" aria-label="Copy the wsl update and default-version commands">copy</button></div>
+        <p class="case-p">After a WSL update, shut the subsystem down once so the new version is used:</p>
+          <div class="code-block"><span class="c-cmd">wsl</span> --shutdown<button type="button" class="copy-btn" data-copy="wsl --shutdown" aria-label="Copy the wsl --shutdown command">copy</button></div>
+      </section>
+
+      <section class="case-section" aria-labelledby="install-kali">
+        <h2 id="install-kali" class="case-h2"><span class="step-chip">2</span> Install Kali</h2>
+        <p class="case-p">Open a normal Terminal or PowerShell window and run:</p>
+          <div class="code-block"><span class="c-cmd">wsl</span> --install -d kali-linux<button type="button" class="copy-btn" data-copy="wsl --install -d kali-linux" aria-label="Copy the Kali install command">copy</button></div>
+        <p class="case-p">When the Kali window opens, create a UNIX username and password. This account gets <code>sudo</code> rights inside Kali. You will not see characters as you type the password.</p>
+        <p class="case-p">Confirm Kali is running as WSL 2:</p>
+          <div class="code-block"><span class="c-cmd">wsl</span> --list --verbose<button type="button" class="copy-btn" data-copy="wsl --list --verbose" aria-label="Copy the wsl list verbose command">copy</button></div>
+        <p class="case-p">If an existing Kali install still shows version 1, upgrade it:</p>
+          <div class="code-block"><span class="c-cmd">wsl</span> --set-version kali-linux 2<button type="button" class="copy-btn" data-copy="wsl --set-version kali-linux 2" aria-label="Copy the command to set Kali to WSL 2">copy</button></div>
+      </section>
+
+      <section class="case-section" aria-labelledby="update-packages">
+        <h2 id="update-packages" class="case-h2"><span class="step-chip">3</span> Update packages</h2>
+        <p class="case-p">Inside Kali:</p>
+          <div class="code-block"><span class="c-cmd">sudo</span> apt update &amp;&amp; sudo apt upgrade -y<button type="button" class="copy-btn" data-copy="sudo apt update &amp;&amp; sudo apt upgrade -y" aria-label="Copy the apt update and upgrade command">copy</button></div>
+      </section>
+
+      <section class="case-section" aria-labelledby="wslg-apps">
+        <h2 id="wslg-apps" class="case-h2"><span class="step-chip">4</span> Option A: Single GUI apps (WSLg)</h2>
+        <p class="case-p">Windows 11 includes WSLg, so individual Linux GUI apps can open in their own Windows windows. This is not a full Kali desktop. Microsoft also recommends installing the GPU driver for your machine (Intel, AMD, or NVIDIA) so Linux apps can use hardware-accelerated OpenGL.<sup class="fn"><a href="#ref-3" id="cite-3" aria-label="Source 3">[3]</a></sup> Those driver links are on the WSLg page in Sources checked.</p>
+        <p class="case-p">If WSL was already on the PC before you started, update it and restart WSL first:</p>
+          <div class="code-block"><div><span class="c-cmd">wsl</span> --update</div><div><span class="c-cmd">wsl</span> --shutdown</div><button type="button" class="copy-btn" data-copy="wsl --update&#10;wsl --shutdown" aria-label="Copy the WSL update and shutdown commands">copy</button></div>
+        <p class="case-p">Then, inside Kali:</p>
+          <div class="code-block"><div><span class="c-cmd">sudo</span> apt install x11-apps firefox-esr -y</div><div>firefox-esr &amp;</div><button type="button" class="copy-btn" data-copy="sudo apt install x11-apps firefox-esr -y&#10;firefox-esr &amp;" aria-label="Copy the WSLg install and Firefox commands">copy</button></div>
+        <p class="case-p">Each Linux app opens in its own window. Installed GUI apps also show up in the Windows Start menu under the distribution name.</p>
+      </section>
+
+      <section class="case-section" aria-labelledby="win-kex">
+        <h2 id="win-kex" class="case-h2"><span class="step-chip">5</span> Option B: Full Kali desktop (Win-KeX)</h2>
+        <p class="case-p">Win-KeX is the official Kali method for a full graphical desktop under WSL 2.<sup class="fn"><a href="#ref-5" id="cite-5" aria-label="Source 5">[5]</a></sup> Install it inside Kali. The <code>kali-win-kex</code> package recommends <code>kali-desktop-xfce</code><sup class="fn"><a href="#ref-9" id="cite-9" aria-label="Source 9">[9]</a></sup>, and apt installs recommended packages by default, so you get the Xfce desktop with it:</p>
+          <div class="code-block"><div><span class="c-cmd">sudo</span> apt update</div><div><span class="c-cmd">sudo</span> apt install -y kali-win-kex</div><button type="button" class="copy-btn" data-copy="sudo apt update&#10;sudo apt install -y kali-win-kex" aria-label="Copy the Win-KeX install commands">copy</button></div>
+        <p class="case-p">If the Xfce desktop is missing, install it yourself:</p>
+          <div class="code-block"><span class="c-cmd">sudo</span> apt install -y kali-desktop-xfce<button type="button" class="copy-btn" data-copy="sudo apt install -y kali-desktop-xfce" aria-label="Copy the kali-desktop-xfce install command">copy</button></div>
+        <p class="case-p">Start Window mode with sound.<sup class="fn"><a href="#ref-6" id="cite-6" aria-label="Source 6">[6]</a></sup> This opens the full Kali desktop in a dedicated window, which is the usual way to get a GUI desktop on WSL 2:</p>
+          <div class="code-block"><span class="c-cmd">kex</span> --win -s<button type="button" class="copy-btn" data-copy="kex --win -s" aria-label="Copy the Win-KeX window mode start command">copy</button></div>
+        <p class="case-p">You can also start it from PowerShell or Command Prompt:</p>
+          <div class="code-block"><span class="c-cmd">wsl</span> -d kali-linux kex --win -s<button type="button" class="copy-btn" data-copy="wsl -d kali-linux kex --win -s" aria-label="Copy the command to start Win-KeX from Windows">copy</button></div>
+        <p class="case-p">The first time you start Window mode, Win-KeX asks you to set a VNC server password. You can change it later with <code>kex --passwd</code>. The <code>-s</code> flag (same as <code>--sound</code>) turns on sound. The first time you use sound, choose <strong>Public networks</strong> if Windows Defender Firewall asks for permission.</p>
+        <p class="case-p">The desktop starts in full screen. Press <strong>F8</strong> to open the Win-KeX menu, where you can leave full screen or choose <strong>Exit viewer</strong>. Exit viewer closes the viewer but leaves the session running. Reconnect with:</p>
+          <div class="code-block"><span class="c-cmd">kex</span> --win --start-client<button type="button" class="copy-btn" data-copy="kex --win --start-client" aria-label="Copy the command to reconnect the Win-KeX client">copy</button></div>
+        <p class="case-p">Win-KeX also has two other official modes:</p>
+        <ul class="case-list">
+          <li><strong>Seamless mode</strong> places a Kali panel on your Windows desktop so Kali and Windows apps share the same screen<sup class="fn"><a href="#ref-7" id="cite-7" aria-label="Source 7">[7]</a></sup>:
+          <div class="code-block"><span class="c-cmd">kex</span> --sl -s<button type="button" class="copy-btn" data-copy="kex --sl -s" aria-label="Copy the Win-KeX seamless mode command">copy</button></div>
+          </li>
+          <li><strong>Enhanced session mode</strong> uses Windows Remote Desktop. This is the supported mode on ARM devices. The <code>--ip</code> flag is Kali's documented ARM workaround<sup class="fn"><a href="#ref-8" id="cite-8" aria-label="Source 8">[8]</a></sup>:
+          <div class="code-block"><span class="c-cmd">kex</span> --esm --ip -s<button type="button" class="copy-btn" data-copy="kex --esm --ip -s" aria-label="Copy the Win-KeX enhanced session mode command">copy</button></div>
+          </li>
+        </ul>
+        <p class="case-p">Kali lists Windows Terminal as a Win-KeX prerequisite. You can still start any of these modes from the Kali shell or from a Windows command prompt as shown above.</p>
+      </section>
+
+      <section class="case-section" aria-labelledby="shutdown">
+        <h2 id="shutdown" class="case-h2"><span class="step-chip">6</span> Shut down cleanly</h2>
+        <p class="case-p">To close the viewer only, press <strong>F8</strong> and choose <strong>Exit viewer</strong>. To stop the Window mode server, run this inside Kali:</p>
+          <div class="code-block"><span class="c-cmd">kex</span> --win --stop<button type="button" class="copy-btn" data-copy="kex --win --stop" aria-label="Copy the command to stop Win-KeX window mode">copy</button></div>
+        <p class="case-p">If you started a different mode, stop that mode instead: <code>kex --sl --stop</code> or <code>kex --esm --stop</code>.</p>
+        <p class="case-p">Stop all of WSL from PowerShell or Command Prompt:</p>
+          <div class="code-block"><span class="c-cmd">wsl</span> --shutdown<button type="button" class="copy-btn" data-copy="wsl --shutdown" aria-label="Copy the wsl --shutdown command">copy</button></div>
+      </section>
+
+      <section class="case-section tutorial-callout" aria-labelledby="troubleshooting">
+        <h2 id="troubleshooting" class="case-h2"><span class="step-chip">7</span> Troubleshooting</h2>
+        <p class="case-p">Check that WSL is present and up to date:</p>
+          <div class="code-block"><div><span class="c-cmd">wsl</span> --status</div><div><span class="c-cmd">wsl</span> --version</div><div><span class="c-cmd">wsl</span> --update</div><button type="button" class="copy-btn" data-copy="wsl --status&#10;wsl --version&#10;wsl --update" aria-label="Copy the WSL status, version, and update commands">copy</button></div>
+        <p class="case-p">Win-KeX and WSLg both need WSL 2. Confirm Kali's version with <code>wsl --list --verbose</code>. If it still says 1, run <code>wsl --set-version kali-linux 2</code>.</p>
+        <p class="case-p">If the desktop window is black, or Win-KeX fails after a WSL update, stop the session, update WSL, and restart it:</p>
+          <div class="code-block"><div><span class="c-cmd">kex</span> --win --stop</div><div><span class="c-cmd">wsl</span> --update</div><div><span class="c-cmd">wsl</span> --shutdown</div><button type="button" class="copy-btn" data-copy="kex --win --stop&#10;wsl --update&#10;wsl --shutdown" aria-label="Copy the stop, update, and shutdown commands">copy</button></div>
+        <p class="case-p">Open Kali again, then start Window mode with <code>kex --win -s</code>.</p>
+        <p class="case-p">A WSL update can leave a WSLg socket that blocks Win-KeX. Official Win-KeX commands can check, remove, and later restore that socket<sup class="fn"><a href="#ref-10" id="cite-10" aria-label="Source 10">[10]</a></sup>:</p>
+          <div class="code-block"><div><span class="c-cmd">kex</span> --wslg-status</div><div><span class="c-cmd">kex</span> --wslg-remove</div><div><span class="c-cmd">kex</span> --win -s</div><button type="button" class="copy-btn" data-copy="kex --wslg-status&#10;kex --wslg-remove&#10;kex --win -s" aria-label="Copy the WSLg status, remove, and Win-KeX start commands">copy</button></div>
+        <p class="case-p">When you want WSLg single-app windows again, run <code>kex --wslg-restore</code>.</p>
+        <p class="case-p">If Window mode still reports that <code>/tmp/.X11-unix</code> is read-only (a known issue after some WSL Store updates)<sup class="fn"><a href="#ref-11" id="cite-11" aria-label="Source 11">[11]</a></sup>, remount it and try again:</p>
+          <div class="code-block"><div><span class="c-cmd">sudo</span> mount -o remount,rw /tmp/.X11-unix</div><div><span class="c-cmd">kex</span> --win -s</div><button type="button" class="copy-btn" data-copy="sudo mount -o remount,rw /tmp/.X11-unix&#10;kex --win -s" aria-label="Copy the remount and Win-KeX start commands">copy</button></div>
+      </section>
+
+      <div class="page-cta">
+        <a href="kali-wsl2-desktop-windows-10.html" class="dl-btn magnetic">Windows 10 guide <svg aria-hidden="true" class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+        <a href="writing.html#tutorials" class="btn-ghost magnetic">Back to Blog</a>
+      </div>
+
+      <section class="case-section refs" aria-labelledby="sources">
+        <h2 id="sources" class="case-h2 refs-title">Sources checked</h2>
+        <ol class="refs-list">
+          <li id="ref-1">Microsoft, Install WSL: <a href="https://learn.microsoft.com/windows/wsl/install" target="_blank" rel="noopener noreferrer">learn.microsoft.com/windows/wsl/install</a> <a class="refs-back" href="#cite-1" aria-label="Back to text for source 1">↩</a></li>
+          <li id="ref-2">Microsoft, Basic commands for WSL: <a href="https://learn.microsoft.com/windows/wsl/basic-commands" target="_blank" rel="noopener noreferrer">learn.microsoft.com/windows/wsl/basic-commands</a></li>
+          <li id="ref-3">Microsoft, Run Linux GUI apps (WSLg): <a href="https://learn.microsoft.com/windows/wsl/tutorials/gui-apps" target="_blank" rel="noopener noreferrer">learn.microsoft.com/windows/…/tutorials/gui-apps</a> <a class="refs-back" href="#cite-3" aria-label="Back to text for source 3">↩</a></li>
+          <li id="ref-4">Kali, WSL preparations: <a href="https://www.kali.org/docs/wsl/wsl-preparations/" target="_blank" rel="noopener noreferrer">kali.org/docs/wsl/wsl-preparations</a></li>
+          <li id="ref-5">Kali, Win-KeX: <a href="https://www.kali.org/docs/wsl/win-kex/" target="_blank" rel="noopener noreferrer">kali.org/docs/wsl/win-kex</a> <a class="refs-back" href="#cite-5" aria-label="Back to text for source 5">↩</a></li>
+          <li id="ref-6">Kali, Win-KeX Window Mode: <a href="https://www.kali.org/docs/wsl/win-kex-win/" target="_blank" rel="noopener noreferrer">kali.org/docs/wsl/win-kex-win</a> <a class="refs-back" href="#cite-6" aria-label="Back to text for source 6">↩</a></li>
+          <li id="ref-7">Kali, Win-KeX Seamless Mode: <a href="https://www.kali.org/docs/wsl/win-kex-sl/" target="_blank" rel="noopener noreferrer">kali.org/docs/wsl/win-kex-sl</a> <a class="refs-back" href="#cite-7" aria-label="Back to text for source 7">↩</a></li>
+          <li id="ref-8">Kali, Win-KeX Enhanced Session Mode: <a href="https://www.kali.org/docs/wsl/win-kex-esm/" target="_blank" rel="noopener noreferrer">kali.org/docs/wsl/win-kex-esm</a> <a class="refs-back" href="#cite-8" aria-label="Back to text for source 8">↩</a></li>
+          <li id="ref-9">Kali, kali-win-kex package control (recommends kali-desktop-xfce): <a href="https://gitlab.com/kalilinux/packages/kali-win-kex/-/blob/kali/master/debian/control" target="_blank" rel="noopener noreferrer">gitlab.com/kalilinux/…/debian/control</a> <a class="refs-back" href="#cite-9" aria-label="Back to text for source 9">↩</a></li>
+          <li id="ref-10">Kali, Win-KeX help (<code>kex --help</code>; WSLg socket commands): <a href="https://gitlab.com/kalilinux/packages/kali-win-kex/-/blob/kali/master/usr/bin/kex" target="_blank" rel="noopener noreferrer">gitlab.com/kalilinux/…/bin/kex</a> <a class="refs-back" href="#cite-10" aria-label="Back to text for source 10">↩</a></li>
+          <li id="ref-11">Kali bug 0008183, Window mode after WSL Store updates: <a href="https://bugs.kali.org/view.php?id=8183" target="_blank" rel="noopener noreferrer">bugs.kali.org/view.php?id=8183</a> <a class="refs-back" href="#cite-11" aria-label="Back to text for source 11">↩</a></li>
+        </ol>
+        <p class="tutorial-mark refs-note">KALI LINUX™ is a trademark of OffSec.</p>
+      </section>
+    </article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark" aria-hidden="true">&gt;_</span>
+        <span><strong>Nick Harrison</strong><span>nickharrison96.github.io</span></span>
+      </div>
+      <nav class="footer-nav" aria-label="Site hubs">
+        <a href="work.html">Work</a>
+        <a href="writing.html">Blog</a>
+        <a href="repair.html">Right to Repair</a>
+        <a href="tools.html">Tools</a>
+        <a href="downloads.html">Downloads</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="footer-social">
+        <a href="mailto:harrisontechdev@gmail.com" aria-label="Email">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.1 24.1 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.1 24.1 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+        </a>
+        <a href="https://github.com/NickHarrison96" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        </a>
+      </div>
+      <p class="footer-legal">&copy; 2026 Nick Harrison. Open Technical License. <span>Right to Repair &mdash; built to be opened, fixed, and reused.</span></p>
+      <a class="to-top" href="#main">Top &uarr;</a>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/site.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,293 @@
+/* Hardware lab guide — loaded only by hardware-lab.html. Do not edit styles.css. */
+
+.lab-article {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(24px, 5vw, 48px) 0 clamp(48px, 8vw, 80px);
+}
+
+.lab-article .back-link {
+  margin-bottom: 28px;
+}
+
+.lab-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 36px;
+  padding: 0;
+  list-style: none;
+}
+
+.lab-toc a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--soft);
+  font: 400 12px var(--font-mono);
+  text-decoration: none;
+}
+
+.lab-toc a:hover,
+.lab-toc a:focus-visible {
+  color: #fff;
+  border-color: rgba(56, 189, 248, 0.45);
+}
+
+.lab-section {
+  margin: 0 0 clamp(36px, 6vw, 56px);
+  scroll-margin-top: calc(var(--header-real, var(--header-h)) + 16px);
+}
+
+.lab-section h2 {
+  font: 700 clamp(20px, 3vw, 26px) / 1.25 var(--font-sans);
+  color: var(--text-strong);
+  letter-spacing: -0.015em;
+  margin: 0 0 16px;
+}
+
+.lab-section h2 .step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6em;
+  margin-right: 8px;
+  font: 700 13px var(--font-mono);
+  color: var(--brand);
+}
+
+.lab-section h3,
+.lab-section h4 {
+  font: 700 17px / 1.3 var(--font-sans);
+  color: #fff;
+  margin: 24px 0 10px;
+}
+
+.lab-section p,
+.lab-section li {
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: var(--soft);
+}
+
+.lab-section p {
+  margin: 0 0 14px;
+  max-width: 72ch;
+}
+
+.lab-section ul,
+.lab-section ol {
+  margin: 0 0 16px;
+  padding-left: 1.25em;
+  max-width: 72ch;
+}
+
+.lab-section li + li {
+  margin-top: 8px;
+}
+
+.lab-section strong {
+  color: #fff;
+}
+
+.lab-section code {
+  font: 500 0.9em / 1.4 var(--font-mono);
+  color: var(--brand-soft);
+  background: var(--raised);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+
+.lab-why,
+.lab-callout,
+.lab-banner {
+  padding: 16px 18px;
+  border-radius: var(--r);
+  margin: 0 0 20px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  max-width: 72ch;
+}
+
+.lab-why,
+.lab-banner {
+  background: var(--brand-tint);
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  color: var(--soft);
+}
+
+.lab-why strong,
+.lab-banner strong,
+.lab-callout strong {
+  color: #fff;
+}
+
+.lab-callout-warn {
+  background: rgba(210, 153, 34, 0.1);
+  border: 1px solid rgba(210, 153, 34, 0.35);
+  color: var(--soft);
+}
+
+.lab-callout-ok {
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  color: var(--soft);
+}
+
+.lab-table-wrap {
+  overflow-x: auto;
+  margin: 0 0 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: var(--card);
+  -webkit-overflow-scrolling: touch;
+}
+
+.lab-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.lab-table th,
+.lab-table td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+  color: var(--soft);
+}
+
+.lab-table th {
+  font: 600 11px var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: rgba(2, 6, 23, 0.6);
+}
+
+.lab-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.lab-diagram {
+  margin: 20px 0 24px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--card);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.lab-diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  .lab-diagram svg {
+    width: max(100%, 520px);
+    max-width: none;
+  }
+}
+
+.lab-diagram figcaption {
+  margin: 12px 0 0;
+  font: 400 13px / 1.5 var(--font-sans);
+  color: var(--muted);
+  max-width: 72ch;
+}
+
+.lab-diagram .illust-note {
+  color: var(--muted);
+}
+
+.lab-checklist {
+  margin: 0 0 20px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: var(--card);
+  max-width: 72ch;
+}
+
+.lab-checklist h4 {
+  margin-top: 0;
+}
+
+.lab-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0 0 10px;
+}
+
+.lab-check:last-child {
+  margin-bottom: 0;
+}
+
+.lab-check input {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  flex: none;
+  accent-color: var(--brand);
+}
+
+.lab-check label {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--soft);
+}
+
+.lab-check .subtext {
+  display: block;
+  margin-top: 2px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.lab-article pre {
+  margin: 0 0 20px;
+  padding: 16px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: rgba(2, 6, 23, 0.9);
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+.lab-article pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--text);
+  font: 400 13px / 1.55 var(--font-mono);
+}
+
+@media (max-width: 640px) {
+  .lab-diagram {
+    padding: 10px;
+  }
+
+  .lab-article pre {
+    font-size: 12px;
+  }
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .lab-article {
+    scroll-behavior: auto;
+  }
+}
