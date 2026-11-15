@@ -40,7 +40,7 @@ export const RENAMED = { 'All Downloads →': 'All tools →' };
  * project names appear in no tracked site file.
  */
 export const RETIRED = [
-  'YouTube@NickHarrison96', // Nick 2026-11-15: channel is @HarrisonTech22
+  'YouTube@NickHarrison96', // Nick 2026-11-15: channel is @HarrisonTechnologyCA
   // Nick (2026-11-13): LiteLLM, Stable Diffusion and X570 project cards removed (not his work).
   "ProjectPython / AILiteLLM Proxy & SDK Unified proxy server to call 100+ LLM APIs in OpenAI format with cost tracking, load balancing, and logging middleware. View repo ↗",
   "ProjectPyTorch / MLStable Diffusion WebUI Generative vision workflows, custom kext/metal performance patches, and optimized local GPU model executions. View repo ↗",
@@ -259,7 +259,7 @@ export async function runIA(r) {
     const fnav = /<nav class="footer-nav"[^>]*>([\s\S]*?)<\/nav>/.exec(ft)?.[1] || '';
     const flinks = elements(fnav, 'a').map((a) => [pageText(a.inner), attr(a.attrs, 'href')]);
     r.check(`ia ${f}: footer nav is the hubs`, JSON.stringify(flinks) === JSON.stringify(HUBS), JSON.stringify(flinks));
-    r.check(`ia ${f}: footer contact (email, YouTube, GitHub)`, ft.includes('href="mailto:harrisontechdev@gmail.com"') && ft.includes('href="https://www.youtube.com/@HarrisonTech22"') && ft.includes('href="https://github.com/NickHarrison96"'));
+    r.check(`ia ${f}: footer contact (email, YouTube, GitHub)`, ft.includes('href="mailto:harrisontechdev@gmail.com"') && ft.includes('href="https://www.youtube.com/@HarrisonTechnologyCA"') && ft.includes('href="https://github.com/NickHarrison96"'));
     r.check(`ia ${f}: footer legal line`, /&copy;[^<]*Nick Harrison\. Open Technical License\./.test(ft));
     r.check(`ia ${f}: footer Top ↑`, /<a class="to-top" href="#main">Top &uarr;<\/a>/.test(ft));
     r.check(`ia ${f}: title names Nick Harrison`, /<title>[^<]*Nick Harrison[^<]*<\/title>/.test(html[f]));
