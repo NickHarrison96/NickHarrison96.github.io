@@ -384,8 +384,8 @@ main {
 }
 
 .yt-icon path { stroke: none; }
-.yt-icon .yt-bg { fill: var(--brand); }
-.yt-icon .yt-play { fill: #fff; }
+.yt-icon .yt-bg { fill: #fff; }
+.yt-icon .yt-play { fill: #0f172a; }
 
 .dc-icon {
   width: 24px;
