@@ -328,12 +328,12 @@ const VERBATIM_HOME = [
 
 const VERBATIM_CASE = [
   'Surgical Recovery of a Corrupted macOS Installation',
-  'How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.',
+  'How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—working around a reported 401.5 GB of user data, with file-integrity verification still pending.',
   'MacPro7,1 (AMD Zen 2)', 'APFS Container (disk1 / disk3)', '401.5 GB Volume Untouched',
   'The machine encountered a critical failure involving a desynchronized dscl (Directory Service Command Line) user database and corrupted PAM/security framework tokens within macOS.',
   'a complete destructive wipe or total loss of access.',
   'Forces a complete erase of the drive, requiring hours of backup restoration, loss of ephemeral configurations, network re-authentications, and potential data loss for non-cloud synced folders.',
-  'Adds a secondary, clean APFS volume inside the same dynamic container (disk3s7), streams an official Apple-signed payload via Online Recovery, and boots cleanly alongside 401.5 GB of intact user files.',
+  'Adds a secondary, clean APFS volume inside the same dynamic container (disk3s7), streams an official Apple-signed payload via Online Recovery, and boots cleanly alongside the reported 401.5 GB of user files (integrity check pending).',
   'Rather than repartitioning or shrinking existing allocations, we took advantage of APFS dynamic space sharing. We allocated a new, unencrypted APFS volume named Untitled into the primary container.',
   'diskutil apfs addVolume disk3 APFS "Untitled"',
   'To ensure total system image integrity matching the OpenCore SMBIOS identity (MacPro7,1), we fetched the ~18.39 GB installation package directly from Apple recovery servers.',
