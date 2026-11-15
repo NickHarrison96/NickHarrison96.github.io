@@ -329,7 +329,7 @@ const VERBATIM_HOME = [
 const VERBATIM_CASE = [
   'Surgical Recovery of a Corrupted macOS Installation',
   'How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—working around a reported 401.5 GB of user data, with file-integrity verification still pending.',
-  'MacPro7,1 (AMD Zen 2)', 'APFS Container (disk1 / disk3)', '401.5 GB Volume Untouched',
+  'MacPro7,1 (AMD Zen 2)', 'APFS Container (disk1 / disk3)', '401.5 GB reported, verification pending',
   'The machine encountered a critical failure involving a desynchronized dscl (Directory Service Command Line) user database and corrupted PAM/security framework tokens within macOS.',
   'a complete destructive wipe or total loss of access.',
   'Forces a complete erase of the drive, requiring hours of backup restoration, loss of ephemeral configurations, network re-authentications, and potential data loss for non-cloud synced folders.',
