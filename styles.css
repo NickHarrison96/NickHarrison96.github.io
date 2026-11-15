@@ -374,6 +374,20 @@ main {
   padding: 6px 12px 6px 6px;
 }
 
+.yt-link { white-space: nowrap; }
+
+.yt-icon {
+  width: 28px;
+  height: 28px;
+  flex: none;
+}
+
+.yt-icon path { stroke: none; }
+.yt-icon .yt-bg { fill: #ff0033; }
+.yt-icon .yt-play { fill: #fff; }
+
+.footer-social svg[fill="currentColor"] { stroke: none; }
+
 .gh-avatar {
   width: 28px;
   height: 28px;
@@ -4517,4 +4531,8 @@ sup.fn a:target {
   .guide-with-toc > .tutorial-toc {
     transition: none;
   }
+}
+
+@media (max-width: 479px) {
+  .site-actions .yt-link { display: none; }
 }
