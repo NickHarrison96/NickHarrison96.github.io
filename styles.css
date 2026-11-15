@@ -374,7 +374,8 @@ main {
   padding: 6px 12px 6px 6px;
 }
 
-.yt-link { white-space: nowrap; }
+.yt-link,
+.dc-link { white-space: nowrap; }
 
 .yt-icon {
   width: 28px;
@@ -383,8 +384,16 @@ main {
 }
 
 .yt-icon path { stroke: none; }
-.yt-icon .yt-bg { fill: #ff0033; }
+.yt-icon .yt-bg { fill: var(--brand); }
 .yt-icon .yt-play { fill: #fff; }
+
+.dc-icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 2px;
+  flex: none;
+  color: var(--brand);
+}
 
 .footer-social svg[fill="currentColor"] { stroke: none; }
 
@@ -4533,6 +4542,7 @@ sup.fn a:target {
   }
 }
 
-@media (max-width: 479px) {
-  .site-actions .yt-link { display: none; }
+@media (max-width: 559px) {
+  .site-actions .yt-link,
+  .site-actions .dc-link { display: none; }
 }
