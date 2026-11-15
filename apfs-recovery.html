@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#05070d">
   <meta name="description"
-    content="Case study: surgical recovery of a corrupted macOS installation — a parallel APFS volume that preserved 401.5 GB of user data on a MacPro7,1 OpenCore build." />
+    content="Case study: surgical recovery of a corrupted macOS installation — a parallel APFS volume that worked around a reported 401.5 GB of user data (integrity check pending)." />
   <title>APFS Recovery Case Study &mdash; Nick Harrison</title>
   <script>/* shell: runs before first paint — see AGENTS.md "Shell" */(function(d){d.classList.add('js');try{if(localStorage.getItem('nh-jailbreak')==='1')d.dataset.theme='jailbreak'}catch(e){}if(d.hasAttribute('data-boot')&&!location.hash&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{if(!sessionStorage.getItem('nh-booted')){sessionStorage.setItem('nh-booted','1');d.classList.add('booting')}}catch(e){}}})(document.documentElement);</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,11 +61,11 @@
       <header class="case-head">
         <div class="pill"><span class="pulse" aria-hidden="true"></span>FEATURED CASE STUDY • INCIDENT &amp; SYSTEM RECOVERY</div>
         <h1 class="teaser-title">Surgical Recovery of a <br><span class="grad">Corrupted macOS Installation</span></h1>
-        <p class="teaser-lede">How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—preserving 401.5 GB of user data intact on MacPro7,1.</p>
+        <p class="teaser-lede">How we bypassed OpenDirectory locks, PAM authentication decay, and space constraints by establishing a parallel APFS volume—working around a reported 401.5 GB of user data, with file-integrity verification still pending.</p>
         <dl class="spec-grid">
           <div class="spec"><dt>SMBIOS TARGET</dt><dd>MacPro7,1 (AMD Zen 2)</dd></div>
           <div class="spec"><dt>STORAGE LAYOUT</dt><dd>APFS Container (disk1 / disk3)</dd></div>
-          <div class="spec spec-ok"><dt>DATA PRESERVATION</dt><dd>401.5 GB Volume Untouched</dd></div>
+          <div class="spec spec-ok"><dt>DATA</dt><dd>401.5 GB reported, verification pending</dd></div>
         </dl>
       </header>
 
@@ -82,7 +82,7 @@
           <div class="vs-card vs-good">
             <span class="vs-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></span>
             <h3>Non-Destructive APFS Strategy</h3>
-            <p>Adds a secondary, clean APFS volume inside the same dynamic container (<code>disk3s7</code>), streams an official Apple-signed payload via Online Recovery, and boots cleanly alongside 401.5 GB of intact user files.</p>
+            <p>Adds a secondary, clean APFS volume inside the same dynamic container (<code>disk3s7</code>), streams an official Apple-signed payload via Online Recovery, and boots cleanly alongside the reported 401.5 GB of user files (integrity check pending).</p>
           </div>
         </div>
       </section>
@@ -145,7 +145,7 @@
           <p class="manifesto-lede">Computers are meant to be tools of empowerment, creative expression, and personal agency. When an operating system fails, users shouldn't feel helpless, nor should they be forced to accept data loss as an inevitability.</p>
           <ul class="manifesto-grid">
             <li><span class="m-icon" aria-hidden="true">01</span><div><b>Demystifying Systems</b><span>Breaking down UNIX, APFS, and bootloader internals into transparent, actionable guides.</span></div></li>
-            <li><span class="m-icon" aria-hidden="true">02</span><div><b>Promoting Data Rights</b><span>Your data belongs to you. Every write-up emphasizes non-destructive, zero-loss recovery methodologies.</span></div></li>
+            <li><span class="m-icon" aria-hidden="true">02</span><div><b>Promoting Data Rights</b><span>Your data belongs to you. Every write-up emphasizes non-destructive recovery methods that put your data first.</span></div></li>
             <li><span class="m-icon" aria-hidden="true">03</span><div><b>Community Knowledge Base</b><span>Documenting solutions creates an indexable, open roadmap for developers faced with black screens.</span></div></li>
             <li><span class="m-icon" aria-hidden="true">04</span><div><b>Open Engineering Spirit</b><span>Honoring the classical hacker ethos of learning how software and hardware work under the hood.</span></div></li>
           </ul>
