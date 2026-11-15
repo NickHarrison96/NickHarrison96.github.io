@@ -1,0 +1,49 @@
+name: Announce new write-ups
+
+# Posts new write-ups from writing.html to Discord. Runs when a page changes on main, or by hand.
+# Needs the repository secret DISCORD_WEBHOOK_URL (Settings > Secrets and variables > Actions).
+on:
+  push:
+    branches: [main]
+    paths: ['*.html']
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Print what would be posted without posting'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write # only to commit announced.json back
+
+concurrency:
+  group: announce
+  cancel-in-progress: false
+
+jobs:
+  announce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Announce
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            node tools/announce.mjs --dry-run
+          else
+            node tools/announce.mjs
+          fi
+
+      - name: Save announced.json
+        run: |
+          if [ -n "$(git status --porcelain announced.json)" ]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add announced.json
+            git commit -m "chore: record announced write-ups"
+            git push
+          fi
