@@ -308,9 +308,9 @@ export async function runIA(r) {
   if (html['index.html']) {
     const h = html['index.html'];
     // Nick (2026-11-13): the home page is a welcome about knowledge and empowerment, not Apple or the case study:
-    // hero/terminal → what we do → values strip → closing invite. The Apple layer explainer moved to writing.html.
-    const order = ['terminal', 'what-we-do', 'principle', 'start'].map((id) => h.indexOf(`id="${id}"`));
-    r.check('ia index: hero/terminal → what-we-do → principle → start', order.every((v, i) => v >= 0 && (i === 0 || v > order[i - 1])), JSON.stringify(order));
+    // hero/terminal → brand pillars → what we do → values strip → closing invite. The Apple layer explainer moved to writing.html.
+    const order = ['terminal', 'pillars', 'what-we-do', 'principle', 'start'].map((id) => h.indexOf(`id="${id}"`));
+    r.check('ia index: hero/terminal → pillars → what-we-do → principle → start', order.every((v, i) => v >= 0 && (i === 0 || v > order[i - 1])), JSON.stringify(order));
     for (const id of ['log', 'philosophy']) r.check(`ia index: #${id} moved off the homepage`, !ids(h).has(id));
     r.check('ia index: marquee kept', /class="marquee"/.test(h));
     r.check('ia index: Apple module gone (no #repair, stack or layer panels)', !ids(h).has('repair') && !/class="stack-stage"/.test(h) && !/class="layer-panel"/.test(h));

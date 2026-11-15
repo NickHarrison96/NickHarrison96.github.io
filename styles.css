@@ -2900,6 +2900,89 @@ html[data-fx="static"] .log-entry.enter {
   margin-top: 22px;
 }
 
+/* Home brand pillars (Nick, 2026-11-15): 3-up row after the hero, stack on small screens.
+   Technical dark surfaces with a warmer cyan / blue / violet glow. No green or red. */
+.pillars {
+  padding-top: clamp(32px, 5vw, 48px);
+  padding-bottom: clamp(32px, 5vw, 48px);
+}
+
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.pillar {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 24px;
+  border-radius: var(--r);
+  background: var(--card);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.pillar::before {
+  content: '';
+  position: absolute;
+  inset: -20% -10% 40%;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(ellipse at 50% 0%, var(--pillar-glow) 0%, transparent 70%);
+}
+
+.pillar:nth-child(1) {
+  --pillar-glow: rgba(125, 211, 252, 0.18);
+}
+
+.pillar:nth-child(2) {
+  --pillar-glow: rgba(37, 99, 235, 0.22);
+}
+
+.pillar:nth-child(3) {
+  --pillar-glow: rgba(167, 139, 250, 0.22);
+}
+
+.pillar-title {
+  margin: 0;
+  font: 600 1.25rem / 1.4 var(--font-sans);
+  letter-spacing: -0.02em;
+  color: var(--text-strong);
+}
+
+.pillar-copy {
+  margin: 0;
+  font: 400 1rem / 1.5 var(--font-sans);
+  color: var(--text);
+}
+
+.pillar-link {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 8px 0;
+  font: 600 1rem / 1.5 var(--font-sans);
+  color: var(--brand-soft);
+  text-decoration: none;
+  transition: color 0.12s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.pillar-link:hover {
+  color: var(--brand-pale);
+}
+
+@media (max-width: 900px) {
+  .pillars-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 860px) {
   .values-grid {
     grid-template-columns: minmax(0, 1fr);
