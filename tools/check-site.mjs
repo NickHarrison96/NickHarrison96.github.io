@@ -23,7 +23,7 @@ const FUTURE_TARGETS = {
   'apfs-recovery.html': 4, 'work.html': 8, 'repair.html': 8, 'kali-wsl2-desktop-windows-11.html': 9, 'kali-wsl2-desktop-windows-10.html': 9, 'local-ai.html': 9, 'llama-cpp.html': 9, 'guide-kali-wsl2.html': 9, 'guide-ollama-claude-code-windows.html': 9,
   'guide-ollama-claude-code-macos.html': 9, 'guide-llama-cpp.html': 9,
 };
-const FUTURE_INDEX_IDS = { terminal: 3, projects: 3, 'case-study': 3, repair: 3, writing: 8, tools: 3, 'what-we-do': 9, principle: 9, start: 9 };
+const FUTURE_INDEX_IDS = { terminal: 3, projects: 3, 'case-study': 3, repair: 3, writing: 8, tools: 3, pillars: 9, 'what-we-do': 9, principle: 9, start: 9 };
 // Links the homepage must keep. Phase 8 replaced the old ITEMS grid targets (mission.html, get-involved.html,
 // repair-guides.html, legislation.html, repair-cafes.html, talks.html — now redirect stubs) with the
 // repair.html sections they moved to; writing.html and downloads.html stay.
@@ -214,9 +214,9 @@ async function run() {
     // #log and #philosophy moved to writing.html in phase 8 (asserted there below and in check-ia).
     // Phase 9 (Nick, 2026-11-08): the featured-work grid (#projects) and the case-study teaser (#case-study)
     // left the homepage; check-guides.mjs asserts they are gone and what replaced them.
-    // Nick (2026-11-13): the home page became a welcome (hero/terminal, what we do, values, invite); the Apple
+    // Nick (2026-11-15): the home page is a welcome (hero/terminal, brand pillars, what we do, values, invite); the Apple
     // module (#repair) moved to writing.html#inside-the-device and the writing grid lives on the Blog.
-    const homeIds = at(9) ? ['terminal', 'what-we-do', 'principle', 'start'] : ['terminal', 'projects', 'case-study', 'repair', 'writing', 'tools'];
+    const homeIds = at(9) ? ['terminal', 'pillars', 'what-we-do', 'principle', 'start'] : ['terminal', 'projects', 'case-study', 'repair', 'writing', 'tools'];
     for (const id of homeIds) {
       if ((FUTURE_INDEX_IDS[id] ?? 0) <= PHASE) r.check(`index: section #${id}`, own.has(id));
     }
