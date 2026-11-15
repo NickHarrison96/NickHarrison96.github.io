@@ -2973,6 +2973,17 @@ html[data-fx="static"] .log-entry.enter {
   transition: color 0.12s cubic-bezier(0.2, 0, 0, 1);
 }
 
+.pillar-links {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 20px;
+}
+
+.pillar-links .pillar-link {
+  margin-top: 0;
+}
+
 .pillar-link:hover {
   color: var(--brand-pale);
 }
