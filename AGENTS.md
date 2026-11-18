@@ -78,11 +78,3 @@ node smoke.mjs --perf                         # frame-time report (not a gate); 
 ## Deploy
 - Push to `main`. Pages serves the repo root (legacy build, no workflow) at https://nickharrison96.github.io/.
 - Pages caches hard: hard-refresh or use a private window. Asset changes can take ~45s to appear.
-
-## Announcements (Discord)
-- `tools/announce.mjs` reads the write-up cards on `writing.html` (tags Case study, Tutorial, Local AI; Campaign and Layer cards are skipped) and posts each new one to Discord through a webhook. `announced.json` lists what has already been announced, so each page is posted once.
-- `.github/workflows/announce.yml` runs it on pushes to `main` that touch a root `.html` file, and by hand (Actions > Announce new write-ups > Run workflow; dry run is the default there). It commits `announced.json` back when something was posted.
-- The webhook address is the repository secret `DISCORD_WEBHOOK_URL`. It is never written to a tracked file, printed, or committed; if it leaks, delete the webhook in Discord and make a new one.
-- Adding a write-up: add its `blog-card` to `writing.html` with one of the tags above and push to `main`. To publish quietly, run `node tools/announce.mjs --seed` first and commit `announced.json`.
-- `node tools/announce.mjs --selftest` checks the parser and payload; `--dry-run` prints what would be posted.
-- The old public Discord invite was revoked and every Discord link was removed from the site; the server is invite-only. Don't add an invite link back without asking.
